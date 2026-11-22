@@ -281,6 +281,21 @@
             font-size: 1.05rem;
         }
 
+        .local-hint {
+            margin-top: 8px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .local-hint strong {
+            color: #fff;
+        }
+
         .val-green { color: var(--green); font-weight: 700; }
 
         .section-head {
@@ -423,13 +438,13 @@
 
             <div class="grid-2 field">
                 <div>
-                    <label>Vevő / Partner (100k+ felett kedvezmény)</label>
+                    <label>Vevő / Partner</label>
                     <select id="partner" onchange="render()">
-                        <option value="regular" data-name="Sima vevő">Sima vevő (100k+ felett -10%)</option>
-                        <option value="partner" data-name="Tai (füvesek)">Tai (100k+ felett -15%)</option>
-                        <option value="partner" data-name="Ravens">Ravens (100k+ felett -15%)</option>
-                        <option value="partner" data-name="Syndicate (Meth)">Syndicate (100k+ felett -15%)</option>
-                        <option value="partner" data-name="Rustata">Rustata (100k+ felett -15%)</option>
+                        <option value="other" data-name="Sima vevő">Mindenki más (100k+ felett -10%)</option>
+                        <option value="tier" data-name="Tai (füvesek)">Tai (-10% / 100k+ felett -15%)</option>
+                        <option value="tier" data-name="Ravens">Ravens (-10% / 100k+ felett -15%)</option>
+                        <option value="tier" data-name="Syndicate (Meth)">Syndicate (-10% / 100k+ felett -15%)</option>
+                        <option value="rustata" data-name="Rustata">Rustata (mindig -15%)</option>
                     </select>
                 </div>
                 <div>
@@ -451,12 +466,14 @@
                 <div class="sum-line"><span>Kedvezmény:</span><span id="sDisc">0 $</span></div>
                 <div class="sum-line sum-highlight"><span>Tiszta haszon:</span><span id="sProfit" class="val-green">0 $</span></div>
                 <div class="sum-line total"><span>Végösszeg:</span><span id="sTotal" class="val-green">0 $</span></div>
+                <div class="local-hint" id="sQuote">Csak itt látszik: adj hozzá tételt a kalkulációhoz.</div>
             </div>
         </div>
 
         <!-- GYÁR KIADÁS -->
         <div id="tab-factory" class="hidden">
             <div class="chips">
+                <button class="chip" onclick="setFactory('Tár gyártás (25 db)', 2500)">-2,5k tár gyártás</button>
                 <button class="chip" onclick="setFactory('Gyártási díj', 2000)">-2k gyártás</button>
                 <button class="chip" onclick="setFactory('Gyártási díj', 4000)">-4k gyártás</button>
                 <button class="chip" onclick="setFactory('Gyártási díj', 6000)">-6k gyártás</button>
@@ -524,7 +541,7 @@
 </div>
 
 <script>
-    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1574083295216406528/pykSkznZG8RU2U4Cczh6eVtdLrdo0cSk2jydkx6HRbw9PTJYtTCPmZSVlS0C5MkaE7wU';
+    const WEBHOOK_URL = 'IDE_MASOLD_A_WEBHOOK_URL_T';
     const DISCOUNT_THRESHOLD = 100000;
 
     const PRICES = {
@@ -593,8 +610,9 @@
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
 
     function getDiscountPercent(buyerRole, rawSell) {
-        if (rawSell <= DISCOUNT_THRESHOLD) return 0;
-        return buyerRole === 'partner' ? 15 : 10;
+        if (buyerRole === 'rustata') return 15;
+        if (buyerRole === 'tier') return rawSell > DISCOUNT_THRESHOLD ? 15 : 10;
+        return rawSell > DISCOUNT_THRESHOLD ? 10 : 0;
     }
 
     function updateCalibers() {
@@ -652,6 +670,29 @@
         render();
     }
 
+    function updateLocalQuote(buyerRole, rawSell, total, discPct) {
+        const quoteEl = document.getElementById('sQuote');
+        if (!rawSell) {
+            quoteEl.innerHTML = 'Csak itt látszik: adj hozzá tételt a kalkulációhoz.';
+            return;
+        }
+        if (buyerRole === 'rustata') {
+            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (Rustata fix 15% kedvezmény aktív).`;
+            return;
+        }
+        if (rawSell > DISCOUNT_THRESHOLD) {
+            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (${discPct}% kedvezmény aktív, 100k+ felett).`;
+        } else {
+            const missing = Math.max(0, (DISCOUNT_THRESHOLD + 1) - rawSell);
+            const nextPct = buyerRole === 'tier' ? 15 : 10;
+            const hypothetical100k = Math.round(rawSell * (1 - nextPct / 100));
+            quoteEl.innerHTML =
+                `Vevőnek mondandó: <strong>${money(total)}</strong> (aktuális: -${discPct}%) • ` +
+                `Még <strong>${money(missing)}</strong> kell a <strong>-${nextPct}%</strong>-hoz ` +
+                `(100k+ sávban kb. <strong>${money(hypothetical100k)}</strong>).`;
+        }
+    }
+
     function buildPayload() {
         const rawRecorder = document.getElementById('recorder').value.trim();
         const upperRecorder = rawRecorder ? rawRecorder.toUpperCase() : '—';
@@ -683,6 +724,7 @@
             document.getElementById('sDisc').textContent = discVal ? `-${money(discVal)} (${discPct}%)` : '0 $';
             document.getElementById('sProfit').textContent = (profit >= 0 ? '+' : '') + money(profit);
             document.getElementById('sTotal').textContent = '+' + money(total);
+            updateLocalQuote(buyerRole, rawSell, total, discPct);
 
             color = status === 'paid' ? 0x10b981 : 0xf59e0b;
             title = status === 'paid' ? 'Eladás (Kész)' : 'Függőben / Tartozás';
