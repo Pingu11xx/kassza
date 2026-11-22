@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZERO // Kassza & Kalkulátor</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --card: #171a23;
+            --input: #202532;
+            --border: #2d3446;
+            --text: #f3f4f6;
+            --muted: #9ca3af;
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 18px;
+            align-items: start;
+        }
+
+        @media (max-width: 780px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .top {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .top h1 {
+            font-size: 1.25rem;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            background: var(--bg);
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tab {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding: 9px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: var(--input);
+            color: var(--text);
+        }
+
+        .field {
+            margin-bottom: 12px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            background: var(--input);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 9px 11px;
+            border-radius: 7px;
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--blue);
+        }
+
+        button.action {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: var(--input);
+            color: var(--text);
+            border: 1px solid var(--border) !important;
+            margin-bottom: 12px;
+        }
+
+        .btn-send {
+            background: var(--blue);
+            color: #fff;
+            margin-top: 6px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .chip {
+            background: var(--input);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            cursor: pointer;
+        }
+
+        .cart {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 8px;
+            margin-bottom: 14px;
+            min-height: 56px;
+            max-height: 170px;
+            overflow-y: auto;
+        }
+
+        .cart-empty {
+            color: var(--muted);
+            font-size: 0.82rem;
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .cart-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 4px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.83rem;
+        }
+
+        .cart-row:last-child {
+            border-bottom: none;
+        }
+
+        .del {
+            background: none;
+            border: none;
+            color: var(--red);
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .summary {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 12px;
+            margin-bottom: 14px;
+            font-size: 0.84rem;
+        }
+
+        .sum-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: var(--muted);
+        }
+
+        .sum-line.total {
+            border-top: 1px solid var(--border);
+            padding-top: 7px;
+            margin: 6px 0 0;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 0.98rem;
+        }
+
+        .preview-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .embed {
+            background: #2b2d31;
+            border-left: 4px solid var(--green);
+            border-radius: 4px;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            color: #dbdee1;
+        }
+
+        .embed-title {
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .embed-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .embed-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .embed-k {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .embed-v {
+            font-size: 0.82rem;
+            white-space: pre-line;
+        }
+
+        .webhook-area {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        .msg {
+            margin-top: 8px;
+            font-size: 0.82rem;
+            min-height: 18px;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <div class="box top">
+        <h1>ZERO // Kassza</h1>
+        <div style="width: 220px;">
+            <input type="text" id="recorder" placeholder="Rögzítő neve (kötelező)">
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="tabs">
+            <button class="tab active" data-tab="sale" onclick="setTab('sale')">Eladás</button>
+            <button class="tab" data-tab="factory" onclick="setTab('factory')">Gyár kiadás</button>
+            <button class="tab" data-tab="other" onclick="setTab('other')">Egyéb</button>
+        </div>
+
+        <!-- ELADÁS -->
+        <div id="tab-sale">
+            <div class="grid-2 field">
+                <div>
+                    <label>Kategória</label>
+                    <select id="category" onchange="updateCalibers()">
+                        <option value="ammo">Lőszer</option>
+                        <option value="shotgun">Sörétes lőszer</option>
+                        <option value="emptyPistol">Üres pisztolytár</option>
+                        <option value="emptyBig">Üres nagy tár</option>
+                        <option value="fullPistol">Töltött pisztolytár (+30)</option>
+                        <option value="fullBig">Töltött nagy tár (+50)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Kaliber / Típus</label>
+                    <select id="caliber"></select>
+                </div>
+            </div>
+
+            <div class="grid-2 field">
+                <div>
+                    <label>Ritkaság</label>
+                    <select id="rarity">
+                        <option value="Common">Common</option>
+                        <option value="Uncommon" selected>Uncommon</option>
+                        <option value="Rare">Rare</option>
+                        <option value="Epic">Epic</option>
+                        <option value="Legendary">Legendary</option>
+                        <option value="Mythic">Mythic</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Darabszám</label>
+                    <input type="number" id="qty" value="1000" min="1">
+                </div>
+            </div>
+
+            <button class="action btn-add" onclick="addItem()">+ Hozzáadás</button>
+
+            <div class="cart" id="cart">
+                <div class="cart-empty">Nincs tétel a listában.</div>
+            </div>
+
+            <div class="grid-2 field">
+                <div>
+                    <label>Kedvezmény / Partner</label>
+                    <select id="partner" onchange="render()">
+                        <option value="0" data-name="Alap vevő">Alap (0%)</option>
+                        <option value="10" data-name="Tai (füvesek)">Tai (-10%)</option>
+                        <option value="10" data-name="Ravens">Ravens (-10%)</option>
+                        <option value="10" data-name="Syndicate (Meth)">Syndicate (-10%)</option>
+                        <option value="15" data-name="Rustata">Rustata (-15%)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Státusz</label>
+                    <select id="status" onchange="render()">
+                        <option value="paid">Kész (kasszában)</option>
+                        <option value="pending">Függőben / tartozás</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Megjegyzés</label>
+                <input type="text" id="saleNote" placeholder="pl. Holnap kerül be" oninput="render()">
+            </div>
+
+            <div class="summary">
+                <div class="sum-line"><span>Önköltség:</span><span id="sCost">0 $</span></div>
+                <div class="sum-line"><span>Kedvezmény:</span><span id="sDisc">0 $</span></div>
+                <div class="sum-line"><span>Tiszta haszon:</span><span id="sProfit">0 $</span></div>
+                <div class="sum-line total"><span>Végösszeg:</span><span id="sTotal">0 $</span></div>
+            </div>
+        </div>
+
+        <!-- GYÁR KIADÁS -->
+        <div id="tab-factory" class="hidden">
+            <div class="chips">
+                <button class="chip" onclick="setFactory('Gyártási díj', 2000)">-2k gyártás</button>
+                <button class="chip" onclick="setFactory('Gyártási díj', 4000)">-4k gyártás</button>
+                <button class="chip" onclick="setFactory('Gyártási díj', 6000)">-6k gyártás</button>
+                <button class="chip" onclick="setFactory('1 gép fullra fejlesztése', 120000)">-120k gép full</button>
+                <button class="chip" onclick="setFactory('Alapanyag (1000 db)', 40000)">-40k alapanyag</button>
+            </div>
+            <div class="grid-2 field">
+                <div>
+                    <label>Megnevezés</label>
+                    <input type="text" id="fTitle" placeholder="pl. Puskapor" oninput="render()">
+                </div>
+                <div>
+                    <label>Összeg ($)</label>
+                    <input type="number" id="fAmount" placeholder="pl. 8000" oninput="render()">
+                </div>
+            </div>
+            <div class="field">
+                <label>Megjegyzés</label>
+                <input type="text" id="fNote" oninput="render()">
+            </div>
+        </div>
+
+        <!-- EGYÉB -->
+        <div id="tab-other" class="hidden">
+            <div class="grid-2 field">
+                <div>
+                    <label>Típus</label>
+                    <select id="oType" onchange="render()">
+                        <option value="expense">Kiadás (-)</option>
+                        <option value="income">Bevétel (+)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Összeg ($)</label>
+                    <input type="number" id="oAmount" placeholder="pl. 75000" oninput="render()">
+                </div>
+            </div>
+            <div class="field">
+                <label>Megnevezés</label>
+                <input type="text" id="oTitle" placeholder="pl. Fegyverek / Nátrium-klorid" oninput="render()">
+            </div>
+            <div class="field">
+                <label>Megjegyzés</label>
+                <input type="text" id="oNote" oninput="render()">
+            </div>
+        </div>
+
+        <button class="action btn-send" onclick="send()">Küldés Discordra</button>
+        <div class="msg" id="msg"></div>
+    </div>
+
+    <div class="box">
+        <div class="preview-label">Discord előnézet</div>
+        <div class="embed" id="embed">
+            <div class="embed-title" id="eTitle">Eladás</div>
+            <div class="embed-grid" id="eFields"></div>
+        </div>
+
+        <div class="webhook-area">
+            <label>Webhook URL (csak helyben mentve)</label>
+            <input type="password" id="webhook" placeholder="https://discord.com/api/webhooks/..." onchange="saveLocal()">
+        </div>
+    </div>
+</div>
+
+<script>
+    const PRICES = {
+        ammo: {
+            Common:    { cost: 9.8,  sell: 15 },
+            Uncommon:  { cost: 10.6, sell: 19 },
+            Rare:      { cost: 11.4, sell: 22 },
+            Epic:      { cost: 12.2, sell: 28 },
+            Legendary: { cost: 13.0, sell: 34 },
+            Mythic:    { cost: 13.8, sell: 40 }
+        },
+        shotgun: {
+            Common:    { cost: 8.6,  sell: 15 },
+            Uncommon:  { cost: 9.4,  sell: 19 },
+            Rare:      { cost: 10.2, sell: 22 },
+            Epic:      { cost: 11.0, sell: 28 },
+            Legendary: { cost: 11.8, sell: 34 },
+            Mythic:    { cost: 12.6, sell: 40 }
+        },
+        emptyPistol: {
+            Common:    { cost: 364.0, sell: 600 },
+            Uncommon:  { cost: 391.2, sell: 750 },
+            Rare:      { cost: 416.8, sell: 900 },
+            Epic:      { cost: 444.0, sell: 1150 },
+            Legendary: { cost: 469.6, sell: 1400 },
+            Mythic:    { cost: 496.8, sell: 1700 }
+        },
+        emptyBig: {
+            Common:    { cost: 452.0, sell: 800 },
+            Uncommon:  { cost: 487.2, sell: 1000 },
+            Rare:      { cost: 522.4, sell: 1200 },
+            Epic:      { cost: 557.6, sell: 1600 },
+            Legendary: { cost: 592.8, sell: 2000 },
+            Mythic:    { cost: 628.0, sell: 2400 }
+        },
+        fullPistol: {
+            Common:    { cost: 364.0 + 30 * 9.8,  sell: 1100 },
+            Uncommon:  { cost: 391.2 + 30 * 10.6, sell: 1400 },
+            Rare:      { cost: 416.8 + 30 * 11.4, sell: 1600 },
+            Epic:      { cost: 444.0 + 30 * 12.2, sell: 2000 },
+            Legendary: { cost: 469.6 + 30 * 13.0, sell: 2500 },
+            Mythic:    { cost: 496.8 + 30 * 13.8, sell: 2900 }
+        },
+        fullBig: {
+            Common:    { cost: 452.0 + 50 * 9.8,  sell: 1600 },
+            Uncommon:  { cost: 487.2 + 50 * 10.6, sell: 2000 },
+            Rare:      { cost: 522.4 + 50 * 11.4, sell: 2300 },
+            Epic:      { cost: 557.6 + 50 * 12.2, sell: 3000 },
+            Legendary: { cost: 592.8 + 50 * 13.0, sell: 3700 },
+            Mythic:    { cost: 628.0 + 50 * 13.8, sell: 4400 }
+        }
+    };
+
+    const CALIBERS = {
+        ammo: ['9×19 mm Parabellum', '.45 ACP', '.44 Magnum', '5.56×45 mm NATO', '7.62×39 mm', '7.62×51 mm NATO'],
+        shotgun: ['Sörétes lőszer'],
+        emptyPistol: ['9×19 mm Parabellum tár', '.45 ACP tár', 'Desert Eagle (.44 Magnum) tár'],
+        emptyBig: ['5.56×45 mm NATO tár', '7.62×39 mm tár', '7.62×51 mm NATO tár', '9×19 mm géppisztolytár', '.45 ACP géppisztoly dobtár'],
+        fullPistol: ['9×19 mm Parabellum tár (töltött)', '.45 ACP tár (töltött)', 'Desert Eagle (.44 Magnum) tár (töltött)'],
+        fullBig: ['5.56×45 mm NATO tár (töltött)', '7.62×39 mm tár (töltött)', '7.62×51 mm NATO tár (töltött)', '9×19 mm géppisztolytár (töltött)', '.45 ACP dobtár (töltött)']
+    };
+
+    let tab = 'sale';
+    let cart = [];
+
+    const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
+
+    function updateCalibers() {
+        const cat = document.getElementById('category').value;
+        document.getElementById('caliber').innerHTML = CALIBERS[cat]
+            .map(c => `<option value="${c}">${c}</option>`).join('');
+        document.getElementById('qty').value = (cat === 'ammo' || cat === 'shotgun') ? 1000 : 5;
+    }
+
+    function addItem() {
+        const cat = document.getElementById('category').value;
+        const cal = document.getElementById('caliber').value;
+        const rar = document.getElementById('rarity').value;
+        const qty = parseInt(document.getElementById('qty').value, 10) || 0;
+        if (qty <= 0) return;
+
+        const p = PRICES[cat][rar];
+        cart.push({ cal, rar, qty, cost: p.cost, sell: p.sell });
+        renderCart();
+        render();
+    }
+
+    function removeItem(i) {
+        cart.splice(i, 1);
+        renderCart();
+        render();
+    }
+
+    function renderCart() {
+        const el = document.getElementById('cart');
+        if (!cart.length) {
+            el.innerHTML = '<div class="cart-empty">Nincs tétel a listában.</div>';
+            return;
+        }
+        el.innerHTML = cart.map((x, i) => `
+            <div class="cart-row">
+                <span><strong>${x.qty} db</strong> ${x.cal} (${x.rar})</span>
+                <span><strong>${money(x.qty * x.sell)}</strong><button class="del" onclick="removeItem(${i})">✕</button></span>
+            </div>
+        `).join('');
+    }
+
+    function setTab(next) {
+        tab = next;
+        document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === next));
+        document.getElementById('tab-sale').classList.toggle('hidden', next !== 'sale');
+        document.getElementById('tab-factory').classList.toggle('hidden', next !== 'factory');
+        document.getElementById('tab-other').classList.toggle('hidden', next !== 'other');
+        render();
+    }
+
+    function setFactory(title, amount) {
+        document.getElementById('fTitle').value = title;
+        document.getElementById('fAmount').value = amount;
+        render();
+    }
+
+    function buildPayload() {
+        const recorder = document.getElementById('recorder').value.trim() || '—';
+        let color = 0x10b981;
+        let title = '';
+        let fields = [];
+
+        if (tab === 'sale') {
+            const pSel = document.getElementById('partner');
+            const discPct = parseInt(pSel.value, 10) || 0;
+            const pName = pSel.options[pSel.selectedIndex].dataset.name;
+            const status = document.getElementById('status').value;
+            const note = document.getElementById('saleNote').value.trim();
+
+            let rawSell = 0, rawCost = 0;
+            cart.forEach(x => {
+                rawSell += x.qty * x.sell;
+                rawCost += x.qty * x.cost;
+            });
+
+            const discVal = Math.round(rawSell * (discPct / 100));
+            const total = rawSell - discVal;
+            const profit = total - rawCost;
+
+            document.getElementById('sCost').textContent = money(rawCost);
+            document.getElementById('sDisc').textContent = discVal ? `-${money(discVal)} (${discPct}%)` : '0 $';
+            document.getElementById('sProfit').textContent = (profit >= 0 ? '+' : '') + money(profit);
+            document.getElementById('sTotal').textContent = '+' + money(total);
+
+            color = status === 'paid' ? 0x10b981 : 0xf59e0b;
+            title = status === 'paid' ? 'Eladás (Kész)' : 'Függőben / Tartozás';
+
+            fields = [
+                { name: 'Rögzítette', value: recorder, inline: true },
+                { name: 'Partner', value: discPct ? `${pName} (-${discPct}%)` : pName, inline: true },
+                { name: 'Bevétel', value: `**+${money(total)}**`, inline: true },
+                { name: 'Tételek', value: cart.length ? cart.map(x => `• **${x.qty} db** ${x.cal} (${x.rar})`).join('\n') : '*Nincs tétel*', inline: false },
+                { name: 'Önköltség', value: money(rawCost), inline: true },
+                { name: 'Haszon', value: `**${profit >= 0 ? '+' : ''}${money(profit)}**`, inline: true }
+            ];
+            if (note) fields.push({ name: 'Megjegyzés', value: note, inline: false });
+        } else if (tab === 'factory') {
+            const fTitle = document.getElementById('fTitle').value.trim() || 'Gyári kiadás';
+            const fAmt = parseInt(document.getElementById('fAmount').value, 10) || 0;
+            const fNote = document.getElementById('fNote').value.trim();
+            color = 0xef4444;
+            title = 'Gyár kiadás';
+            fields = [
+                { name: 'Rögzítette', value: recorder, inline: true },
+                { name: 'Összeg', value: `**- ${money(fAmt).replace(' ', '')}**`, inline: true },
+                { name: 'Megnevezés', value: fTitle, inline: false }
+            ];
+            fields[1].value = `**-${money(fAmt)}**`;
+            if (fNote) fields.push({ name: 'Megjegyzés', value: fNote, inline: false });
+        } else {
+            const isExp = document.getElementById('oType').value === 'expense';
+            const oAmt = parseInt(document.getElementById('oAmount').value, 10) || 0;
+            const oTitle = document.getElementById('oTitle').value.trim() || 'Frakció tétel';
+            const oNote = document.getElementById('oNote').value.trim();
+            color = isExp ? 0xef4444 : 0x10b981;
+            title = isExp ? 'Egyéb kiadás' : 'Egyéb bevétel';
+            fields = [
+                { name: 'Rögzítette', value: recorder, inline: true },
+                { name: 'Összeg', value: `**${isExp ? '-' : '+'}${money(oAmt)}**`, inline: true },
+                { name: 'Megnevezés', value: oTitle, inline: false }
+            ];
+            if (oNote) fields.push({ name: 'Megjegyzés', value: oNote, inline: false });
+        }
+
+        return {
+            username: 'ZERO Kassza',
+            embeds: [{ color, title, fields, timestamp: new Date().toISOString() }]
+        };
+    }
+
+    function render() {
+        const embed = buildPayload().embeds[0];
+        document.getElementById('embed').style.borderLeftColor = '#' + embed.color.toString(16).padStart(6, '0');
+        document.getElementById('eTitle').textContent = embed.title;
+        document.getElementById('eFields').innerHTML = embed.fields.map(f => `
+            <div class="embed-item ${f.inline ? '' : 'full'}">
+                <div class="embed-k">${f.name}</div>
+                <div class="embed-v">${f.value.replace(/\*\*/g, '')}</div>
+            </div>
+        `).join('');
+    }
+
+    async function send() {
+        const recorderEl = document.getElementById('recorder');
+        const recorder = recorderEl.value.trim();
+        const webhook = document.getElementById('webhook').value.trim();
+        const msg = document.getElementById('msg');
+
+        if (!recorder) {
+            msg.style.color = 'var(--red)';
+            msg.textContent = 'Add meg a rögzítő nevét, nélküle nem küldhető el!';
+            recorderEl.focus();
+            return;
+        }
+        if (!webhook) {
+            msg.style.color = 'var(--red)';
+            msg.textContent = 'Hiányzik a Webhook URL!';
+            return;
+        }
+        if (tab === 'sale' && !cart.length) {
+            msg.style.color = 'var(--red)';
+            msg.textContent = 'Adj hozzá legalább egy tételt!';
+            return;
+        }
+
+        saveLocal();
+        msg.style.color = 'var(--muted)';
+        msg.textContent = 'Küldés...';
+
+        try {
+            const res = await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(buildPayload())
+            });
+            if (res.ok) {
+                msg.style.color = 'var(--green)';
+                msg.textContent = 'Elküldve!';
+                if (tab === 'sale') {
+                    cart = [];
+                    renderCart();
+                    document.getElementById('saleNote').value = '';
+                }
+                render();
+            } else {
+                msg.style.color = 'var(--red)';
+                msg.textContent = `Hiba (${res.status})`;
+            }
+        } catch {
+            msg.style.color = 'var(--red)';
+            msg.textContent = 'Hálózati hiba.';
+        }
+    }
+
+    function saveLocal() {
+        localStorage.setItem('zero_rec', document.getElementById('recorder').value.trim());
+        localStorage.setItem('zero_wh', document.getElementById('webhook').value.trim());
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('recorder').value = localStorage.getItem('zero_rec') || '';
+        document.getElementById('webhook').value = localStorage.getItem('zero_wh') || '';
+        document.getElementById('recorder').addEventListener('input', () => {
+            saveLocal();
+            render();
+        });
+        updateCalibers();
+        render();
+    });
+</script>
+
+</body>
+</html>
