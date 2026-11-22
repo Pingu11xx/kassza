@@ -6,10 +6,10 @@
     <title>ZERO // Kassza & Kalkulátor</title>
     <style>
         :root {
-            --bg: #0f1117;
-            --card: #171a23;
-            --input: #202532;
-            --border: #2d3446;
+            --bg: #0c0e13;
+            --card: #141821;
+            --input: #1d222f;
+            --border: #2a3142;
             --text: #f3f4f6;
             --muted: #9ca3af;
             --green: #10b981;
@@ -35,14 +35,14 @@
 
         .app {
             width: 100%;
-            max-width: 900px;
+            max-width: 940px;
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
             gap: 18px;
             align-items: start;
         }
 
-        @media (max-width: 780px) {
+        @media (max-width: 820px) {
             .app {
                 grid-template-columns: 1fr;
             }
@@ -64,8 +64,25 @@
             flex-wrap: wrap;
         }
 
-        .top h1 {
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand h1 {
             font-size: 1.25rem;
+            letter-spacing: 0.4px;
+        }
+
+        .pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(59, 130, 246, 0.14);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .tabs {
@@ -87,12 +104,17 @@
             font-weight: 600;
             font-size: 0.85rem;
             cursor: pointer;
+            border-bottom: 2px solid transparent;
         }
 
         .tab.active {
             background: var(--input);
             color: var(--text);
         }
+
+        .tab[data-tab="sale"].active { border-bottom-color: var(--green); }
+        .tab[data-tab="factory"].active { border-bottom-color: var(--red); }
+        .tab[data-tab="other"].active { border-bottom-color: var(--blue); }
 
         .field {
             margin-bottom: 12px;
@@ -106,7 +128,7 @@
 
         label {
             display: block;
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--muted);
             margin-bottom: 5px;
         }
@@ -126,12 +148,16 @@
             border-color: var(--blue);
         }
 
+        input.req-missing {
+            border-color: var(--red);
+        }
+
         button.action {
             width: 100%;
             padding: 11px;
             border: none;
             border-radius: 7px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
             cursor: pointer;
         }
@@ -143,10 +169,18 @@
             margin-bottom: 12px;
         }
 
+        .btn-add:hover {
+            border-color: var(--blue) !important;
+        }
+
         .btn-send {
             background: var(--blue);
             color: #fff;
             margin-top: 6px;
+        }
+
+        .btn-send:hover {
+            filter: brightness(1.08);
         }
 
         .chips {
@@ -164,6 +198,11 @@
             border-radius: 6px;
             font-size: 0.76rem;
             cursor: pointer;
+        }
+
+        .chip:hover {
+            color: var(--text);
+            border-color: var(--blue);
         }
 
         .cart {
@@ -209,7 +248,7 @@
         .summary {
             background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 7px;
+            border-radius: 8px;
             padding: 12px;
             margin-bottom: 14px;
             font-size: 0.84rem;
@@ -218,30 +257,50 @@
         .sum-line {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            align-items: center;
+            margin-bottom: 6px;
             color: var(--muted);
+        }
+
+        .sum-highlight {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 6px;
+            padding: 7px 9px;
+            margin: 8px 0;
+            color: var(--text);
+            font-weight: 600;
         }
 
         .sum-line.total {
             border-top: 1px solid var(--border);
-            padding-top: 7px;
-            margin: 6px 0 0;
+            padding-top: 8px;
+            margin: 8px 0 0;
             color: var(--text);
-            font-weight: 700;
-            font-size: 0.98rem;
+            font-weight: 800;
+            font-size: 1.05rem;
+        }
+
+        .val-green { color: var(--green); font-weight: 700; }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .preview-label {
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             color: var(--muted);
             text-transform: uppercase;
-            margin-bottom: 10px;
+            letter-spacing: 0.5px;
         }
 
         .embed {
             background: #2b2d31;
             border-left: 4px solid var(--green);
-            border-radius: 4px;
+            border-radius: 5px;
             padding: 12px 14px;
             font-size: 0.85rem;
             color: #dbdee1;
@@ -250,7 +309,17 @@
         .embed-title {
             font-weight: 700;
             color: #fff;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            font-size: 0.94rem;
+        }
+
+        .embed-desc {
+            font-size: 0.82rem;
+            color: #f3f4f6;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
         }
 
         .embed-grid {
@@ -274,17 +343,12 @@
             white-space: pre-line;
         }
 
-        .webhook-area {
-            margin-top: 16px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
-        }
-
         .msg {
             margin-top: 8px;
             font-size: 0.82rem;
             min-height: 18px;
             text-align: center;
+            font-weight: 600;
         }
 
         .hidden {
@@ -296,12 +360,16 @@
 
 <div class="app">
     <div class="box top">
-        <h1>ZERO // Kassza</h1>
-        <div style="width: 220px;">
+        <div class="brand">
+            <h1>ZERO // Kassza</h1>
+            <span class="pill">Lőszergyár & Kalkulátor</span>
+        </div>
+        <div style="width: 230px;">
             <input type="text" id="recorder" placeholder="Rögzítő neve (kötelező)">
         </div>
     </div>
 
+    <!-- Bal oldal: Űrlap -->
     <div class="box">
         <div class="tabs">
             <button class="tab active" data-tab="sale" onclick="setTab('sale')">Eladás</button>
@@ -347,7 +415,7 @@
                 </div>
             </div>
 
-            <button class="action btn-add" onclick="addItem()">+ Hozzáadás</button>
+            <button class="action btn-add" onclick="addItem()">+ Tétel hozzáadása</button>
 
             <div class="cart" id="cart">
                 <div class="cart-empty">Nincs tétel a listában.</div>
@@ -355,9 +423,9 @@
 
             <div class="grid-2 field">
                 <div>
-                    <label>Kedvezmény / Partner</label>
+                    <label>Kedvezmény</label>
                     <select id="partner" onchange="render()">
-                        <option value="0" data-name="Alap vevő">Alap (0%)</option>
+                        <option value="0" data-name="Nincs">Nincs (0%)</option>
                         <option value="10" data-name="Tai (füvesek)">Tai (-10%)</option>
                         <option value="10" data-name="Ravens">Ravens (-10%)</option>
                         <option value="10" data-name="Syndicate (Meth)">Syndicate (-10%)</option>
@@ -375,14 +443,14 @@
 
             <div class="field">
                 <label>Megjegyzés</label>
-                <input type="text" id="saleNote" placeholder="pl. Holnap kerül be" oninput="render()">
+                <input type="text" id="saleNote" placeholder="pl. Holnap kerül be a széfbe" oninput="render()">
             </div>
 
             <div class="summary">
                 <div class="sum-line"><span>Önköltség:</span><span id="sCost">0 $</span></div>
                 <div class="sum-line"><span>Kedvezmény:</span><span id="sDisc">0 $</span></div>
-                <div class="sum-line"><span>Tiszta haszon:</span><span id="sProfit">0 $</span></div>
-                <div class="sum-line total"><span>Végösszeg:</span><span id="sTotal">0 $</span></div>
+                <div class="sum-line sum-highlight"><span>Tiszta haszon:</span><span id="sProfit" class="val-green">0 $</span></div>
+                <div class="sum-line total"><span>Végösszeg:</span><span id="sTotal" class="val-green">0 $</span></div>
             </div>
         </div>
 
@@ -440,21 +508,25 @@
         <div class="msg" id="msg"></div>
     </div>
 
+    <!-- Jobb oldal: Discord előnézet -->
     <div class="box">
-        <div class="preview-label">Discord előnézet</div>
-        <div class="embed" id="embed">
-            <div class="embed-title" id="eTitle">Eladás</div>
-            <div class="embed-grid" id="eFields"></div>
+        <div class="section-head">
+            <span class="preview-label">Discord előnézet</span>
+            <span class="preview-label" id="statusBadge" style="color: var(--green);">KÉSZ</span>
         </div>
 
-        <div class="webhook-area">
-            <label>Webhook URL (csak helyben mentve)</label>
-            <input type="password" id="webhook" placeholder="https://discord.com/api/webhooks/..." onchange="saveLocal()">
+        <div class="embed" id="embed">
+            <div class="embed-title" id="eTitle">Eladás (Kész)</div>
+            <div class="embed-desc" id="eDesc">👤 Rögzítette: —</div>
+            <div class="embed-grid" id="eFields"></div>
         </div>
     </div>
 </div>
 
 <script>
+    // Ide írd be a fix Discord Webhook URL-t (ha publikus GitHub Pages-re teszed, bárki láthatja a forráskódban)
+    const WEBHOOK_URL = 'IDE_MASOLD_A_WEBHOOK_URL_T';
+
     const PRICES = {
         ammo: {
             Common:    { cost: 9.8,  sell: 15 },
@@ -576,7 +648,10 @@
     }
 
     function buildPayload() {
-        const recorder = document.getElementById('recorder').value.trim() || '—';
+        const rawRecorder = document.getElementById('recorder').value.trim();
+        const upperRecorder = rawRecorder ? rawRecorder.toUpperCase() : '—';
+        const description = `👤 **Rögzítette:** \`${upperRecorder}\``;
+
         let color = 0x10b981;
         let title = '';
         let fields = [];
@@ -607,12 +682,11 @@
             title = status === 'paid' ? 'Eladás (Kész)' : 'Függőben / Tartozás';
 
             fields = [
-                { name: 'Rögzítette', value: recorder, inline: true },
-                { name: 'Partner', value: discPct ? `${pName} (-${discPct}%)` : pName, inline: true },
+                { name: 'Kedvezmény', value: discPct ? `${pName} (-${discPct}%)` : pName, inline: true },
                 { name: 'Bevétel', value: `**+${money(total)}**`, inline: true },
                 { name: 'Tételek', value: cart.length ? cart.map(x => `• **${x.qty} db** ${x.cal} (${x.rar})`).join('\n') : '*Nincs tétel*', inline: false },
                 { name: 'Önköltség', value: money(rawCost), inline: true },
-                { name: 'Haszon', value: `**${profit >= 0 ? '+' : ''}${money(profit)}**`, inline: true }
+                { name: 'Tiszta haszon', value: `**${profit >= 0 ? '+' : ''}${money(profit)}**`, inline: true }
             ];
             if (note) fields.push({ name: 'Megjegyzés', value: note, inline: false });
         } else if (tab === 'factory') {
@@ -622,11 +696,9 @@
             color = 0xef4444;
             title = 'Gyár kiadás';
             fields = [
-                { name: 'Rögzítette', value: recorder, inline: true },
-                { name: 'Összeg', value: `**- ${money(fAmt).replace(' ', '')}**`, inline: true },
-                { name: 'Megnevezés', value: fTitle, inline: false }
+                { name: 'Összeg', value: `**-${money(fAmt)}**`, inline: true },
+                { name: 'Megnevezés', value: fTitle, inline: true }
             ];
-            fields[1].value = `**-${money(fAmt)}**`;
             if (fNote) fields.push({ name: 'Megjegyzés', value: fNote, inline: false });
         } else {
             const isExp = document.getElementById('oType').value === 'expense';
@@ -636,23 +708,36 @@
             color = isExp ? 0xef4444 : 0x10b981;
             title = isExp ? 'Egyéb kiadás' : 'Egyéb bevétel';
             fields = [
-                { name: 'Rögzítette', value: recorder, inline: true },
                 { name: 'Összeg', value: `**${isExp ? '-' : '+'}${money(oAmt)}**`, inline: true },
-                { name: 'Megnevezés', value: oTitle, inline: false }
+                { name: 'Megnevezés', value: oTitle, inline: true }
             ];
             if (oNote) fields.push({ name: 'Megjegyzés', value: oNote, inline: false });
         }
 
         return {
             username: 'ZERO Kassza',
-            embeds: [{ color, title, fields, timestamp: new Date().toISOString() }]
+            embeds: [{ color, title, description, fields, timestamp: new Date().toISOString() }]
         };
     }
 
     function render() {
         const embed = buildPayload().embeds[0];
+        const badge = document.getElementById('statusBadge');
         document.getElementById('embed').style.borderLeftColor = '#' + embed.color.toString(16).padStart(6, '0');
         document.getElementById('eTitle').textContent = embed.title;
+        document.getElementById('eDesc').textContent = embed.description.replace(/\*\*|`/g, '');
+
+        if (embed.color === 0x10b981) {
+            badge.textContent = 'KÉSZ / BEVÉTEL';
+            badge.style.color = 'var(--green)';
+        } else if (embed.color === 0xf59e0b) {
+            badge.textContent = 'FÜGGŐBEN';
+            badge.style.color = 'var(--yellow)';
+        } else {
+            badge.textContent = 'KIADÁS';
+            badge.style.color = 'var(--red)';
+        }
+
         document.getElementById('eFields').innerHTML = embed.fields.map(f => `
             <div class="embed-item ${f.inline ? '' : 'full'}">
                 <div class="embed-k">${f.name}</div>
@@ -664,18 +749,20 @@
     async function send() {
         const recorderEl = document.getElementById('recorder');
         const recorder = recorderEl.value.trim();
-        const webhook = document.getElementById('webhook').value.trim();
         const msg = document.getElementById('msg');
 
+        recorderEl.classList.remove('req-missing');
+
         if (!recorder) {
+            recorderEl.classList.add('req-missing');
             msg.style.color = 'var(--red)';
             msg.textContent = 'Add meg a rögzítő nevét, nélküle nem küldhető el!';
             recorderEl.focus();
             return;
         }
-        if (!webhook) {
+        if (!WEBHOOK_URL || WEBHOOK_URL === 'IDE_MASOLD_A_WEBHOOK_URL_T') {
             msg.style.color = 'var(--red)';
-            msg.textContent = 'Hiányzik a Webhook URL!';
+            msg.textContent = 'Állítsd be a fix WEBHOOK_URL-t a kódban!';
             return;
         }
         if (tab === 'sale' && !cart.length) {
@@ -684,12 +771,12 @@
             return;
         }
 
-        saveLocal();
+        localStorage.setItem('zero_rec', recorder);
         msg.style.color = 'var(--muted)';
         msg.textContent = 'Küldés...';
 
         try {
-            const res = await fetch(webhook, {
+            const res = await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(buildPayload())
@@ -713,18 +800,13 @@
         }
     }
 
-    function saveLocal() {
-        localStorage.setItem('zero_rec', document.getElementById('recorder').value.trim());
-        localStorage.setItem('zero_wh', document.getElementById('webhook').value.trim());
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('recorder').value = localStorage.getItem('zero_rec') || '';
-        document.getElementById('webhook').value = localStorage.getItem('zero_wh') || '';
         document.getElementById('recorder').addEventListener('input', () => {
-            saveLocal();
+            localStorage.setItem('zero_rec', document.getElementById('recorder').value.trim());
             render();
         });
+
         updateCalibers();
         render();
     });
