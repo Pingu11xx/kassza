@@ -35,7 +35,7 @@
 
         .app {
             width: 100%;
-            max-width: 940px;
+            max-width: 980px;
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
             gap: 18px;
@@ -124,6 +124,12 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
+        }
+
+        @media (max-width: 540px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
         }
 
         label {
@@ -366,6 +372,120 @@
             font-weight: 600;
         }
 
+        .pending-box {
+            margin-top: 16px;
+            background: var(--bg);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .pending-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .pending-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--yellow);
+        }
+
+        .pending-count {
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        .pending-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .pending-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--yellow);
+            border-radius: 7px;
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+
+        .pending-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .pending-partner {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .pending-amount {
+            font-weight: 800;
+            color: var(--yellow);
+        }
+
+        .pending-meta {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .pending-items {
+            color: #d1d5db;
+            font-size: 0.76rem;
+            line-height: 1.35;
+            margin-bottom: 8px;
+            white-space: pre-line;
+        }
+
+        .pending-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-import {
+            flex: 1;
+            background: rgba(16, 185, 129, 0.16);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 6px;
+            padding: 6px 8px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-import:hover {
+            background: rgba(16, 185, 129, 0.28);
+        }
+
+        .btn-remove-pending {
+            background: rgba(239, 68, 68, 0.14);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            border-radius: 6px;
+            padding: 6px 9px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-remove-pending:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
         .hidden {
             display: none;
         }
@@ -445,7 +565,7 @@
                         <option value="tier" data-name="Tai (füvesek)">Tai (-10% / 100k+ felett -15%)</option>
                         <option value="tier" data-name="Ravens">Ravens (-10% / 100k+ felett -15%)</option>
                         <option value="tier" data-name="Syndicate (Meth)">Syndicate (-10% / 100k+ felett -15%)</option>
-                        <option value="rustata" data-name="Rustata">Rustata (mindig -15%)</option>
+                        <option value="rustata" data-name="Rustata">Rustata (mindig -30%)</option>
                     </select>
                 </div>
                 <div>
@@ -526,7 +646,7 @@
         <div class="msg" id="msg"></div>
     </div>
 
-    <!-- Jobb oldal: Discord előnézet -->
+    <!-- Jobb oldal: Discord előnézet + Helyi Függőben / Tartozás adatbázis -->
     <div class="box">
         <div class="section-head">
             <span class="preview-label">Discord előnézet</span>
@@ -538,12 +658,21 @@
             <div class="embed-desc" id="eDesc">👤 Rögzítette: —</div>
             <div class="embed-grid" id="eFields"></div>
         </div>
+
+        <div class="pending-box">
+            <div class="pending-head">
+                <span class="pending-title">Helyi Függőben / Tartozás</span>
+                <span class="pending-count" id="pendingCount">0 mentett</span>
+            </div>
+            <div class="pending-list" id="pendingList"></div>
+        </div>
     </div>
 </div>
 
 <script>
     const WEBHOOK_URL = 'https://discord.com/api/webhooks/1574083295216406528/pykSkznZG8RU2U4Cczh6eVtdLrdo0cSk2jydkx6HRbw9PTJYtTCPmZSVlS0C5MkaE7wU';
     const DISCOUNT_THRESHOLD = 100000;
+    const PENDING_STORAGE_KEY = 'zero_pending_orders_v1';
 
     const PRICES = {
         ammo: {
@@ -610,8 +739,165 @@
 
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
 
+    function normText(v) {
+        return String(v || '').trim().toLowerCase();
+    }
+
+    function setPartnerInSelect(partnerRole, partnerName) {
+        const pSel = document.getElementById('partner');
+        const targetName = normText(partnerName);
+        const targetRole = normText(partnerRole);
+
+        let matchedOption = null;
+
+        if (targetName) {
+            matchedOption = Array.from(pSel.options).find(opt => {
+                const dName = normText(opt.dataset.name);
+                const text = normText(opt.textContent);
+                return dName === targetName || text.startsWith(targetName) || text.includes(targetName);
+            });
+        }
+
+        if (!matchedOption && targetRole) {
+            matchedOption = Array.from(pSel.options).find(opt => normText(opt.value) === targetRole);
+        }
+
+        if (!matchedOption && partnerName && partnerName.trim()) {
+            const cleanName = partnerName.trim();
+            const roleVal = (targetRole === 'tier' || targetRole === 'rustata' || targetRole === 'other') ? partnerRole : 'other';
+            const newOpt = document.createElement('option');
+            newOpt.value = roleVal;
+            newOpt.dataset.name = cleanName;
+            newOpt.textContent = `${cleanName} (importált)`;
+            pSel.appendChild(newOpt);
+            matchedOption = newOpt;
+        }
+
+        if (matchedOption) {
+            pSel.value = matchedOption.value;
+            Array.from(pSel.options).forEach(opt => {
+                opt.selected = (opt === matchedOption);
+            });
+            pSel.dispatchEvent(new Event('change'));
+        }
+    }
+
+    function getPendingOrders() {
+        try {
+            const raw = localStorage.getItem(PENDING_STORAGE_KEY);
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function savePendingOrders(orders) {
+        localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(orders));
+    }
+
+    function saveCurrentSaleToPending() {
+        const pSel = document.getElementById('partner');
+        const selectedOpt = pSel.options[pSel.selectedIndex];
+        const partnerRole = pSel.value;
+        const partnerName = (selectedOpt && selectedOpt.dataset.name) ? selectedOpt.dataset.name : (selectedOpt ? selectedOpt.textContent : 'Sima vevő');
+        const note = document.getElementById('saleNote').value.trim();
+        const recorder = document.getElementById('recorder').value.trim().toUpperCase() || '—';
+
+        let rawSell = 0;
+        cart.forEach(x => { rawSell += x.qty * x.sell; });
+        const discPct = getDiscountPercent(partnerRole, rawSell);
+        const total = rawSell - Math.round(rawSell * (discPct / 100));
+
+        const orders = getPendingOrders();
+        orders.unshift({
+            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            createdAt: new Date().toLocaleString('hu-HU'),
+            recorder,
+            partnerRole,
+            partnerName,
+            note,
+            total,
+            items: cart.map(x => ({ ...x }))
+        });
+        savePendingOrders(orders);
+        renderPendingOrders();
+    }
+
+    function importPendingOrder(orderId) {
+        const orders = getPendingOrders();
+        const found = orders.find(o => o.id === orderId);
+        if (!found) return;
+
+        setTab('sale');
+        cart = (found.items || []).map(x => ({ ...x }));
+        renderCart();
+
+        setPartnerInSelect(found.partnerRole, found.partnerName);
+        document.getElementById('status').value = 'paid';
+        document.getElementById('saleNote').value = found.note || '';
+
+        const recInput = document.getElementById('recorder');
+        if (!recInput.value.trim() && found.recorder && found.recorder !== '—') {
+            recInput.value = found.recorder;
+        }
+
+        render();
+
+        const pSel = document.getElementById('partner');
+        const activeName = pSel.options[pSel.selectedIndex]?.dataset?.name || found.partnerName || 'Sima vevő';
+        const msg = document.getElementById('msg');
+        msg.style.color = '#10b981';
+        msg.textContent = `Beimportálva: ${activeName} (${money(found.total)}) — státusz: Kész.`;
+    }
+
+    function deletePendingOrder(orderId) {
+        const filtered = getPendingOrders().filter(o => o.id !== orderId);
+        savePendingOrders(filtered);
+        renderPendingOrders();
+    }
+
+    function renderPendingOrders() {
+        const listEl = document.getElementById('pendingList');
+        const countEl = document.getElementById('pendingCount');
+        const orders = getPendingOrders();
+
+        countEl.textContent = `${orders.length} mentett`;
+
+        if (!orders.length) {
+            listEl.innerHTML = '<div class="cart-empty">Nincs helyben mentett függő rendelés.</div>';
+            return;
+        }
+
+        listEl.innerHTML = orders.map(o => {
+            const itemsText = (o.items || []).map(x => `• ${x.qty} db ${x.cal} (${x.rar})`).join('\n');
+            return `
+                <div class="pending-card">
+                    <div class="pending-top">
+                        <span class="pending-partner">${escapeHtml(o.partnerName || 'Sima vevő')}</span>
+                        <span class="pending-amount">${money(o.total || 0)}</span>
+                    </div>
+                    <div class="pending-meta">${escapeHtml(o.createdAt || '')} • Rögzítette: ${escapeHtml(o.recorder || '—')}${o.note ? ' • ' + escapeHtml(o.note) : ''}</div>
+                    <div class="pending-items">${escapeHtml(itemsText)}</div>
+                    <div class="pending-actions">
+                        <button type="button" class="btn-import" onclick="importPendingOrder('${o.id}')">Rendelés beimportálása</button>
+                        <button type="button" class="btn-remove-pending" onclick="deletePendingOrder('${o.id}')" title="Törlés a helyi listából">✕</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
     function getDiscountPercent(buyerRole, rawSell) {
-        if (buyerRole === 'rustata') return 15;
+        if (buyerRole === 'rustata') return 30;
         if (buyerRole === 'tier') return rawSell > DISCOUNT_THRESHOLD ? 15 : 10;
         return rawSell > DISCOUNT_THRESHOLD ? 10 : 0;
     }
@@ -678,7 +964,7 @@
             return;
         }
         if (buyerRole === 'rustata') {
-            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (Rustata fix 15% kedvezmény aktív).`;
+            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (Rustata fix 30% kedvezmény aktív).`;
             return;
         }
         if (rawSell > DISCOUNT_THRESHOLD) {
@@ -705,8 +991,9 @@
 
         if (tab === 'sale') {
             const pSel = document.getElementById('partner');
+            const selectedOpt = pSel.options[pSel.selectedIndex];
             const buyerRole = pSel.value;
-            const pName = pSel.options[pSel.selectedIndex].dataset.name;
+            const pName = (selectedOpt && selectedOpt.dataset.name) ? selectedOpt.dataset.name : (selectedOpt ? selectedOpt.textContent : 'Sima vevő');
             const status = document.getElementById('status').value;
             const note = document.getElementById('saleNote').value.trim();
 
@@ -824,6 +1111,8 @@
         msg.style.color = 'var(--muted)';
         msg.textContent = 'Küldés...';
 
+        const currentSaleStatus = tab === 'sale' ? document.getElementById('status').value : null;
+
         try {
             const res = await fetch(WEBHOOK_URL, {
                 method: 'POST',
@@ -834,6 +1123,9 @@
                 msg.style.color = 'var(--green)';
                 msg.textContent = 'Elküldve!';
                 if (tab === 'sale') {
+                    if (currentSaleStatus === 'pending') {
+                        saveCurrentSaleToPending();
+                    }
                     cart = [];
                     renderCart();
                     document.getElementById('saleNote').value = '';
@@ -857,6 +1149,7 @@
         });
 
         updateCalibers();
+        renderPendingOrders();
         render();
     });
 </script>
