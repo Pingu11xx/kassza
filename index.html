@@ -423,13 +423,13 @@
 
             <div class="grid-2 field">
                 <div>
-                    <label>Kedvezmény</label>
+                    <label>Vevő / Partner (100k+ felett kedvezmény)</label>
                     <select id="partner" onchange="render()">
-                        <option value="0" data-name="Nincs">Nincs (0%)</option>
-                        <option value="10" data-name="Tai (füvesek)">Tai (-10%)</option>
-                        <option value="10" data-name="Ravens">Ravens (-10%)</option>
-                        <option value="10" data-name="Syndicate (Meth)">Syndicate (-10%)</option>
-                        <option value="15" data-name="Rustata">Rustata (-15%)</option>
+                        <option value="regular" data-name="Sima vevő">Sima vevő (100k+ felett -10%)</option>
+                        <option value="partner" data-name="Tai (füvesek)">Tai (100k+ felett -15%)</option>
+                        <option value="partner" data-name="Ravens">Ravens (100k+ felett -15%)</option>
+                        <option value="partner" data-name="Syndicate (Meth)">Syndicate (100k+ felett -15%)</option>
+                        <option value="partner" data-name="Rustata">Rustata (100k+ felett -15%)</option>
                     </select>
                 </div>
                 <div>
@@ -524,8 +524,8 @@
 </div>
 
 <script>
-    // Ide írd be a fix Discord Webhook URL-t (ha publikus GitHub Pages-re teszed, bárki láthatja a forráskódban)
     const WEBHOOK_URL = 'IDE_MASOLD_A_WEBHOOK_URL_T';
+    const DISCOUNT_THRESHOLD = 100000;
 
     const PRICES = {
         ammo: {
@@ -591,6 +591,11 @@
     let cart = [];
 
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
+
+    function getDiscountPercent(buyerRole, rawSell) {
+        if (rawSell <= DISCOUNT_THRESHOLD) return 0;
+        return buyerRole === 'partner' ? 15 : 10;
+    }
 
     function updateCalibers() {
         const cat = document.getElementById('category').value;
@@ -658,7 +663,7 @@
 
         if (tab === 'sale') {
             const pSel = document.getElementById('partner');
-            const discPct = parseInt(pSel.value, 10) || 0;
+            const buyerRole = pSel.value;
             const pName = pSel.options[pSel.selectedIndex].dataset.name;
             const status = document.getElementById('status').value;
             const note = document.getElementById('saleNote').value.trim();
@@ -669,6 +674,7 @@
                 rawCost += x.qty * x.cost;
             });
 
+            const discPct = getDiscountPercent(buyerRole, rawSell);
             const discVal = Math.round(rawSell * (discPct / 100));
             const total = rawSell - discVal;
             const profit = total - rawCost;
@@ -682,7 +688,7 @@
             title = status === 'paid' ? 'Eladás (Kész)' : 'Függőben / Tartozás';
 
             fields = [
-                { name: 'Kedvezmény', value: discPct ? `${pName} (-${discPct}%)` : pName, inline: true },
+                { name: 'Partner', value: discPct ? `${pName} (-${discPct}%)` : pName, inline: true },
                 { name: 'Bevétel', value: `**+${money(total)}**`, inline: true },
                 { name: 'Tételek', value: cart.length ? cart.map(x => `• **${x.qty} db** ${x.cal} (${x.rar})`).join('\n') : '*Nincs tétel*', inline: false },
                 { name: 'Önköltség', value: money(rawCost), inline: true },
