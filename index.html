@@ -1244,7 +1244,7 @@
                 <div class="brand-text">
                     <h1>ZERO // KASSZA</h1>
                     <span class="brand-sub">Lőszergyár</span>
-                    </span>
+                    <span class="live-pill" id="livePill"><span class="live-dot"></span><span id="liveText">READY</span></span>
                 </div>
                 <div class="brand-motto">Kaliberre szabva, nem a véletlenre bízva.</div>
             </div>
@@ -1389,23 +1389,23 @@
                         </button>
                     </div>
 
-                    <div class="p-grp">Partnerek (&lt;100k: -10% · 100–200k: -15% · 200k+: -20%)</div>
+                    <div class="p-grp">Partnerek (&lt;100k: -10% · +5%/100k · max -30% 400k+-tól)</div>
                     <div class="p-grid">
                         <button type="button" class="p-card" data-role="tier" data-name="Mia Keller" onclick="selectPartner('tier', 'Mia Keller')">
                             <span>Mia Keller</span>
-                            <span class="p-tag">-10 / -15 / -20%</span>
+                            <span class="p-tag">-10% · max -30% (400k)</span>
                         </button>
                         <button type="button" class="p-card" data-role="tier" data-name="Tai (füvesek)" onclick="selectPartner('tier', 'Tai (füvesek)')">
                             <span>Tai (füvesek)</span>
-                            <span class="p-tag">-10 / -15 / -20%</span>
+                            <span class="p-tag">-10% · max -30% (400k)</span>
                         </button>
                         <button type="button" class="p-card" data-role="tier" data-name="Ravens" onclick="selectPartner('tier', 'Ravens')">
                             <span>Ravens</span>
-                            <span class="p-tag">-10 / -15 / -20%</span>
+                            <span class="p-tag">-10% · max -30% (400k)</span>
                         </button>
                         <button type="button" class="p-card" data-role="tier" data-name="Syndicate (Meth)" onclick="selectPartner('tier', 'Syndicate (Meth)')">
                             <span>Syndicate (Meth)</span>
-                            <span class="p-tag">-10 / -15 / -20%</span>
+                            <span class="p-tag">-10% · max -30% (400k)</span>
                         </button>
                     </div>
 
@@ -1536,7 +1536,7 @@
                     <div class="stat-val" id="stExpense" style="color:var(--err);">-0 $</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-lbl">PROFIT</div>
+                    <div class="stat-lbl">Nettó</div>
                     <div class="stat-val" id="stNet">0 $</div>
                 </div>
                 <div class="stat-box">
@@ -1581,6 +1581,8 @@
     const WEBHOOK_URL = 'https://discord.com/api/webhooks/1574083295216406528/pykSkznZG8RU2U4Cczh6eVtdLrdo0cSk2jydkx6HRbw9PTJYtTCPmZSVlS0C5MkaE7wU';
     const TIER_1 = 100000;
     const TIER_2 = 200000;
+    const PARTNER_CAP_AMOUNT = 400000;
+    const PARTNER_MAX_DISCOUNT = 30;
     const SEND_COOLDOWN_MS = 1500;
 
     const STORAGE_KEYS = {
@@ -1978,9 +1980,8 @@
         if (buyerRole === 'drock') return 50;
         if (buyerRole === 'rustata') return 30;
         if (buyerRole === 'tier') {
-            if (rawSell >= TIER_2) return 20;
-            if (rawSell >= TIER_1) return 15;
-            return 10;
+            const steps = Math.floor(Math.max(0, rawSell) / TIER_1);
+            return Math.min(PARTNER_MAX_DISCOUNT, 10 + steps * 5);
         }
         if (rawSell >= TIER_2) return 10;
         if (rawSell >= TIER_1) return 5;
@@ -2182,16 +2183,14 @@
         }
 
         if (state.partnerRole === 'tier') {
-            if (t.rawSell >= TIER_2) {
-                quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · Partner max sáv (-20%, 200k+ felett)`;
-            } else if (t.rawSell >= TIER_1) {
-                const missing = TIER_2 - t.rawSell;
-                const hyp20 = Math.round(t.rawSell * 0.8);
-                quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (-15%) · <strong>${money(missing)}</strong> a <strong>-20%</strong>-hoz (~<strong>${money(hyp20)}</strong>)`;
+            if (t.rawSell >= PARTNER_CAP_AMOUNT || t.discPct >= PARTNER_MAX_DISCOUNT) {
+                quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · Partner max sáv (-30%, 400k+ felett)`;
             } else {
-                const missing = TIER_1 - t.rawSell;
-                const hyp15 = Math.round(t.rawSell * 0.85);
-                quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (-10%) · <strong>${money(missing)}</strong> a <strong>-15%</strong>-hoz (~<strong>${money(hyp15)}</strong>)`;
+                const nextThreshold = Math.min(PARTNER_CAP_AMOUNT, (Math.floor(t.rawSell / TIER_1) + 1) * TIER_1);
+                const nextPct = Math.min(PARTNER_MAX_DISCOUNT, t.discPct + 5);
+                const missing = nextThreshold - t.rawSell;
+                const hypNext = Math.round(t.rawSell * (1 - nextPct / 100));
+                quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (-${t.discPct}%) · <strong>${money(missing)}</strong> a <strong>-${nextPct}%</strong>-hoz (~<strong>${money(hypNext)}</strong>)`;
             }
             return;
         }
