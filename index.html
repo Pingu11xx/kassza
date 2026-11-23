@@ -1243,7 +1243,8 @@
             <div class="brand-stack">
                 <div class="brand-text">
                     <h1>ZERO // KASSZA</h1>
-                    <span class="brand-sub">Lőszergyár</span></span>
+                    <span class="brand-sub">Lőszergyár</span>
+                    </span>
                 </div>
                 <div class="brand-motto">Kaliberre szabva, nem a véletlenre bízva.</div>
             </div>
@@ -1739,6 +1740,7 @@
     function setLiveIndicator(mode, label) {
         const pill = document.getElementById('livePill');
         const txt = document.getElementById('liveText');
+        if (!pill || !txt) return;
         pill.classList.toggle('busy', mode === 'busy');
         txt.textContent = label || (mode === 'busy' ? 'SENDING' : 'READY');
     }
