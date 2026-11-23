@@ -565,7 +565,8 @@
                         <option value="tier" data-name="Tai (füvesek)">Tai (-10% / 100k+ felett -15%)</option>
                         <option value="tier" data-name="Ravens">Ravens (-10% / 100k+ felett -15%)</option>
                         <option value="tier" data-name="Syndicate (Meth)">Syndicate (-10% / 100k+ felett -15%)</option>
-                        <option value="rustata" data-name="Rustata">Rustata (mindig -30%)</option>
+                        <option value="rustata" data-name="Rustata">Rustata (mindig -15%)</option>
+                        <option value="drock" data-name="D-Rock">D-Rock (mindig -50%)</option>
                     </select>
                 </div>
                 <div>
@@ -764,7 +765,7 @@
 
         if (!matchedOption && partnerName && partnerName.trim()) {
             const cleanName = partnerName.trim();
-            const roleVal = (targetRole === 'tier' || targetRole === 'rustata' || targetRole === 'other') ? partnerRole : 'other';
+            const roleVal = (['tier', 'rustata', 'drock', 'other'].includes(targetRole)) ? partnerRole : 'other';
             const newOpt = document.createElement('option');
             newOpt.value = roleVal;
             newOpt.dataset.name = cleanName;
@@ -897,7 +898,8 @@
     }
 
     function getDiscountPercent(buyerRole, rawSell) {
-        if (buyerRole === 'rustata') return 30;
+        if (buyerRole === 'drock') return 50;
+        if (buyerRole === 'rustata') return 15;
         if (buyerRole === 'tier') return rawSell > DISCOUNT_THRESHOLD ? 15 : 10;
         return rawSell > DISCOUNT_THRESHOLD ? 10 : 0;
     }
@@ -963,8 +965,12 @@
             quoteEl.innerHTML = 'Csak itt látszik: adj hozzá tételt a kalkulációhoz.';
             return;
         }
+        if (buyerRole === 'drock') {
+            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (D-Rock fix 50% kedvezmény aktív).`;
+            return;
+        }
         if (buyerRole === 'rustata') {
-            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (Rustata fix 30% kedvezmény aktív).`;
+            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (Rustata fix 15% kedvezmény aktív).`;
             return;
         }
         if (rawSell > DISCOUNT_THRESHOLD) {
