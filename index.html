@@ -3,718 +3,1507 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZERO // Kassza & Kalkulátor</title>
+    <title>ZERO // Kassza</title>
     <style>
         :root {
-            --bg: #0c0e13;
-            --card: #141821;
-            --input: #1d222f;
-            --border: #2a3142;
-            --text: #f3f4f6;
-            --muted: #9ca3af;
-            --green: #10b981;
-            --yellow: #f59e0b;
-            --red: #ef4444;
-            --blue: #3b82f6;
+            --bg: #090b0f;
+            --bg-elev: #0e131b;
+            --card: #121722;
+            --surface: #182030;
+            --surface-hover: #1f293d;
+            --border: #252f44;
+            --border-hi: #364563;
+            --text: #f3f6fa;
+            --text-dim: #9fb0c7;
+            --text-muted: #677891;
+
+            --accent: #3b82f6;
+            --accent-bg: rgba(59, 130, 246, 0.14);
+            --accent-bd: rgba(59, 130, 246, 0.45);
+
+            --ok: #10b981;
+            --ok-bg: rgba(16, 185, 129, 0.14);
+            --ok-bd: rgba(16, 185, 129, 0.45);
+
+            --warn: #f59e0b;
+            --warn-bg: rgba(245, 158, 11, 0.15);
+            --warn-bd: rgba(245, 158, 11, 0.48);
+
+            --err: #ef4444;
+            --err-bg: rgba(239, 68, 68, 0.14);
+            --err-bd: rgba(239, 68, 68, 0.45);
+
+            --gold: #eab308;
+            --gold-bg: rgba(234, 179, 8, 0.15);
+            --gold-bd: rgba(234, 179, 8, 0.48);
+
+            /* Szerver ritkaság színek */
+            --r-Common: #9ca3af;
+            --r-Uncommon: #22c55e;
+            --r-Rare: #3b82f6;
+            --r-Epic: #a855f7;
+            --r-Legendary: #eab308;
+            --r-Mythic: #ef4444;
+
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background: var(--bg);
+            background:
+                radial-gradient(1000px 460px at 10% -12%, rgba(59, 130, 246, 0.09), transparent 60%),
+                radial-gradient(800px 420px at 92% 0%, rgba(16, 185, 129, 0.06), transparent 55%),
+                var(--bg);
             color: var(--text);
-            padding: 20px;
+            font-family: var(--sans);
+            padding: 18px;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
+            line-height: 1.38;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .app {
+        .shell {
             width: 100%;
-            max-width: 980px;
+            max-width: 1260px;
             display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-columns: 1.24fr 0.76fr;
             gap: 18px;
             align-items: start;
         }
 
-        @media (max-width: 820px) {
-            .app {
+        @media (max-width: 980px) {
+            .shell {
                 grid-template-columns: 1fr;
             }
         }
 
-        .box {
+        .panel {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 18px;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
         }
 
-        .top {
+        /* Fejléc */
+        .topbar {
             grid-column: 1 / -1;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             flex-wrap: wrap;
+            padding: 14px 20px;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+        }
+
+        .brand-mark {
+            width: 10px;
+            height: 26px;
+            border-radius: 3px;
+            background: linear-gradient(180deg, var(--accent), var(--ok));
         }
 
         .brand h1 {
-            font-size: 1.25rem;
-            letter-spacing: 0.4px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
         }
 
-        .pill {
-            font-size: 0.72rem;
+        .brand-sub {
+            font-size: 0.74rem;
             font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 999px;
-            background: rgba(59, 130, 246, 0.14);
-            color: #93c5fd;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .tabs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            background: var(--bg);
-            padding: 5px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-
-        .tab {
-            background: transparent;
-            border: none;
-            color: var(--muted);
-            padding: 9px;
+            color: var(--text-dim);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 3px 9px;
             border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
         }
 
-        .tab.active {
-            background: var(--input);
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Kiemelt Árlista gomb */
+        .btn-pricelist {
+            background: var(--gold-bg);
+            border: 1px solid var(--gold-bd);
+            color: #fde047;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: 0.14s ease;
+        }
+
+        .btn-pricelist:hover, .btn-pricelist.active {
+            background: rgba(234, 179, 8, 0.25);
+            border-color: var(--gold);
+            color: #fff;
+        }
+
+        .btn-ghost {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 7px 11px;
+            border-radius: 7px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.14s ease;
+        }
+
+        .btn-ghost:hover {
+            color: var(--text);
+            border-color: var(--border-hi);
+            background: var(--surface-hover);
+        }
+
+        .rec-box {
+            width: 230px;
+        }
+
+        @media (max-width: 600px) {
+            .rec-box {
+                width: 100%;
+            }
+        }
+
+        /* Árlista fiók */
+        .drawer {
+            grid-column: 1 / -1;
+            background: var(--bg-elev);
+            border: 1px solid var(--gold-bd);
+            border-left: 4px solid var(--gold);
+            border-radius: 12px;
+            padding: 16px 18px;
+            overflow-x: auto;
+        }
+
+        .drawer-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .drawer-title {
+            font-size: 0.84rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #fde047;
+        }
+
+        .drawer-note {
+            font-size: 0.74rem;
+            color: var(--text-dim);
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.79rem;
+            min-width: 680px;
+        }
+
+        .price-table th {
+            text-align: left;
+            color: var(--text-dim);
+            font-weight: 800;
+            padding: 7px 10px;
+            border-bottom: 1px solid var(--border-hi);
+        }
+
+        .price-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid rgba(37, 47, 68, 0.6);
+            font-family: var(--mono);
+            font-size: 0.76rem;
+        }
+
+        .price-table td:first-child {
+            font-family: var(--sans);
+            font-weight: 700;
             color: var(--text);
         }
 
-        .tab[data-tab="sale"].active { border-bottom-color: var(--green); }
-        .tab[data-tab="factory"].active { border-bottom-color: var(--red); }
-        .tab[data-tab="other"].active { border-bottom-color: var(--blue); }
-
-        .field {
-            margin-bottom: 12px;
+        /* Fő fülek */
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            background: var(--bg-elev);
+            border: 1px solid var(--border);
+            padding: 4px;
+            border-radius: 9px;
+            margin-bottom: 18px;
         }
 
-        .grid-2 {
+        .nav-tab {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-dim);
+            padding: 10px;
+            border-radius: 7px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.14s ease;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+        }
+
+        .nav-tab.active {
+            background: var(--surface);
+            color: var(--text);
+            border-color: var(--border-hi);
+        }
+
+        .nav-tab[data-tab="sale"].active { box-shadow: inset 0 -2px 0 var(--ok); }
+        .nav-tab[data-tab="factory"].active { box-shadow: inset 0 -2px 0 var(--err); }
+        .nav-tab[data-tab="other"].active { box-shadow: inset 0 -2px 0 var(--accent); }
+
+        /* Kiemelt alcímek / szekciók */
+        .block {
+            background: var(--bg-elev);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--border-hi);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+        }
+
+        .block.hl-blue { border-left-color: var(--accent); }
+        .block.hl-green { border-left-color: var(--ok); }
+        .block.hl-warn { border-left-color: var(--warn); }
+
+        .sec-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .sec-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text);
+        }
+
+        .sec-sub {
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: var(--text-dim);
+        }
+
+        .row-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
 
-        @media (max-width: 540px) {
-            .grid-2 {
+        @media (max-width: 620px) {
+            .row-2 {
                 grid-template-columns: 1fr;
             }
         }
 
-        label {
-            display: block;
-            font-size: 0.76rem;
-            color: var(--muted);
-            margin-bottom: 5px;
-        }
-
-        input, select {
+        input[type="text"],
+        input[type="number"] {
             width: 100%;
-            background: var(--input);
+            background: var(--card);
             border: 1px solid var(--border);
             color: var(--text);
             padding: 9px 11px;
-            border-radius: 7px;
-            font-size: 0.88rem;
+            border-radius: 8px;
+            font-size: 0.87rem;
             outline: none;
+            transition: border-color 0.14s, background 0.14s;
         }
 
-        input:focus, select:focus {
-            border-color: var(--blue);
+        input[type="number"] {
+            font-family: var(--mono);
+            font-weight: 700;
         }
 
-        input.req-missing {
-            border-color: var(--red);
+        input:focus {
+            border-color: var(--accent);
+            background: var(--surface);
         }
 
-        .mat-switch {
+        input.invalid {
+            border-color: var(--err);
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        /* Saját, 100% sötét custom dropdown */
+        .dd {
+            position: relative;
+        }
+
+        .dd-trigger {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            border: 1px solid var(--border-hi);
+            color: var(--text);
+            padding: 9px 11px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.14s, background 0.14s;
+        }
+
+        .dd-trigger:hover, .dd.open .dd-trigger {
+            border-color: var(--accent);
+            background: var(--surface);
+        }
+
+        .dd-trigger-main {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dd-arrow {
+            color: var(--text-dim);
+            font-size: 0.72rem;
+            transition: transform 0.14s;
+            flex-shrink: 0;
+        }
+
+        .dd.open .dd-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dd-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: #141b29;
+            border: 1px solid var(--border-hi);
+            border-radius: 9px;
+            padding: 5px;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.65);
+            max-height: 270px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .dd.open .dd-menu {
+            display: block;
+        }
+
+        .dd-opt {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-dim);
+            padding: 8px 10px;
+            border-radius: 7px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 2px;
+        }
+
+        .dd-opt:last-child {
+            margin-bottom: 0;
+        }
+
+        .dd-opt:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .dd-opt.selected {
+            background: var(--accent-bg);
+            border-color: var(--accent-bd);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .spec-chip {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-dim);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .spec-chip.nato556 {
+            background: rgba(59, 130, 246, 0.16);
+            color: #93c5fd;
+        }
+
+        .spec-chip.nato762 {
+            background: rgba(245, 158, 11, 0.16);
+            color: #fcd34d;
+        }
+
+        .spec-chip.ak762 {
+            background: rgba(16, 185, 129, 0.16);
+            color: #6ee7b7;
+        }
+
+        .spec-chip.mag44 {
+            background: rgba(168, 85, 247, 0.16);
+            color: #d8b4fe;
+        }
+
+        .spec-chip.mag {
+            background: rgba(148, 163, 184, 0.14);
+            color: #e2e8f0;
+        }
+
+        /* Alapanyag forrás váltó */
+        .seg-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6px;
-            background: var(--bg);
+            background: var(--card);
             border: 1px solid var(--border);
             padding: 4px;
             border-radius: 8px;
-            margin-bottom: 12px;
         }
 
-        .mat-btn {
+        .seg-btn {
             background: transparent;
             border: 1px solid transparent;
-            color: var(--muted);
+            color: var(--text-dim);
             padding: 8px 10px;
             border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 700;
             cursor: pointer;
+            transition: 0.14s ease;
         }
 
-        .mat-btn.active {
-            background: var(--input);
+        .seg-btn:hover {
             color: var(--text);
-            border-color: var(--blue);
         }
 
-        button.action {
-            width: 100%;
-            padding: 11px;
-            border: none;
+        .seg-btn.active {
+            background: var(--surface);
+            color: var(--text);
+            border-color: var(--accent-bd);
+        }
+
+        /* Ritkaság gombsor */
+        .rar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .rar-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 7px;
+            padding: 7px 6px;
+            font-size: 0.76rem;
             font-weight: 700;
-            font-size: 0.9rem;
             cursor: pointer;
+            transition: 0.12s ease;
         }
 
-        .btn-add {
-            background: var(--input);
-            color: var(--text);
-            border: 1px solid var(--border) !important;
-            margin-bottom: 12px;
+        .rar-btn::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            flex-shrink: 0;
         }
 
-        .btn-add:hover {
-            border-color: var(--blue) !important;
+        .rar-btn:hover {
+            background: var(--surface);
+            border-color: var(--border-hi);
         }
 
-        .btn-send {
-            background: var(--blue);
-            color: #fff;
+        .rar-btn.active {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: currentColor;
+            box-shadow: inset 0 0 0 1px currentColor;
+        }
+
+        .rar-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .rar-tag::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .c-Common    { color: var(--r-Common); }
+        .c-Uncommon  { color: var(--r-Uncommon); }
+        .c-Rare      { color: var(--r-Rare); }
+        .c-Epic      { color: var(--r-Epic); }
+        .c-Legendary { color: var(--r-Legendary); }
+        .c-Mythic    { color: var(--r-Mythic); }
+
+        /* Gyors mennyiség */
+        .qty-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
             margin-top: 6px;
         }
 
-        .btn-send:hover {
-            filter: brightness(1.08);
-        }
-
-        .chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
-
-        .chip {
-            background: var(--input);
+        .qty-btn {
+            background: var(--card);
             border: 1px solid var(--border);
-            color: var(--muted);
-            padding: 5px 9px;
+            color: var(--text-dim);
             border-radius: 6px;
-            font-size: 0.76rem;
+            padding: 5px 0;
+            font-family: var(--mono);
+            font-size: 0.73rem;
+            font-weight: 700;
             cursor: pointer;
+            transition: 0.12s ease;
         }
 
-        .chip:hover {
+        .qty-btn:hover {
             color: var(--text);
-            border-color: var(--blue);
+            border-color: var(--accent-bd);
+            background: var(--surface);
         }
 
-        .cart {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 7px;
-            padding: 8px;
+        /* Hozzáadás gomb */
+        .btn-add {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border-hi);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.87rem;
+            font-weight: 700;
+            cursor: pointer;
             margin-bottom: 14px;
-            min-height: 56px;
-            max-height: 170px;
+            transition: 0.14s ease;
+        }
+
+        .btn-add:hover {
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .btn-add-price {
+            font-family: var(--mono);
+            font-size: 0.81rem;
+            color: #6ee7b7;
+            background: var(--ok-bg);
+            border: 1px solid var(--ok-bd);
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+
+        /* Kosár */
+        .cart-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            min-height: 68px;
+            max-height: 240px;
             overflow-y: auto;
         }
 
-        .cart-empty {
-            color: var(--muted);
-            font-size: 0.82rem;
+        .empty-note {
+            color: var(--text-muted);
+            font-size: 0.8rem;
             text-align: center;
-            padding: 12px 0;
+            padding: 16px 0;
         }
 
-        .cart-row {
+        .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 4px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.83rem;
             gap: 8px;
+            padding: 7px 6px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.82rem;
         }
 
-        .cart-row:last-child {
+        .cart-item:last-child {
             border-bottom: none;
         }
 
-        .cart-tag {
-            font-size: 0.7rem;
-            color: var(--muted);
-            margin-left: 4px;
-        }
-
-        .del {
-            background: none;
-            border: none;
-            color: var(--red);
-            cursor: pointer;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-
-        .summary {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 14px;
-            font-size: 0.84rem;
-        }
-
-        .sum-line {
+        .cart-info {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
-            color: var(--muted);
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
-        .sum-highlight {
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            border-radius: 6px;
-            padding: 7px 9px;
-            margin: 8px 0;
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .sum-line.total {
-            border-top: 1px solid var(--border);
-            padding-top: 8px;
-            margin: 8px 0 0;
-            color: var(--text);
+        .src-pill {
+            font-size: 0.67rem;
             font-weight: 800;
-            font-size: 1.05rem;
+            text-transform: uppercase;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
         }
 
-        .local-hint {
-            margin-top: 8px;
-            padding: 8px 10px;
-            border-radius: 6px;
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            font-size: 0.78rem;
-            color: #cbd5e1;
-            line-height: 1.4;
+        .src-pill.own {
+            background: var(--accent-bg);
+            color: #93c5fd;
         }
 
-        .local-hint strong {
-            color: #fff;
+        .cart-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
         }
 
-        .val-green { color: var(--green); font-weight: 700; }
+        .step-btn {
+            width: 23px;
+            height: 23px;
+            border-radius: 5px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            font-weight: 800;
+            font-size: 0.82rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        .section-head {
+        .step-btn:hover {
+            color: var(--text);
+            border-color: var(--border-hi);
+        }
+
+        .step-btn.rm:hover {
+            color: var(--err);
+            border-color: var(--err-bd);
+        }
+
+        .cart-sum {
+            font-family: var(--mono);
+            font-weight: 700;
+            font-size: 0.81rem;
+            min-width: 78px;
+            text-align: right;
+        }
+
+        /* Partnerek */
+        .p-grp {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+            color: var(--text-muted);
+            margin: 8px 0 5px;
+        }
+
+        .p-grp:first-child {
+            margin-top: 0;
+        }
+
+        .p-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        @media (max-width: 560px) {
+            .p-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .p-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            gap: 6px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 7px;
+            padding: 7px 10px;
+            font-size: 0.79rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.13s ease;
         }
 
-        .preview-label {
-            font-size: 0.74rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .p-card.span-2 {
+            grid-column: 1 / -1;
         }
 
-        .embed {
-            background: #2b2d31;
-            border-left: 4px solid var(--green);
-            border-radius: 5px;
-            padding: 12px 14px;
-            font-size: 0.85rem;
-            color: #dbdee1;
+        .p-card:hover {
+            background: var(--surface);
+            border-color: var(--border-hi);
         }
 
-        .embed-title {
+        .p-card.active {
+            background: var(--surface);
+            border-color: var(--accent);
+            box-shadow: inset 0 0 0 1px var(--accent);
+        }
+
+        .p-card[data-role="rustata"].active {
+            border-color: #a855f7;
+            box-shadow: inset 0 0 0 1px #a855f7;
+        }
+
+        .p-card[data-role="drock"].active {
+            border-color: var(--warn);
+            box-shadow: inset 0 0 0 1px var(--warn);
+        }
+
+        .p-tag {
+            font-family: var(--mono);
+            font-size: 0.69rem;
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 6px;
-            font-size: 0.94rem;
-        }
-
-        .embed-desc {
-            font-size: 0.82rem;
-            color: #f3f4f6;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 6px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
-            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
         }
 
-        .embed-grid {
+        .p-card[data-role="tier"] .p-tag {
+            background: var(--accent-bg);
+            color: #93c5fd;
+        }
+
+        .p-card[data-role="rustata"] .p-tag {
+            background: rgba(168, 85, 247, 0.16);
+            color: #d8b4fe;
+        }
+
+        .p-card[data-role="drock"] .p-tag {
+            background: var(--warn-bg);
+            color: #fde047;
+        }
+
+        /* Státusz */
+        .st-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
         }
 
-        .embed-item.full {
-            grid-column: 1 / -1;
-        }
-
-        .embed-k {
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .embed-v {
-            font-size: 0.82rem;
-            white-space: pre-line;
-        }
-
-        .msg {
-            margin-top: 8px;
-            font-size: 0.82rem;
-            min-height: 18px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .pending-box {
-            margin-top: 16px;
-            background: var(--bg);
-            border: 1px solid rgba(245, 158, 11, 0.35);
+        .st-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
             border-radius: 8px;
-            padding: 12px;
+            padding: 9px 10px;
+            font-size: 0.81rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.14s ease;
         }
 
-        .pending-head {
+        .st-btn:hover {
+            color: var(--text);
+            border-color: var(--border-hi);
+        }
+
+        .st-btn.paid-on {
+            background: var(--ok-bg);
+            border-color: var(--ok-bd);
+            color: #6ee7b7;
+        }
+
+        .st-btn.pend-on {
+            background: var(--warn-bg);
+            border-color: var(--warn-bd);
+            color: #fcd34d;
+        }
+
+        /* Összegző pontok */
+        .t-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 8px;
+            font-size: 0.84rem;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        .t-row span:first-child {
+            font-weight: 600;
+        }
+
+        .t-row span:last-child {
+            font-family: var(--mono);
+            font-weight: 700;
+        }
+
+        .t-profit {
+            background: var(--ok-bg);
+            border: 1px solid var(--ok-bd);
+            border-radius: 7px;
+            padding: 8px 10px;
+            margin: 8px 0;
+            color: var(--text);
+        }
+
+        .t-profit span:first-child {
+            font-weight: 800;
+        }
+
+        .t-profit span:last-child {
+            color: #6ee7b7;
+        }
+
+        .t-grand {
+            border-top: 1px solid var(--border-hi);
+            padding-top: 9px;
+            margin: 8px 0 0;
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .t-grand span:last-child {
+            color: var(--ok);
+        }
+
+        .quote-bar {
+            margin-top: 9px;
+            padding: 8px 10px;
+            border-radius: 7px;
+            background: var(--accent-bg);
+            border: 1px solid var(--accent-bd);
+            font-size: 0.78rem;
+            color: #dbeafe;
+        }
+
+        .quote-bar strong {
+            color: #fff;
+            font-family: var(--mono);
+        }
+
+        /* Gyár gyorsgombok */
+        .preset-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .preset-btn {
+            background: var(--bg-elev);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 6px 10px;
+            border-radius: 7px;
+            font-size: 0.77rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.13s ease;
+        }
+
+        .preset-btn:hover {
+            color: var(--text);
+            border-color: var(--accent-bd);
+            background: var(--surface);
+        }
+
+        /* Küldés gomb */
+        .btn-submit {
+            width: 100%;
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: 0.14s ease;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            filter: brightness(1.08);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 8px;
+            min-height: 18px;
+            text-align: center;
+            font-size: 0.81rem;
+            font-weight: 700;
+        }
+
+        /* Jobb oszlop: Discord előnézet */
+        .discord-card {
+            background: #2b2d31;
+            border-left: 4px solid var(--ok);
+            border-radius: 6px;
+            padding: 12px 14px;
+            color: #dbdee1;
+            font-size: 0.84rem;
+        }
+
+        .dc-title {
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .dc-desc {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f3f4f6;
+            font-size: 0.8rem;
+            padding: 6px 8px;
+            border-radius: 5px;
             margin-bottom: 10px;
         }
 
-        .pending-title {
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--yellow);
+        .dc-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
 
-        .pending-count {
-            font-size: 0.72rem;
-            color: var(--muted);
+        .dc-field.full {
+            grid-column: 1 / -1;
         }
 
-        .pending-list {
+        .dc-k {
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1px;
+        }
+
+        .dc-v {
+            font-size: 0.81rem;
+            white-space: pre-line;
+        }
+
+        .stack-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 280px;
+            max-height: 310px;
             overflow-y: auto;
         }
 
-        .pending-card {
+        .order-card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-left: 3px solid var(--yellow);
-            border-radius: 7px;
+            border-left: 3px solid var(--warn);
+            border-radius: 8px;
             padding: 10px;
-            font-size: 0.8rem;
+            font-size: 0.79rem;
         }
 
-        .pending-top {
+        .order-top {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             gap: 8px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
-        .pending-partner {
+        .order-name {
             font-weight: 700;
             color: #fff;
         }
 
-        .pending-amount {
+        .order-val {
+            font-family: var(--mono);
             font-weight: 800;
-            color: var(--yellow);
+            color: var(--warn);
         }
 
-        .pending-meta {
-            font-size: 0.72rem;
-            color: var(--muted);
+        .order-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
             margin-bottom: 6px;
         }
 
-        .pending-items {
-            color: #d1d5db;
-            font-size: 0.76rem;
-            line-height: 1.35;
+        .order-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
             margin-bottom: 8px;
-            white-space: pre-line;
+            color: #cbd5e1;
+            font-size: 0.75rem;
         }
 
-        .pending-actions {
+        .order-line {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .order-btns {
             display: flex;
             gap: 6px;
         }
 
-        .btn-import {
+        .btn-imp {
             flex: 1;
-            background: rgba(16, 185, 129, 0.16);
+            background: var(--ok-bg);
+            border: 1px solid var(--ok-bd);
             color: #6ee7b7;
-            border: 1px solid rgba(16, 185, 129, 0.4);
             border-radius: 6px;
             padding: 6px 8px;
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
         }
 
-        .btn-import:hover {
-            background: rgba(16, 185, 129, 0.28);
+        .btn-imp:hover {
+            background: rgba(16, 185, 129, 0.22);
         }
 
-        .btn-remove-pending {
-            background: rgba(239, 68, 68, 0.14);
+        .btn-del {
+            background: var(--err-bg);
+            border: 1px solid var(--err-bd);
             color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.35);
             border-radius: 6px;
             padding: 6px 9px;
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
         }
 
-        .btn-remove-pending:hover {
-            background: rgba(239, 68, 68, 0.25);
+        .btn-del:hover {
+            background: rgba(239, 68, 68, 0.22);
+        }
+
+        .log-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            padding: 6px 8px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-dim);
+        }
+
+        .log-row strong {
+            color: var(--text);
+        }
+
+        .log-amt {
+            font-family: var(--mono);
+            font-weight: 700;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
     </style>
 </head>
 <body>
 
-<div class="app">
-    <div class="box top">
+<div class="shell">
+    <!-- Fejléc -->
+    <header class="panel topbar">
         <div class="brand">
-            <h1>ZERO // Kassza</h1>
-            <span class="pill">Lőszergyár & Kalkulátor</span>
+            <span class="brand-mark"></span>
+            <h1>ZERO // KASSZA</h1>
+            <span class="brand-sub">Lőszergyár</span>
         </div>
-        <div style="width: 230px;">
-            <input type="text" id="recorder" placeholder="Rögzítő neve (kötelező)">
+        <div class="top-actions">
+            <button type="button" class="btn-pricelist" id="btnPriceToggle" onclick="togglePrices()">ÁRLISTA</button>
+            <div class="rec-box">
+                <input type="text" id="recorder" placeholder="Rögzítő neve (kötelező)">
+            </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Bal oldal: Űrlap -->
-    <div class="box">
-        <div class="tabs">
-            <button class="tab active" data-tab="sale" onclick="setTab('sale')">Eladás</button>
-            <button class="tab" data-tab="factory" onclick="setTab('factory')">Gyár kiadás</button>
-            <button class="tab" data-tab="other" onclick="setTab('other')">Egyéb</button>
+    <!-- Kiemelt Árlista fiók -->
+    <section class="drawer hidden" id="priceDrawer">
+        <div class="drawer-head">
+            <span class="drawer-title">ÁRLISTA — ELADÁSI ÁR (VETÉSI ÖNKÖLTSÉG)</span>
+            <span class="drawer-note">Saját alapanyag: 1 $/lőszer · 10 $/üres tár · +30 / +50 töltöttnél</span>
         </div>
+        <table class="price-table">
+            <thead>
+                <tr>
+                    <th>Kategória</th>
+                    <th class="c-Common">Common</th>
+                    <th class="c-Uncommon">Uncommon</th>
+                    <th class="c-Rare">Rare</th>
+                    <th class="c-Epic">Epic</th>
+                    <th class="c-Legendary">Legendary</th>
+                    <th class="c-Mythic">Mythic</th>
+                </tr>
+            </thead>
+            <tbody id="priceTableBody"></tbody>
+        </table>
+    </section>
+
+    <!-- Bal oldal: Műveletek -->
+    <main class="panel">
+        <nav class="nav-tabs">
+            <button type="button" class="nav-tab active" data-tab="sale" onclick="setTab('sale')">Eladás</button>
+            <button type="button" class="nav-tab" data-tab="factory" onclick="setTab('factory')">Gyár kiadás</button>
+            <button type="button" class="nav-tab" data-tab="other" onclick="setTab('other')">Egyéb</button>
+        </nav>
 
         <!-- ELADÁS -->
         <div id="tab-sale">
-            <label>Alapanyag forrás (önköltség számítás)</label>
-            <div class="mat-switch">
-                <button type="button" class="mat-btn" data-mat="own" onclick="setMaterialMode('own')">Saját alapanyag (1$/db · 10$/tár)</button>
-                <button type="button" class="mat-btn active" data-mat="bought" onclick="setMaterialMode('bought')">Vett alapanyag (régi ár)</button>
-            </div>
-
-            <div class="grid-2 field">
-                <div>
-                    <label>Kategória</label>
-                    <select id="category" onchange="updateCalibers()">
-                        <option value="ammo">Lőszer</option>
-                        <option value="shotgun">Sörétes lőszer</option>
-                        <option value="emptyPistol">Üres pisztolytár</option>
-                        <option value="emptyBig">Üres nagy tár</option>
-                        <option value="fullPistol">Töltött pisztolytár (+30)</option>
-                        <option value="fullBig">Töltött nagy tár (+50)</option>
-                    </select>
+            <div class="block hl-blue">
+                <div class="sec-head">
+                    <span class="sec-title">1. Alapanyag forrás</span>
+                    <span class="sec-sub">Önköltség számítás</span>
                 </div>
-                <div>
-                    <label>Kaliber / Típus</label>
-                    <select id="caliber"></select>
+                <div class="seg-2">
+                    <button type="button" class="seg-btn" data-mat="own" onclick="setMaterialMode('own')">Saját (1$/db · 10$/tár)</button>
+                    <button type="button" class="seg-btn active" data-mat="bought" onclick="setMaterialMode('bought')">Vett (alap ár)</button>
                 </div>
             </div>
 
-            <div class="grid-2 field">
-                <div>
-                    <label>Ritkaság</label>
-                    <select id="rarity">
-                        <option value="Common">Common</option>
-                        <option value="Uncommon" selected>Uncommon</option>
-                        <option value="Rare">Rare</option>
-                        <option value="Epic">Epic</option>
-                        <option value="Legendary">Legendary</option>
-                        <option value="Mythic">Mythic</option>
-                    </select>
+            <div class="block hl-blue">
+                <div class="sec-head">
+                    <span class="sec-title">2. Kategória &amp; Kaliber / Típus</span>
+                    <span class="sec-sub">Pontos típus-jelöléssel</span>
                 </div>
-                <div>
-                    <label>Darabszám</label>
-                    <input type="number" id="qty" value="1000" min="1">
-                </div>
-            </div>
-
-            <button class="action btn-add" onclick="addItem()">+ Tétel hozzáadása</button>
-
-            <div class="cart" id="cart">
-                <div class="cart-empty">Nincs tétel a listában.</div>
-            </div>
-
-            <div class="grid-2 field">
-                <div>
-                    <label>Vevő / Partner</label>
-                    <select id="partner" onchange="render()">
-                        <option value="other" data-name="Sima vevő">Mindenki más (100k+ felett -10%)</option>
-                        <option value="tier" data-name="Mia Keller">Mia Keller (-10% / 100k+ felett -15%)</option>
-                        <option value="tier" data-name="Tai (füvesek)">Tai (-10% / 100k+ felett -15%)</option>
-                        <option value="tier" data-name="Ravens">Ravens (-10% / 100k+ felett -15%)</option>
-                        <option value="tier" data-name="Syndicate (Meth)">Syndicate (-10% / 100k+ felett -15%)</option>
-                        <option value="rustata" data-name="Rustata">Rustata (mindig -15%)</option>
-                        <option value="drock" data-name="D-Rock">D-Rock (mindig -50%)</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Státusz</label>
-                    <select id="status" onchange="render()">
-                        <option value="paid">Kész (kasszában)</option>
-                        <option value="pending">Függőben / tartozás</option>
-                    </select>
+                <div class="row-2">
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;">
+                            <span class="sec-sub" style="color:var(--text);">Kategória</span>
+                        </div>
+                        <div class="dd" id="ddCategory">
+                            <button type="button" class="dd-trigger" onclick="toggleDropdown('ddCategory')">
+                                <span class="dd-trigger-main" id="ddCategoryLabel">Lőszer</span>
+                                <span class="dd-arrow">▼</span>
+                            </button>
+                            <div class="dd-menu" id="ddCategoryMenu"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;">
+                            <span class="sec-sub" style="color:var(--text);">Kaliber / Típus</span>
+                        </div>
+                        <div class="dd" id="ddCaliber">
+                            <button type="button" class="dd-trigger" onclick="toggleDropdown('ddCaliber')">
+                                <span class="dd-trigger-main" id="ddCaliberLabel">9×19 mm Parabellum</span>
+                                <span class="dd-arrow">▼</span>
+                            </button>
+                            <div class="dd-menu" id="ddCaliberMenu"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="field">
-                <label>Megjegyzés</label>
-                <input type="text" id="saleNote" placeholder="pl. Holnap kerül be a széfbe" oninput="render()">
+            <div class="block">
+                <div class="sec-head">
+                    <span class="sec-title">3. Ritkaság &amp; Darabszám</span>
+                </div>
+                <div class="row-2">
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;">
+                            <span class="sec-sub">Ritkaság</span>
+                        </div>
+                        <div class="rar-grid" id="rarityGrid">
+                            <button type="button" class="rar-btn c-Common" data-rar="Common" onclick="selectRarity('Common')">Common</button>
+                            <button type="button" class="rar-btn c-Uncommon active" data-rar="Uncommon" onclick="selectRarity('Uncommon')">Uncommon</button>
+                            <button type="button" class="rar-btn c-Rare" data-rar="Rare" onclick="selectRarity('Rare')">Rare</button>
+                            <button type="button" class="rar-btn c-Epic" data-rar="Epic" onclick="selectRarity('Epic')">Epic</button>
+                            <button type="button" class="rar-btn c-Legendary" data-rar="Legendary" onclick="selectRarity('Legendary')">Legendary</button>
+                            <button type="button" class="rar-btn c-Mythic" data-rar="Mythic" onclick="selectRarity('Mythic')">Mythic</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;">
+                            <span class="sec-sub">Darabszám</span>
+                        </div>
+                        <input type="number" id="qty" value="1000" min="1" oninput="updateAddButtonPreview()" onkeydown="if(event.key==='Enter'){event.preventDefault();addItem();}">
+                        <div class="qty-bar" id="qtyPresets"></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="summary">
-                <div class="sum-line"><span>Önköltség:</span><span id="sCost">0 $</span></div>
-                <div class="sum-line"><span>Kedvezmény:</span><span id="sDisc">0 $</span></div>
-                <div class="sum-line sum-highlight"><span>Tiszta haszon:</span><span id="sProfit" class="val-green">0 $</span></div>
-                <div class="sum-line total"><span>Végösszeg:</span><span id="sTotal" class="val-green">0 $</span></div>
-                <div class="local-hint" id="sQuote">Csak itt látszik: adj hozzá tételt a kalkulációhoz.</div>
+            <button type="button" class="btn-add" onclick="addItem()">
+                <span>+ Tétel hozzáadása a kosárhoz</span>
+                <span class="btn-add-price" id="addPreviewPrice">+19 000 $</span>
+            </button>
+
+            <div class="block hl-green">
+                <div class="sec-head">
+                    <span class="sec-title">4. Kosár</span>
+                    <button type="button" class="btn-ghost" onclick="clearCart()">Kosár ürítése</button>
+                </div>
+                <div class="cart-box" id="cart">
+                    <div class="empty-note">Nincs tétel a listában.</div>
+                </div>
+            </div>
+
+            <div class="block">
+                <div class="sec-head">
+                    <span class="sec-title">5. Vevő / Partner</span>
+                    <span class="sec-sub">Kedvezménysávok</span>
+                </div>
+                <div id="partnerPanel">
+                    <div class="p-grp">Alap</div>
+                    <div class="p-grid">
+                        <button type="button" class="p-card span-2 active" data-role="other" data-name="Sima vevő" onclick="selectPartner('other', 'Sima vevő')">
+                            <span>Sima vevő</span>
+                            <span class="p-tag">100k+ : -10%</span>
+                        </button>
+                    </div>
+
+                    <div class="p-grp">Tier partnerek (-10% / 100k+ felett -15%)</div>
+                    <div class="p-grid">
+                        <button type="button" class="p-card" data-role="tier" data-name="Mia Keller" onclick="selectPartner('tier', 'Mia Keller')">
+                            <span>Mia Keller</span>
+                            <span class="p-tag">-10 / -15%</span>
+                        </button>
+                        <button type="button" class="p-card" data-role="tier" data-name="Tai (füvesek)" onclick="selectPartner('tier', 'Tai (füvesek)')">
+                            <span>Tai (füvesek)</span>
+                            <span class="p-tag">-10 / -15%</span>
+                        </button>
+                        <button type="button" class="p-card" data-role="tier" data-name="Ravens" onclick="selectPartner('tier', 'Ravens')">
+                            <span>Ravens</span>
+                            <span class="p-tag">-10 / -15%</span>
+                        </button>
+                        <button type="button" class="p-card" data-role="tier" data-name="Syndicate (Meth)" onclick="selectPartner('tier', 'Syndicate (Meth)')">
+                            <span>Syndicate (Meth)</span>
+                            <span class="p-tag">-10 / -15%</span>
+                        </button>
+                    </div>
+
+                    <div class="p-grp">Fix kedvezmény</div>
+                    <div class="p-grid">
+                        <button type="button" class="p-card" data-role="rustata" data-name="Rustata" onclick="selectPartner('rustata', 'Rustata')">
+                            <span>Rustata</span>
+                            <span class="p-tag">FIX -15%</span>
+                        </button>
+                        <button type="button" class="p-card" data-role="drock" data-name="D-Rock" onclick="selectPartner('drock', 'D-Rock')">
+                            <span>D-Rock</span>
+                            <span class="p-tag">FIX -50%</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block hl-warn">
+                <div class="sec-head">
+                    <span class="sec-title">6. Státusz &amp; Megjegyzés</span>
+                </div>
+                <div class="st-grid" style="margin-bottom:10px;">
+                    <button type="button" class="st-btn paid-on" id="stPaidBtn" onclick="selectStatus('paid')">Kész (kasszában)</button>
+                    <button type="button" class="st-btn" id="stPendingBtn" onclick="selectStatus('pending')">Függőben / tartozás</button>
+                </div>
+                <input type="text" id="saleNote" placeholder="Megjegyzés (pl. Holnap kerül be a széfbe)" oninput="render()">
+            </div>
+
+            <div class="block hl-green" style="margin-bottom:10px;">
+                <div class="sec-head">
+                    <span class="sec-title">7. Elszámolás</span>
+                </div>
+                <div class="t-row"><span>Önköltség</span><span id="sCost">0 $</span></div>
+                <div class="t-row"><span>Kedvezmény</span><span id="sDisc">0 $</span></div>
+                <div class="t-row t-profit"><span>Tiszta haszon</span><span id="sProfit">0 $</span></div>
+                <div class="t-row t-grand"><span>Végösszeg</span><span id="sTotal">0 $</span></div>
+                <div class="quote-bar" id="sQuote">Vevői végösszeg (csak itt): adj hozzá tételt.</div>
             </div>
         </div>
 
         <!-- GYÁR KIADÁS -->
         <div id="tab-factory" class="hidden">
-            <div class="chips">
-                <button class="chip" onclick="setFactory('Tár gyártás (25 db)', 2500)">-2,5k tár gyártás</button>
-                <button class="chip" onclick="setFactory('Gyártási díj', 2000)">-2k gyártás</button>
-                <button class="chip" onclick="setFactory('Gyártási díj', 4000)">-4k gyártás</button>
-                <button class="chip" onclick="setFactory('Gyártási díj', 6000)">-6k gyártás</button>
-                <button class="chip" onclick="setFactory('1 gép fullra fejlesztése', 120000)">-120k gép full</button>
-                <button class="chip" onclick="setFactory('Alapanyag (1000 db)', 40000)">-40k alapanyag</button>
-            </div>
-            <div class="grid-2 field">
-                <div>
-                    <label>Megnevezés</label>
-                    <input type="text" id="fTitle" placeholder="pl. Puskapor" oninput="render()">
+            <div class="block hl-warn">
+                <div class="sec-head">
+                    <span class="sec-title">Gyors gyári tételek</span>
                 </div>
-                <div>
-                    <label>Összeg ($)</label>
-                    <input type="number" id="fAmount" placeholder="pl. 8000" oninput="render()">
+                <div class="preset-wrap" style="margin-bottom:0;">
+                    <button type="button" class="preset-btn" onclick="setFactory('Tár gyártás (25 db)', 2500)">-2,5k tár gyártás</button>
+                    <button type="button" class="preset-btn" onclick="setFactory('Gyártási díj', 2000)">-2k gyártás</button>
+                    <button type="button" class="preset-btn" onclick="setFactory('Gyártási díj', 4000)">-4k gyártás</button>
+                    <button type="button" class="preset-btn" onclick="setFactory('Gyártási díj', 6000)">-6k gyártás</button>
+                    <button type="button" class="preset-btn" onclick="setFactory('1 gép fullra fejlesztése', 120000)">-120k gép full</button>
+                    <button type="button" class="preset-btn" onclick="setFactory('Alapanyag (1000 db)', 40000)">-40k alapanyag</button>
                 </div>
             </div>
-            <div class="field">
-                <label>Megjegyzés</label>
-                <input type="text" id="fNote" oninput="render()">
+            <div class="block">
+                <div class="sec-head">
+                    <span class="sec-title">Kiadás adatai</span>
+                </div>
+                <div class="row-2" style="margin-bottom:10px;">
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Megnevezés</span></div>
+                        <input type="text" id="fTitle" placeholder="pl. Puskapor" oninput="render()">
+                    </div>
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Összeg ($)</span></div>
+                        <input type="number" id="fAmount" placeholder="pl. 8000" oninput="render()">
+                    </div>
+                </div>
+                <div>
+                    <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Megjegyzés</span></div>
+                    <input type="text" id="fNote" oninput="render()">
+                </div>
             </div>
         </div>
 
         <!-- EGYÉB -->
         <div id="tab-other" class="hidden">
-            <div class="grid-2 field">
-                <div>
-                    <label>Típus</label>
-                    <select id="oType" onchange="render()">
-                        <option value="expense">Kiadás (-)</option>
-                        <option value="income">Bevétel (+)</option>
-                    </select>
+            <div class="block hl-blue">
+                <div class="sec-head">
+                    <span class="sec-title">Egyéb tétel adatai</span>
+                </div>
+                <div class="row-2" style="margin-bottom:10px;">
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Típus</span></div>
+                        <div class="seg-2">
+                            <button type="button" class="seg-btn active" id="oExpBtn" onclick="setOtherType('expense')">Kiadás (-)</button>
+                            <button type="button" class="seg-btn" id="oIncBtn" onclick="setOtherType('income')">Bevétel (+)</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Összeg ($)</span></div>
+                        <input type="number" id="oAmount" placeholder="pl. 75000" oninput="render()">
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Megnevezés</span></div>
+                    <input type="text" id="oTitle" placeholder="pl. Fegyverek / Nátrium-klorid" oninput="render()">
                 </div>
                 <div>
-                    <label>Összeg ($)</label>
-                    <input type="number" id="oAmount" placeholder="pl. 75000" oninput="render()">
+                    <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Megjegyzés</span></div>
+                    <input type="text" id="oNote" oninput="render()">
                 </div>
             </div>
-            <div class="field">
-                <label>Megnevezés</label>
-                <input type="text" id="oTitle" placeholder="pl. Fegyverek / Nátrium-klorid" oninput="render()">
+        </div>
+
+        <button type="button" class="btn-submit" id="btnSend" onclick="send()">Küldés Discordra</button>
+        <div class="feedback" id="msg"></div>
+    </main>
+
+    <!-- Jobb oldal: Discord előnézet + Függőben + Legutóbbi küldések -->
+    <aside class="panel">
+        <div class="block hl-blue">
+            <div class="sec-head">
+                <span class="sec-title">Discord előnézet</span>
+                <span class="sec-sub" id="statusBadge" style="color: var(--ok);">KÉSZ</span>
             </div>
-            <div class="field">
-                <label>Megjegyzés</label>
-                <input type="text" id="oNote" oninput="render()">
+
+            <div class="discord-card" id="embed">
+                <div class="dc-title" id="eTitle">Eladás (Kész)</div>
+                <div class="dc-desc" id="eDesc">👤 Rögzítette: —</div>
+                <div class="dc-fields" id="eFields"></div>
             </div>
         </div>
 
-        <button class="action btn-send" onclick="send()">Küldés Discordra</button>
-        <div class="msg" id="msg"></div>
-    </div>
-
-    <!-- Jobb oldal: Discord előnézet + Helyi Függőben / Tartozás adatbázis -->
-    <div class="box">
-        <div class="section-head">
-            <span class="preview-label">Discord előnézet</span>
-            <span class="preview-label" id="statusBadge" style="color: var(--green);">KÉSZ</span>
-        </div>
-
-        <div class="embed" id="embed">
-            <div class="embed-title" id="eTitle">Eladás (Kész)</div>
-            <div class="embed-desc" id="eDesc">👤 Rögzítette: —</div>
-            <div class="embed-grid" id="eFields"></div>
-        </div>
-
-        <div class="pending-box">
-            <div class="pending-head">
-                <span class="pending-title">Helyi Függőben / Tartozás</span>
-                <span class="pending-count" id="pendingCount">0 mentett</span>
+        <div class="block hl-warn">
+            <div class="sec-head">
+                <span class="sec-title" style="color: var(--warn);">Függőben / Tartozás</span>
+                <span class="sec-sub" id="pendingCount">0 mentett</span>
             </div>
-            <div class="pending-list" id="pendingList"></div>
+            <div class="stack-list" id="pendingList"></div>
         </div>
-    </div>
+
+        <div class="block">
+            <div class="sec-head">
+                <span class="sec-title">Legutóbb elküldve</span>
+                <span class="sec-sub" id="recentCount">0 db</span>
+            </div>
+            <div class="stack-list" id="recentList"></div>
+        </div>
+    </aside>
 </div>
 
 <script>
     const WEBHOOK_URL = 'https://discord.com/api/webhooks/1574083295216406528/pykSkznZG8RU2U4Cczh6eVtdLrdo0cSk2jydkx6HRbw9PTJYtTCPmZSVlS0C5MkaE7wU';
     const DISCOUNT_THRESHOLD = 100000;
     const PENDING_STORAGE_KEY = 'zero_pending_orders_v1';
+    const RECENT_STORAGE_KEY = 'zero_recent_sent_v1';
+
+    const CATEGORIES = [
+        { id: 'ammo',        label: 'Lőszer',              chip: 'LŐSZER',    chipCls: 'mag' },
+        { id: 'shotgun',     label: 'Sörétes lőszer',      chip: 'SÖRÉTES',   chipCls: 'mag' },
+        { id: 'emptyPistol', label: 'Üres pisztolytár',    chip: 'ÜRES',      chipCls: 'mag' },
+        { id: 'emptyBig',    label: 'Üres nagy tár',       chip: 'ÜRES NAGY', chipCls: 'mag' },
+        { id: 'fullPistol',  label: 'Töltött pisztolytár', chip: '+30 TÖLT',  chipCls: 'nato556' },
+        { id: 'fullBig',     label: 'Töltött nagy tár',    chip: '+50 TÖLT',  chipCls: 'nato762' }
+    ];
+
+    const RARITIES = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic'];
 
     const PRICES = {
         ammo: {
@@ -768,208 +1557,56 @@
     };
 
     const CALIBERS = {
-        ammo: ['9×19 mm Parabellum', '.45 ACP', '.44 Magnum', '5.56×45 mm NATO', '7.62×39 mm', '7.62×51 mm NATO'],
-        shotgun: ['Sörétes lőszer'],
-        emptyPistol: ['9×19 mm Parabellum tár', '.45 ACP tár', 'Desert Eagle (.44 Magnum) tár'],
-        emptyBig: ['5.56×45 mm NATO tár', '7.62×39 mm tár', '7.62×51 mm NATO tár', '9×19 mm géppisztolytár', '.45 ACP géppisztoly dobtár'],
-        fullPistol: ['9×19 mm Parabellum tár (töltött)', '.45 ACP tár (töltött)', 'Desert Eagle (.44 Magnum) tár (töltött)'],
-        fullBig: ['5.56×45 mm NATO tár (töltött)', '7.62×39 mm tár (töltött)', '7.62×51 mm NATO tár (töltött)', '9×19 mm géppisztolytár (töltött)', '.45 ACP dobtár (töltött)']
+        ammo: [
+            { name: '9×19 mm Parabellum', chip: '9×19',     cls: 'mag' },
+            { name: '.45 ACP',            chip: '.45 ACP',  cls: 'mag' },
+            { name: '.44 Magnum',         chip: '.44 MAG',  cls: 'mag44' },
+            { name: '5.56×45 mm NATO',    chip: '5.56 NATO',cls: 'nato556' },
+            { name: '7.62×39 mm',         chip: '7.62×39',  cls: 'ak762' },
+            { name: '7.62×51 mm NATO',    chip: '7.62 NATO',cls: 'nato762' }
+        ],
+        shotgun: [
+            { name: 'Sörétes lőszer', chip: '12 GA', cls: 'mag' }
+        ],
+        emptyPistol: [
+            { name: '9×19 mm Parabellum tár',       chip: '9×19 · ÜRES', cls: 'mag' },
+            { name: '.45 ACP tár',                  chip: '.45 · ÜRES',  cls: 'mag' },
+            { name: 'Desert Eagle (.44 Magnum) tár',chip: '.44 · ÜRES',  cls: 'mag44' }
+        ],
+        emptyBig: [
+            { name: '5.56×45 mm NATO tár',           chip: '5.56 NATO',   cls: 'nato556' },
+            { name: '7.62×39 mm tár',                chip: '7.62×39',     cls: 'ak762' },
+            { name: '7.62×51 mm NATO tár',           chip: '7.62 NATO',   cls: 'nato762' },
+            { name: '9×19 mm géppisztolytár',        chip: '9×19 SMG',    cls: 'mag' },
+            { name: '.45 ACP géppisztoly dobtár',    chip: '.45 DOBTÁR',  cls: 'mag' }
+        ],
+        fullPistol: [
+            { name: '9×19 mm Parabellum tár (töltött)',       chip: '9×19 · +30', cls: 'mag' },
+            { name: '.45 ACP tár (töltött)',                  chip: '.45 · +30',  cls: 'mag' },
+            { name: 'Desert Eagle (.44 Magnum) tár (töltött)',chip: '.44 · +30',  cls: 'mag44' }
+        ],
+        fullBig: [
+            { name: '5.56×45 mm NATO tár (töltött)',        chip: '5.56 NATO +50', cls: 'nato556' },
+            { name: '7.62×39 mm tár (töltött)',             chip: '7.62×39 +50',   cls: 'ak762' },
+            { name: '7.62×51 mm NATO tár (töltött)',        chip: '7.62 NATO +50', cls: 'nato762' },
+            { name: '9×19 mm géppisztolytár (töltött)',     chip: '9×19 SMG +50',  cls: 'mag' },
+            { name: '.45 ACP dobtár (töltött)',             chip: '.45 DOB +50',   cls: 'mag' }
+        ]
     };
 
     let tab = 'sale';
-    let materialMode = 'bought'; // 'own' | 'bought'
+    let materialMode = 'bought';
+    let currentCategory = 'ammo';
+    let currentCaliber = CALIBERS.ammo[0].name;
+    let currentRarity = 'Uncommon';
+    let currentPartnerRole = 'other';
+    let currentPartnerName = 'Sima vevő';
+    let currentStatus = 'paid';
+    let otherType = 'expense';
     let cart = [];
+    let isSending = false;
 
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
-
-    function getCostTag(mode) {
-        return mode === 'own' ? 'saját' : 'vett';
-    }
-
-    function getEffectiveMode() {
-        if (cart.length > 0) {
-            return cart[0].mode || materialMode;
-        }
-        return materialMode;
-    }
-
-    function getUnitCost(cat, rar, mode) {
-        if (mode === 'own') {
-            if (cat === 'ammo' || cat === 'shotgun') return 1;
-            if (cat === 'emptyPistol' || cat === 'emptyBig') return 10;
-            if (cat === 'fullPistol') return 10 + 30 * 1;
-            if (cat === 'fullBig') return 10 + 50 * 1;
-        }
-        return PRICES[cat][rar].cost;
-    }
-
-    function setMaterialMode(mode) {
-        materialMode = mode;
-        document.querySelectorAll('.mat-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.mat === mode);
-        });
-        render();
-    }
-
-    function normText(v) {
-        return String(v || '').trim().toLowerCase();
-    }
-
-    function setPartnerInSelect(partnerRole, partnerName) {
-        const pSel = document.getElementById('partner');
-        const targetName = normText(partnerName);
-        const targetRole = normText(partnerRole);
-
-        let matchedOption = null;
-
-        if (targetName) {
-            matchedOption = Array.from(pSel.options).find(opt => {
-                const dName = normText(opt.dataset.name);
-                const text = normText(opt.textContent);
-                return dName === targetName || text.startsWith(targetName) || text.includes(targetName);
-            });
-        }
-
-        if (!matchedOption && targetRole) {
-            matchedOption = Array.from(pSel.options).find(opt => normText(opt.value) === targetRole);
-        }
-
-        if (!matchedOption && partnerName && partnerName.trim()) {
-            const cleanName = partnerName.trim();
-            const roleVal = (['tier', 'rustata', 'drock', 'other'].includes(targetRole)) ? partnerRole : 'other';
-            const newOpt = document.createElement('option');
-            newOpt.value = roleVal;
-            newOpt.dataset.name = cleanName;
-            newOpt.textContent = `${cleanName} (importált)`;
-            pSel.appendChild(newOpt);
-            matchedOption = newOpt;
-        }
-
-        if (matchedOption) {
-            pSel.value = matchedOption.value;
-            Array.from(pSel.options).forEach(opt => {
-                opt.selected = (opt === matchedOption);
-            });
-            pSel.dispatchEvent(new Event('change'));
-        }
-    }
-
-    function getPendingOrders() {
-        try {
-            const raw = localStorage.getItem(PENDING_STORAGE_KEY);
-            const parsed = raw ? JSON.parse(raw) : [];
-            return Array.isArray(parsed) ? parsed : [];
-        } catch {
-            return [];
-        }
-    }
-
-    function savePendingOrders(orders) {
-        localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(orders));
-    }
-
-    function saveCurrentSaleToPending() {
-        const pSel = document.getElementById('partner');
-        const selectedOpt = pSel.options[pSel.selectedIndex];
-        const partnerRole = pSel.value;
-        const partnerName = (selectedOpt && selectedOpt.dataset.name) ? selectedOpt.dataset.name : (selectedOpt ? selectedOpt.textContent : 'Sima vevő');
-        const note = document.getElementById('saleNote').value.trim();
-        const recorder = document.getElementById('recorder').value.trim().toUpperCase() || '—';
-
-        let rawSell = 0;
-        cart.forEach(x => { rawSell += x.qty * x.sell; });
-        const discPct = getDiscountPercent(partnerRole, rawSell);
-        const total = rawSell - Math.round(rawSell * (discPct / 100));
-
-        const orders = getPendingOrders();
-        orders.unshift({
-            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            createdAt: new Date().toLocaleString('hu-HU'),
-            recorder,
-            partnerRole,
-            partnerName,
-            materialMode,
-            note,
-            total,
-            items: cart.map(x => ({ ...x }))
-        });
-        savePendingOrders(orders);
-        renderPendingOrders();
-    }
-
-    function importPendingOrder(orderId) {
-        const orders = getPendingOrders();
-        const found = orders.find(o => o.id === orderId);
-        if (!found) return;
-
-        setTab('sale');
-        const restoredMode = found.materialMode === 'own' ? 'own' : 'bought';
-        setMaterialMode(restoredMode);
-
-        cart = (found.items || []).map(x => {
-            const fallbackCost = (x.cat && x.rar) ? getUnitCost(x.cat, x.rar, restoredMode) : 0;
-            return {
-                ...x,
-                cost: typeof x.cost === 'number' ? x.cost : fallbackCost
-            };
-        });
-        renderCart();
-
-        setPartnerInSelect(found.partnerRole, found.partnerName);
-        document.getElementById('status').value = 'paid';
-        document.getElementById('saleNote').value = found.note || '';
-
-        const recInput = document.getElementById('recorder');
-        if (!recInput.value.trim() && found.recorder && found.recorder !== '—') {
-            recInput.value = found.recorder;
-        }
-
-        render();
-
-        const pSel = document.getElementById('partner');
-        const activeName = pSel.options[pSel.selectedIndex]?.dataset?.name || found.partnerName || 'Sima vevő';
-        const msg = document.getElementById('msg');
-        msg.style.color = '#10b981';
-        msg.textContent = `Beimportálva: ${activeName} (${money(found.total)}) — státusz: Kész.`;
-    }
-
-    function deletePendingOrder(orderId) {
-        const filtered = getPendingOrders().filter(o => o.id !== orderId);
-        savePendingOrders(filtered);
-        renderPendingOrders();
-    }
-
-    function renderPendingOrders() {
-        const listEl = document.getElementById('pendingList');
-        const countEl = document.getElementById('pendingCount');
-        const orders = getPendingOrders();
-
-        countEl.textContent = `${orders.length} mentett`;
-
-        if (!orders.length) {
-            listEl.innerHTML = '<div class="cart-empty">Nincs helyben mentett függő rendelés.</div>';
-            return;
-        }
-
-        listEl.innerHTML = orders.map(o => {
-            const itemsText = (o.items || []).map(x => `• ${x.qty} db ${x.cal} (${x.rar})`).join('\n');
-            const modeLabel = o.materialMode === 'own' ? 'saját' : 'vett';
-            return `
-                <div class="pending-card">
-                    <div class="pending-top">
-                        <span class="pending-partner">${escapeHtml(o.partnerName || 'Sima vevő')}</span>
-                        <span class="pending-amount">${money(o.total || 0)}</span>
-                    </div>
-                    <div class="pending-meta">${escapeHtml(o.createdAt || '')} • ${modeLabel} • Rögzítette: ${escapeHtml(o.recorder || '—')}${o.note ? ' • ' + escapeHtml(o.note) : ''}</div>
-                    <div class="pending-items">${escapeHtml(itemsText)}</div>
-                    <div class="pending-actions">
-                        <button type="button" class="btn-import" onclick="importPendingOrder('${o.id}')">Rendelés beimportálása</button>
-                        <button type="button" class="btn-remove-pending" onclick="deletePendingOrder('${o.id}')" title="Törlés a helyi listából">✕</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
 
     function escapeHtml(str) {
         return String(str)
@@ -979,6 +1616,170 @@
             .replace(/"/g, '&quot;');
     }
 
+    function safeRarity(rar) {
+        return RARITIES.includes(rar) ? rar : 'Uncommon';
+    }
+
+    function rarityTagHtml(rar) {
+        const r = safeRarity(rar);
+        return `<span class="rar-tag c-${r}">${escapeHtml(r)}</span>`;
+    }
+
+    function getCaliberMeta(catId, calName) {
+        const list = CALIBERS[catId] || [];
+        return list.find(x => x.name === calName) || { name: calName, chip: '', cls: 'mag' };
+    }
+
+    function togglePrices() {
+        const drawer = document.getElementById('priceDrawer');
+        const btn = document.getElementById('btnPriceToggle');
+        const hidden = drawer.classList.toggle('hidden');
+        btn.classList.toggle('active', !hidden);
+    }
+
+    function buildPriceTable() {
+        const body = document.getElementById('priceTableBody');
+        body.innerHTML = CATEGORIES.map(cat => {
+            const cells = RARITIES.map(r => {
+                const p = PRICES[cat.id][r];
+                return `<td>${p.sell.toLocaleString('hu-HU')} $ <span style="color:var(--text-muted)">(${p.cost})</span></td>`;
+            }).join('');
+            return `<tr><td>${escapeHtml(cat.label)}</td>${cells}</tr>`;
+        }).join('');
+    }
+
+    /* Custom sötét dropdownok */
+    function closeAllDropdowns() {
+        document.querySelectorAll('.dd.open').forEach(el => el.classList.remove('open'));
+    }
+
+    function toggleDropdown(id) {
+        const el = document.getElementById(id);
+        const wasOpen = el.classList.contains('open');
+        closeAllDropdowns();
+        if (!wasOpen) el.classList.add('open');
+    }
+
+    function renderCategoryDropdown() {
+        const catObj = CATEGORIES.find(c => c.id === currentCategory) || CATEGORIES[0];
+        document.getElementById('ddCategoryLabel').innerHTML =
+            `<span>${escapeHtml(catObj.label)}</span><span class="spec-chip ${catObj.chipCls}">${escapeHtml(catObj.chip)}</span>`;
+
+        document.getElementById('ddCategoryMenu').innerHTML = CATEGORIES.map(c => `
+            <button type="button" class="dd-opt ${c.id === currentCategory ? 'selected' : ''}" onclick="selectCategory('${c.id}')">
+                <span>${escapeHtml(c.label)}</span>
+                <span class="spec-chip ${c.chipCls}">${escapeHtml(c.chip)}</span>
+            </button>
+        `).join('');
+    }
+
+    function renderCaliberDropdown() {
+        const list = CALIBERS[currentCategory] || [];
+        if (!list.some(x => x.name === currentCaliber)) currentCaliber = list[0].name;
+        const activeMeta = getCaliberMeta(currentCategory, currentCaliber);
+
+        document.getElementById('ddCaliberLabel').innerHTML =
+            `<span>${escapeHtml(activeMeta.name)}</span><span class="spec-chip ${activeMeta.cls}">${escapeHtml(activeMeta.chip)}</span>`;
+
+        document.getElementById('ddCaliberMenu').innerHTML = list.map(item => `
+            <button type="button" class="dd-opt ${item.name === currentCaliber ? 'selected' : ''}" onclick='selectCaliber(${JSON.stringify(item.name)})'>
+                <span>${escapeHtml(item.name)}</span>
+                <span class="spec-chip ${item.cls}">${escapeHtml(item.chip)}</span>
+            </button>
+        `).join('');
+    }
+
+    function selectCategory(catId) {
+        currentCategory = catId;
+        const isAmmo = catId === 'ammo' || catId === 'shotgun';
+        document.getElementById('qty').value = isAmmo ? 1000 : 5;
+        renderCategoryDropdown();
+        renderCaliberDropdown();
+        renderQtyPresets(isAmmo);
+        updateAddButtonPreview();
+        closeAllDropdowns();
+    }
+
+    function selectCaliber(cal) {
+        currentCaliber = cal;
+        renderCaliberDropdown();
+        closeAllDropdowns();
+    }
+
+    function selectRarity(rar) {
+        currentRarity = safeRarity(rar);
+        document.querySelectorAll('#rarityGrid .rar-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.rar === currentRarity);
+        });
+        updateAddButtonPreview();
+    }
+
+    function updateAddButtonPreview() {
+        const qty = Math.max(0, parseInt(document.getElementById('qty').value, 10) || 0);
+        const unitSell = PRICES[currentCategory][currentRarity].sell;
+        document.getElementById('addPreviewPrice').textContent = `+${money(qty * unitSell)}`;
+    }
+
+    function selectPartner(role, name) {
+        currentPartnerRole = ['tier', 'rustata', 'drock', 'other'].includes(role) ? role : 'other';
+        currentPartnerName = String(name || 'Sima vevő').trim() || 'Sima vevő';
+
+        let matched = false;
+        document.querySelectorAll('#partnerPanel .p-card').forEach(btn => {
+            const ok = !matched && btn.dataset.name === currentPartnerName && btn.dataset.role === currentPartnerRole;
+            btn.classList.toggle('active', ok);
+            if (ok) matched = true;
+        });
+
+        if (!matched) {
+            document.querySelectorAll('#partnerPanel .p-card').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.role === currentPartnerRole && btn.dataset.name === 'Sima vevő');
+            });
+        }
+        render();
+    }
+
+    function selectStatus(st) {
+        currentStatus = st === 'pending' ? 'pending' : 'paid';
+        document.getElementById('stPaidBtn').classList.toggle('paid-on', currentStatus === 'paid');
+        document.getElementById('stPendingBtn').classList.toggle('pend-on', currentStatus === 'pending');
+        render();
+    }
+
+    function setOtherType(type) {
+        otherType = type === 'income' ? 'income' : 'expense';
+        document.getElementById('oExpBtn').classList.toggle('active', otherType === 'expense');
+        document.getElementById('oIncBtn').classList.toggle('active', otherType === 'income');
+        render();
+    }
+
+    function getCostTag(mode) {
+        return mode === 'own' ? 'gyári' : 'vett';
+    }
+
+    function getEffectiveMode() {
+        if (cart.length > 0) return cart[0].mode || materialMode;
+        return materialMode;
+    }
+
+    function getUnitCost(cat, rar, mode) {
+        if (mode === 'own') {
+            if (cat === 'ammo' || cat === 'shotgun') return 1;
+            if (cat === 'emptyPistol' || cat === 'emptyBig') return 10;
+            if (cat === 'fullPistol') return 40;
+            if (cat === 'fullBig') return 60;
+        }
+        return PRICES[cat][rar].cost;
+    }
+
+    function setMaterialMode(mode) {
+        materialMode = mode;
+        document.querySelectorAll('[data-mat]').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mat === mode);
+        });
+        render();
+    }
+
     function getDiscountPercent(buyerRole, rawSell) {
         if (buyerRole === 'drock') return 50;
         if (buyerRole === 'rustata') return 15;
@@ -986,23 +1787,58 @@
         return rawSell > DISCOUNT_THRESHOLD ? 10 : 0;
     }
 
-    function updateCalibers() {
-        const cat = document.getElementById('category').value;
-        document.getElementById('caliber').innerHTML = CALIBERS[cat]
-            .map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById('qty').value = (cat === 'ammo' || cat === 'shotgun') ? 1000 : 5;
+    function renderQtyPresets(isAmmo) {
+        const presets = isAmmo ? [500, 1000, 2500, 5000] : [5, 10, 25, 50];
+        document.getElementById('qtyPresets').innerHTML = presets
+            .map(n => `<button type="button" class="qty-btn" onclick="setQty(${n})">${n}</button>`)
+            .join('');
+    }
+
+    function setQty(val) {
+        document.getElementById('qty').value = val;
+        updateAddButtonPreview();
     }
 
     function addItem() {
-        const cat = document.getElementById('category').value;
-        const cal = document.getElementById('caliber').value;
-        const rar = document.getElementById('rarity').value;
         const qty = parseInt(document.getElementById('qty').value, 10) || 0;
         if (qty <= 0) return;
 
-        const sell = PRICES[cat][rar].sell;
-        const cost = getUnitCost(cat, rar, materialMode);
-        cart.push({ cat, cal, rar, qty, cost, sell, mode: materialMode });
+        const sell = PRICES[currentCategory][currentRarity].sell;
+        const cost = getUnitCost(currentCategory, currentRarity, materialMode);
+
+        const existing = cart.find(x =>
+            x.cat === currentCategory &&
+            x.cal === currentCaliber &&
+            x.rar === currentRarity &&
+            (x.mode || materialMode) === materialMode
+        );
+
+        if (existing) {
+            existing.qty += qty;
+        } else {
+            cart.push({
+                cat: currentCategory,
+                cal: currentCaliber,
+                rar: currentRarity,
+                qty,
+                cost,
+                sell,
+                mode: materialMode
+            });
+        }
+
+        renderCart();
+        render();
+    }
+
+    function stepItemQty(index, delta) {
+        const item = cart[index];
+        if (!item) return;
+        const step = (item.cat === 'ammo' || item.cat === 'shotgun') ? 250 : 1;
+        item.qty += delta * step;
+        if (item.qty <= 0) {
+            cart.splice(index, 1);
+        }
         renderCart();
         render();
     }
@@ -1013,18 +1849,38 @@
         render();
     }
 
+    function clearCart() {
+        if (!cart.length) return;
+        cart = [];
+        renderCart();
+        render();
+    }
+
     function renderCart() {
         const el = document.getElementById('cart');
         if (!cart.length) {
-            el.innerHTML = '<div class="cart-empty">Nincs tétel a listában.</div>';
+            el.innerHTML = '<div class="empty-note">Nincs tétel a listában.</div>';
             return;
         }
         el.innerHTML = cart.map((x, i) => {
-            const tag = getCostTag(x.mode || materialMode);
+            const mode = x.mode || materialMode;
+            const tag = getCostTag(mode);
+            const meta = getCaliberMeta(x.cat, x.cal);
             return `
-                <div class="cart-row">
-                    <span><strong>${x.qty} db</strong> ${x.cal} (${x.rar})<span class="cart-tag">[${tag}]</span></span>
-                    <span><strong>${money(x.qty * x.sell)}</strong><button class="del" onclick="removeItem(${i})">✕</button></span>
+                <div class="cart-item">
+                    <div class="cart-info">
+                        <strong>${x.qty} db</strong>
+                        <span>${escapeHtml(x.cal)}</span>
+                        ${meta.chip ? `<span class="spec-chip ${meta.cls}">${escapeHtml(meta.chip)}</span>` : ''}
+                        ${rarityTagHtml(x.rar)}
+                        <span class="src-pill ${mode === 'own' ? 'own' : ''}">${tag}</span>
+                    </div>
+                    <div class="cart-ctrl">
+                        <button type="button" class="step-btn" onclick="stepItemQty(${i}, -1)" title="Csökkentés">−</button>
+                        <button type="button" class="step-btn" onclick="stepItemQty(${i}, 1)" title="Növelés">+</button>
+                        <span class="cart-sum">${money(x.qty * x.sell)}</span>
+                        <button type="button" class="step-btn rm" onclick="removeItem(${i})" title="Törlés">✕</button>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -1032,7 +1888,7 @@
 
     function setTab(next) {
         tab = next;
-        document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === next));
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === next));
         document.getElementById('tab-sale').classList.toggle('hidden', next !== 'sale');
         document.getElementById('tab-factory').classList.toggle('hidden', next !== 'factory');
         document.getElementById('tab-other').classList.toggle('hidden', next !== 'other');
@@ -1048,27 +1904,26 @@
     function updateLocalQuote(buyerRole, rawSell, total, discPct) {
         const quoteEl = document.getElementById('sQuote');
         if (!rawSell) {
-            quoteEl.innerHTML = 'Csak itt látszik: adj hozzá tételt a kalkulációhoz.';
+            quoteEl.innerHTML = 'Vevői végösszeg (csak itt): adj hozzá tételt.';
             return;
         }
         if (buyerRole === 'drock') {
-            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (D-Rock fix 50% kedvezmény aktív).`;
+            quoteEl.innerHTML = `Vevői ár: <strong>${money(total)}</strong> · D-Rock (-50%)`;
             return;
         }
         if (buyerRole === 'rustata') {
-            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (Rustata fix 15% kedvezmény aktív).`;
+            quoteEl.innerHTML = `Vevői ár: <strong>${money(total)}</strong> · Rustata (-15%)`;
             return;
         }
         if (rawSell > DISCOUNT_THRESHOLD) {
-            quoteEl.innerHTML = `Vevőnek mondandó: <strong>${money(total)}</strong> (${discPct}% kedvezmény aktív, 100k+ felett).`;
+            quoteEl.innerHTML = `Vevői ár: <strong>${money(total)}</strong> · -${discPct}% aktív (100k+ felett)`;
         } else {
             const missing = Math.max(0, (DISCOUNT_THRESHOLD + 1) - rawSell);
             const nextPct = buyerRole === 'tier' ? 15 : 10;
-            const hypothetical100k = Math.round(rawSell * (1 - nextPct / 100));
+            const hypothetical = Math.round(rawSell * (1 - nextPct / 100));
             quoteEl.innerHTML =
-                `Vevőnek mondandó: <strong>${money(total)}</strong> (aktuális: -${discPct}%) • ` +
-                `Még <strong>${money(missing)}</strong> kell a <strong>-${nextPct}%</strong>-hoz ` +
-                `(100k+ sávban kb. <strong>${money(hypothetical100k)}</strong>).`;
+                `Vevői ár: <strong>${money(total)}</strong> (-${discPct}%) · ` +
+                `<strong>${money(missing)}</strong> a <strong>-${nextPct}%</strong>-hoz (~<strong>${money(hypothetical)}</strong>)`;
         }
     }
 
@@ -1082,11 +1937,6 @@
         let fields = [];
 
         if (tab === 'sale') {
-            const pSel = document.getElementById('partner');
-            const selectedOpt = pSel.options[pSel.selectedIndex];
-            const buyerRole = pSel.value;
-            const pName = (selectedOpt && selectedOpt.dataset.name) ? selectedOpt.dataset.name : (selectedOpt ? selectedOpt.textContent : 'Sima vevő');
-            const status = document.getElementById('status').value;
             const note = document.getElementById('saleNote').value.trim();
 
             let rawSell = 0, rawCost = 0;
@@ -1100,7 +1950,7 @@
 
             const activeMode = getEffectiveMode();
             const costTag = getCostTag(activeMode);
-            const discPct = getDiscountPercent(buyerRole, rawSell);
+            const discPct = getDiscountPercent(currentPartnerRole, rawSell);
             const discVal = Math.round(rawSell * (discPct / 100));
             const total = rawSell - discVal;
             const profit = total - rawCost;
@@ -1110,13 +1960,13 @@
             document.getElementById('sDisc').textContent = discVal ? `-${money(discVal)} (${discPct}%)` : '0 $';
             document.getElementById('sProfit').textContent = (profit >= 0 ? '+' : '') + money(profit);
             document.getElementById('sTotal').textContent = '+' + money(total);
-            updateLocalQuote(buyerRole, rawSell, total, discPct);
+            updateLocalQuote(currentPartnerRole, rawSell, total, discPct);
 
-            color = status === 'paid' ? 0x10b981 : 0xf59e0b;
-            title = status === 'paid' ? 'Eladás (Kész)' : 'Függőben / Tartozás';
+            color = currentStatus === 'paid' ? 0x10b981 : 0xf59e0b;
+            title = currentStatus === 'paid' ? 'Eladás (Kész)' : 'Függőben / Tartozás';
 
             fields = [
-                { name: 'Partner', value: discPct ? `${pName} (-${discPct}%)` : pName, inline: true },
+                { name: 'Partner', value: discPct ? `${currentPartnerName} (-${discPct}%)` : currentPartnerName, inline: true },
                 { name: 'Bevétel', value: `**+${money(total)}**`, inline: true },
                 { name: 'Tételek', value: cart.length ? cart.map(x => `• **${x.qty} db** ${x.cal} (${x.rar})`).join('\n') : '*Nincs tétel*', inline: false },
                 { name: 'Önköltség', value: costDisplay, inline: true },
@@ -1124,7 +1974,7 @@
             ];
             if (note) fields.push({ name: 'Megjegyzés', value: note, inline: false });
         } else if (tab === 'factory') {
-            const fTitle = document.getElementById('fTitle').value.trim() || 'Saját kiadás';
+            const fTitle = document.getElementById('fTitle').value.trim() || 'Gyári kiadás';
             const fAmt = parseInt(document.getElementById('fAmount').value, 10) || 0;
             const fNote = document.getElementById('fNote').value.trim();
             color = 0xef4444;
@@ -1135,7 +1985,7 @@
             ];
             if (fNote) fields.push({ name: 'Megjegyzés', value: fNote, inline: false });
         } else {
-            const isExp = document.getElementById('oType').value === 'expense';
+            const isExp = otherType === 'expense';
             const oAmt = parseInt(document.getElementById('oAmount').value, 10) || 0;
             const oTitle = document.getElementById('oTitle').value.trim() || 'Frakció tétel';
             const oNote = document.getElementById('oNote').value.trim();
@@ -1154,6 +2004,17 @@
         };
     }
 
+    function formatPreviewValue(name, raw) {
+        const clean = raw.replace(/\*\*/g, '');
+        if (name !== 'Tételek' || !cart.length) {
+            return escapeHtml(clean).replace(/\n/g, '<br>');
+        }
+        return cart.map(x => {
+            const meta = getCaliberMeta(x.cat, x.cal);
+            return `<div class="order-line">• <strong>${x.qty} db</strong> ${escapeHtml(x.cal)} ${meta.chip ? `<span class="spec-chip ${meta.cls}">${escapeHtml(meta.chip)}</span>` : ''} ${rarityTagHtml(x.rar)}</div>`;
+        }).join('');
+    }
+
     function render() {
         const embed = buildPayload().embeds[0];
         const badge = document.getElementById('statusBadge');
@@ -1163,63 +2024,207 @@
 
         if (embed.color === 0x10b981) {
             badge.textContent = 'KÉSZ / BEVÉTEL';
-            badge.style.color = 'var(--green)';
+            badge.style.color = 'var(--ok)';
         } else if (embed.color === 0xf59e0b) {
             badge.textContent = 'FÜGGŐBEN';
-            badge.style.color = 'var(--yellow)';
+            badge.style.color = 'var(--warn)';
         } else {
             badge.textContent = 'KIADÁS';
-            badge.style.color = 'var(--red)';
+            badge.style.color = 'var(--err)';
         }
 
         document.getElementById('eFields').innerHTML = embed.fields.map(f => `
-            <div class="embed-item ${f.inline ? '' : 'full'}">
-                <div class="embed-k">${f.name}</div>
-                <div class="embed-v">${f.value.replace(/\*\*/g, '')}</div>
+            <div class="dc-field ${f.inline ? '' : 'full'}">
+                <div class="dc-k">${escapeHtml(f.name)}</div>
+                <div class="dc-v">${formatPreviewValue(f.name, f.value)}</div>
             </div>
         `).join('');
     }
 
+    /* Helyi függő rendelések */
+    function getPendingOrders() {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(PENDING_STORAGE_KEY) || '[]');
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function savePendingOrders(orders) {
+        localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(orders));
+    }
+
+    function saveCurrentSaleToPending() {
+        const note = document.getElementById('saleNote').value.trim();
+        const recorder = document.getElementById('recorder').value.trim().toUpperCase() || '—';
+        let rawSell = 0;
+        cart.forEach(x => { rawSell += x.qty * x.sell; });
+        const discPct = getDiscountPercent(currentPartnerRole, rawSell);
+        const total = rawSell - Math.round(rawSell * (discPct / 100));
+
+        const orders = getPendingOrders();
+        orders.unshift({
+            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            createdAt: new Date().toLocaleString('hu-HU'),
+            recorder,
+            partnerRole: currentPartnerRole,
+            partnerName: currentPartnerName,
+            materialMode: getEffectiveMode(),
+            note,
+            total,
+            items: cart.map(x => ({ ...x }))
+        });
+        savePendingOrders(orders);
+        renderPendingOrders();
+    }
+
+    function importPendingOrder(orderId) {
+        const found = getPendingOrders().find(o => o.id === orderId);
+        if (!found) return;
+
+        setTab('sale');
+        const restoredMode = found.materialMode === 'own' ? 'own' : 'bought';
+        setMaterialMode(restoredMode);
+
+        cart = (found.items || []).map(x => ({
+            ...x,
+            cost: typeof x.cost === 'number' ? x.cost : getUnitCost(x.cat, x.rar, restoredMode)
+        }));
+        renderCart();
+
+        selectPartner(found.partnerRole, found.partnerName);
+        selectStatus('paid');
+        document.getElementById('saleNote').value = found.note || '';
+
+        const recInput = document.getElementById('recorder');
+        if (!recInput.value.trim() && found.recorder && found.recorder !== '—') {
+            recInput.value = found.recorder;
+        }
+
+        render();
+        setFeedback(`Beimportálva: ${currentPartnerName} (${money(found.total)}) — Kész`, 'var(--ok)');
+    }
+
+    function deletePendingOrder(orderId) {
+        savePendingOrders(getPendingOrders().filter(o => o.id !== orderId));
+        renderPendingOrders();
+    }
+
+    function renderPendingOrders() {
+        const listEl = document.getElementById('pendingList');
+        const orders = getPendingOrders();
+        document.getElementById('pendingCount').textContent = `${orders.length} mentett`;
+
+        if (!orders.length) {
+            listEl.innerHTML = '<div class="empty-note">Nincs helyben mentett függő tétel.</div>';
+            return;
+        }
+
+        listEl.innerHTML = orders.map(o => {
+            const lines = (o.items || [])
+                .map(x => `<div class="order-line">• <strong>${x.qty} db</strong> ${escapeHtml(x.cal)} ${rarityTagHtml(x.rar)}</div>`)
+                .join('');
+            const modeLabel = getCostTag(o.materialMode === 'own' ? 'own' : 'bought');
+            return `
+                <div class="order-card">
+                    <div class="order-top">
+                        <span class="order-name">${escapeHtml(o.partnerName || 'Sima vevő')}</span>
+                        <span class="order-val">${money(o.total || 0)}</span>
+                    </div>
+                    <div class="order-meta">${escapeHtml(o.createdAt || '')} · ${modeLabel} · ${escapeHtml(o.recorder || '—')}${o.note ? ' · ' + escapeHtml(o.note) : ''}</div>
+                    <div class="order-lines">${lines}</div>
+                    <div class="order-btns">
+                        <button type="button" class="btn-imp" onclick="importPendingOrder('${o.id}')">Beimportálás</button>
+                        <button type="button" class="btn-del" onclick="deletePendingOrder('${o.id}')" title="Törlés">✕</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    /* Helyi küldési napló */
+    function pushRecentLog(embed) {
+        try {
+            const prev = JSON.parse(localStorage.getItem(RECENT_STORAGE_KEY) || '[]');
+            const list = Array.isArray(prev) ? prev : [];
+            const amtField = embed.fields.find(f => f.name === 'Bevétel' || f.name === 'Összeg');
+            const partnerField = embed.fields.find(f => f.name === 'Partner' || f.name === 'Megnevezés');
+            list.unshift({
+                time: new Date().toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' }),
+                title: embed.title,
+                who: partnerField ? partnerField.value.replace(/\*\*/g, '') : '',
+                amount: amtField ? amtField.value.replace(/\*\*/g, '') : '',
+                isNeg: embed.color === 0xef4444
+            });
+            localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(list.slice(0, 5)));
+        } catch {}
+        renderRecentLogs();
+    }
+
+    function renderRecentLogs() {
+        const listEl = document.getElementById('recentList');
+        let list = [];
+        try {
+            const parsed = JSON.parse(localStorage.getItem(RECENT_STORAGE_KEY) || '[]');
+            if (Array.isArray(parsed)) list = parsed;
+        } catch {}
+        document.getElementById('recentCount').textContent = `${list.length} db`;
+
+        if (!list.length) {
+            listEl.innerHTML = '<div class="empty-note">Még nincs elküldött tétel.</div>';
+            return;
+        }
+
+        listEl.innerHTML = list.map(r => `
+            <div class="log-row">
+                <span><strong>${escapeHtml(r.time)}</strong> · ${escapeHtml(r.who || r.title)}</span>
+                <span class="log-amt" style="color:${r.isNeg ? 'var(--err)' : 'var(--ok)'}">${escapeHtml(r.amount)}</span>
+            </div>
+        `).join('');
+    }
+
+    function setFeedback(text, color) {
+        const msg = document.getElementById('msg');
+        msg.style.color = color;
+        msg.textContent = text;
+    }
+
     async function send() {
+        if (isSending) return;
         const recorderEl = document.getElementById('recorder');
         const recorder = recorderEl.value.trim();
-        const msg = document.getElementById('msg');
-
-        recorderEl.classList.remove('req-missing');
+        recorderEl.classList.remove('invalid');
 
         if (!recorder) {
-            recorderEl.classList.add('req-missing');
-            msg.style.color = 'var(--red)';
-            msg.textContent = 'Add meg a rögzítő nevét, nélküle nem küldhető el!';
+            recorderEl.classList.add('invalid');
+            setFeedback('Add meg a rögzítő nevét!', 'var(--err)');
             recorderEl.focus();
             return;
         }
-        if (!WEBHOOK_URL || WEBHOOK_URL === 'IDE_MASOLD_A_WEBHOOK_URL_T') {
-            msg.style.color = 'var(--red)';
-            msg.textContent = 'Állítsd be a fix WEBHOOK_URL-t a kódban!';
-            return;
-        }
         if (tab === 'sale' && !cart.length) {
-            msg.style.color = 'var(--red)';
-            msg.textContent = 'Adj hozzá legalább egy tételt!';
+            setFeedback('Adj hozzá legalább egy tételt!', 'var(--err)');
             return;
         }
 
         localStorage.setItem('zero_rec', recorder);
-        msg.style.color = 'var(--muted)';
-        msg.textContent = 'Küldés...';
+        const payload = buildPayload();
+        const currentSaleStatus = tab === 'sale' ? currentStatus : null;
 
-        const currentSaleStatus = tab === 'sale' ? document.getElementById('status').value : null;
+        isSending = true;
+        const btn = document.getElementById('btnSend');
+        btn.disabled = true;
+        setFeedback('Küldés...', 'var(--text-dim)');
 
         try {
             const res = await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(buildPayload())
+                body: JSON.stringify(payload)
             });
             if (res.ok) {
-                msg.style.color = 'var(--green)';
-                msg.textContent = 'Elküldve!';
+                setFeedback('Elküldve Discordra.', 'var(--ok)');
+                pushRecentLog(payload.embeds[0]);
                 if (tab === 'sale') {
                     if (currentSaleStatus === 'pending') {
                         saveCurrentSaleToPending();
@@ -1230,24 +2235,46 @@
                 }
                 render();
             } else {
-                msg.style.color = 'var(--red)';
-                msg.textContent = `Hiba (${res.status})`;
+                setFeedback(`Discord hiba (${res.status})`, 'var(--err)');
             }
         } catch {
-            msg.style.color = 'var(--red)';
-            msg.textContent = 'Hálózati hiba.';
+            setFeedback('Hálózati hiba.', 'var(--err)');
+        } finally {
+            isSending = false;
+            btn.disabled = false;
         }
     }
 
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.dd')) closeAllDropdowns();
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            send();
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('recorder').value = localStorage.getItem('zero_rec') || '';
-        document.getElementById('recorder').addEventListener('input', () => {
-            localStorage.setItem('zero_rec', document.getElementById('recorder').value.trim());
+        const rec = document.getElementById('recorder');
+        rec.value = localStorage.getItem('zero_rec') || '';
+        rec.addEventListener('input', () => {
+            rec.classList.remove('invalid');
+            localStorage.setItem('zero_rec', rec.value.trim());
             render();
         });
 
-        updateCalibers();
+        buildPriceTable();
+        renderCategoryDropdown();
+        renderCaliberDropdown();
+        renderQtyPresets(true);
+        selectRarity('Uncommon');
+        selectPartner('other', 'Sima vevő');
+        selectStatus('paid');
+        updateAddButtonPreview();
         renderPendingOrders();
+        renderRecentLogs();
         render();
     });
 </script>
