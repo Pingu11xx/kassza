@@ -1356,7 +1356,7 @@
                         </button>
                         <button type="button" class="p-card" data-role="drock" data-name="D-Rock" onclick="selectPartner('drock', 'D-Rock')">
                             <span>D-Rock</span>
-                            <span class="p-tag">FIX -50%</span>
+                            <span class="p-tag">FIX -30%</span>
                         </button>
                     </div>
                 </div>
@@ -1781,7 +1781,7 @@
     }
 
     function getDiscountPercent(buyerRole, rawSell) {
-        if (buyerRole === 'drock') return 50;
+        if (buyerRole === 'drock') return 30;
         if (buyerRole === 'rustata') return 30;
         if (buyerRole === 'tier') return rawSell > DISCOUNT_THRESHOLD ? 15 : 10;
         return rawSell > DISCOUNT_THRESHOLD ? 10 : 0;
@@ -1908,7 +1908,7 @@
             return;
         }
         if (buyerRole === 'drock') {
-            quoteEl.innerHTML = `Vevői ár: <strong>${money(total)}</strong> · D-Rock (-50%)`;
+            quoteEl.innerHTML = `Vevői ár: <strong>${money(total)}</strong> · D-Rock (-30%)`;
             return;
         }
         if (buyerRole === 'rustata') {
