@@ -158,6 +158,34 @@
             border-color: var(--red);
         }
 
+        .mat-switch {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .mat-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--muted);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .mat-btn.active {
+            background: var(--input);
+            color: var(--text);
+            border-color: var(--blue);
+        }
+
         button.action {
             width: 100%;
             padding: 11px;
@@ -236,10 +264,17 @@
             padding: 6px 4px;
             border-bottom: 1px solid var(--border);
             font-size: 0.83rem;
+            gap: 8px;
         }
 
         .cart-row:last-child {
             border-bottom: none;
+        }
+
+        .cart-tag {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-left: 4px;
         }
 
         .del {
@@ -514,6 +549,12 @@
 
         <!-- ELADÁS -->
         <div id="tab-sale">
+            <label>Alapanyag forrás (önköltség számítás)</label>
+            <div class="mat-switch">
+                <button type="button" class="mat-btn" data-mat="own" onclick="setMaterialMode('own')">Saját alapanyag (1$/db · 10$/tár)</button>
+                <button type="button" class="mat-btn active" data-mat="bought" onclick="setMaterialMode('bought')">Vett alapanyag (régi ár)</button>
+            </div>
+
             <div class="grid-2 field">
                 <div>
                     <label>Kategória</label>
@@ -736,9 +777,28 @@
     };
 
     let tab = 'sale';
+    let materialMode = 'bought'; // 'own' | 'bought'
     let cart = [];
 
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
+
+    function getUnitCost(cat, rar, mode) {
+        if (mode === 'own') {
+            if (cat === 'ammo' || cat === 'shotgun') return 1;
+            if (cat === 'emptyPistol' || cat === 'emptyBig') return 10;
+            if (cat === 'fullPistol') return 10 + 30 * 1;
+            if (cat === 'fullBig') return 10 + 50 * 1;
+        }
+        return PRICES[cat][rar].cost;
+    }
+
+    function setMaterialMode(mode) {
+        materialMode = mode;
+        document.querySelectorAll('.mat-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mat === mode);
+        });
+        render();
+    }
 
     function normText(v) {
         return String(v || '').trim().toLowerCase();
@@ -817,6 +877,7 @@
             recorder,
             partnerRole,
             partnerName,
+            materialMode,
             note,
             total,
             items: cart.map(x => ({ ...x }))
@@ -831,7 +892,16 @@
         if (!found) return;
 
         setTab('sale');
-        cart = (found.items || []).map(x => ({ ...x }));
+        const restoredMode = found.materialMode === 'own' ? 'own' : 'bought';
+        setMaterialMode(restoredMode);
+
+        cart = (found.items || []).map(x => {
+            const fallbackCost = (x.cat && x.rar) ? getUnitCost(x.cat, x.rar, restoredMode) : 0;
+            return {
+                ...x,
+                cost: typeof x.cost === 'number' ? x.cost : fallbackCost
+            };
+        });
         renderCart();
 
         setPartnerInSelect(found.partnerRole, found.partnerName);
@@ -872,13 +942,14 @@
 
         listEl.innerHTML = orders.map(o => {
             const itemsText = (o.items || []).map(x => `• ${x.qty} db ${x.cal} (${x.rar})`).join('\n');
+            const modeLabel = o.materialMode === 'own' ? 'Saját anyag' : 'Vett anyag';
             return `
                 <div class="pending-card">
                     <div class="pending-top">
                         <span class="pending-partner">${escapeHtml(o.partnerName || 'Sima vevő')}</span>
                         <span class="pending-amount">${money(o.total || 0)}</span>
                     </div>
-                    <div class="pending-meta">${escapeHtml(o.createdAt || '')} • Rögzítette: ${escapeHtml(o.recorder || '—')}${o.note ? ' • ' + escapeHtml(o.note) : ''}</div>
+                    <div class="pending-meta">${escapeHtml(o.createdAt || '')} • ${modeLabel} • Rögzítette: ${escapeHtml(o.recorder || '—')}${o.note ? ' • ' + escapeHtml(o.note) : ''}</div>
                     <div class="pending-items">${escapeHtml(itemsText)}</div>
                     <div class="pending-actions">
                         <button type="button" class="btn-import" onclick="importPendingOrder('${o.id}')">Rendelés beimportálása</button>
@@ -918,8 +989,9 @@
         const qty = parseInt(document.getElementById('qty').value, 10) || 0;
         if (qty <= 0) return;
 
-        const p = PRICES[cat][rar];
-        cart.push({ cal, rar, qty, cost: p.cost, sell: p.sell });
+        const sell = PRICES[cat][rar].sell;
+        const cost = getUnitCost(cat, rar, materialMode);
+        cart.push({ cat, cal, rar, qty, cost, sell, mode: materialMode });
         renderCart();
         render();
     }
@@ -936,12 +1008,15 @@
             el.innerHTML = '<div class="cart-empty">Nincs tétel a listában.</div>';
             return;
         }
-        el.innerHTML = cart.map((x, i) => `
-            <div class="cart-row">
-                <span><strong>${x.qty} db</strong> ${x.cal} (${x.rar})</span>
-                <span><strong>${money(x.qty * x.sell)}</strong><button class="del" onclick="removeItem(${i})">✕</button></span>
-            </div>
-        `).join('');
+        el.innerHTML = cart.map((x, i) => {
+            const tag = x.mode === 'own' ? 'saját' : 'vett';
+            return `
+                <div class="cart-row">
+                    <span><strong>${x.qty} db</strong> ${x.cal} (${x.rar})<span class="cart-tag">[${tag}]</span></span>
+                    <span><strong>${money(x.qty * x.sell)}</strong><button class="del" onclick="removeItem(${i})">✕</button></span>
+                </div>
+            `;
+        }).join('');
     }
 
     function setTab(next) {
@@ -1006,7 +1081,10 @@
             let rawSell = 0, rawCost = 0;
             cart.forEach(x => {
                 rawSell += x.qty * x.sell;
-                rawCost += x.qty * x.cost;
+                const unitCost = (x.cat && x.rar)
+                    ? getUnitCost(x.cat, x.rar, x.mode || materialMode)
+                    : x.cost;
+                rawCost += x.qty * unitCost;
             });
 
             const discPct = getDiscountPercent(buyerRole, rawSell);
