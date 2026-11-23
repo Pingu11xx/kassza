@@ -783,7 +783,7 @@
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
 
     function getCostTag(mode) {
-        return mode === 'own' ? 'gyári' : 'vett';
+        return mode === 'own' ? 'saját' : 'vett';
     }
 
     function getEffectiveMode() {
@@ -953,7 +953,7 @@
 
         listEl.innerHTML = orders.map(o => {
             const itemsText = (o.items || []).map(x => `• ${x.qty} db ${x.cal} (${x.rar})`).join('\n');
-            const modeLabel = o.materialMode === 'own' ? 'gyári' : 'vett';
+            const modeLabel = o.materialMode === 'own' ? 'saját' : 'vett';
             return `
                 <div class="pending-card">
                     <div class="pending-top">
@@ -1124,7 +1124,7 @@
             ];
             if (note) fields.push({ name: 'Megjegyzés', value: note, inline: false });
         } else if (tab === 'factory') {
-            const fTitle = document.getElementById('fTitle').value.trim() || 'Gyári kiadás';
+            const fTitle = document.getElementById('fTitle').value.trim() || 'Saját kiadás';
             const fAmt = parseInt(document.getElementById('fAmount').value, 10) || 0;
             const fNote = document.getElementById('fNote').value.trim();
             color = 0xef4444;
