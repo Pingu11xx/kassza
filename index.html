@@ -782,6 +782,17 @@
 
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
 
+    function getCostTag(mode) {
+        return mode === 'own' ? 'gyári' : 'vett';
+    }
+
+    function getEffectiveMode() {
+        if (cart.length > 0) {
+            return cart[0].mode || materialMode;
+        }
+        return materialMode;
+    }
+
     function getUnitCost(cat, rar, mode) {
         if (mode === 'own') {
             if (cat === 'ammo' || cat === 'shotgun') return 1;
@@ -942,7 +953,7 @@
 
         listEl.innerHTML = orders.map(o => {
             const itemsText = (o.items || []).map(x => `• ${x.qty} db ${x.cal} (${x.rar})`).join('\n');
-            const modeLabel = o.materialMode === 'own' ? 'Saját anyag' : 'Vett anyag';
+            const modeLabel = o.materialMode === 'own' ? 'gyári' : 'vett';
             return `
                 <div class="pending-card">
                     <div class="pending-top">
@@ -1009,7 +1020,7 @@
             return;
         }
         el.innerHTML = cart.map((x, i) => {
-            const tag = x.mode === 'own' ? 'saját' : 'vett';
+            const tag = getCostTag(x.mode || materialMode);
             return `
                 <div class="cart-row">
                     <span><strong>${x.qty} db</strong> ${x.cal} (${x.rar})<span class="cart-tag">[${tag}]</span></span>
@@ -1087,12 +1098,15 @@
                 rawCost += x.qty * unitCost;
             });
 
+            const activeMode = getEffectiveMode();
+            const costTag = getCostTag(activeMode);
             const discPct = getDiscountPercent(buyerRole, rawSell);
             const discVal = Math.round(rawSell * (discPct / 100));
             const total = rawSell - discVal;
             const profit = total - rawCost;
+            const costDisplay = `${money(rawCost)} (${costTag})`;
 
-            document.getElementById('sCost').textContent = money(rawCost);
+            document.getElementById('sCost').textContent = costDisplay;
             document.getElementById('sDisc').textContent = discVal ? `-${money(discVal)} (${discPct}%)` : '0 $';
             document.getElementById('sProfit').textContent = (profit >= 0 ? '+' : '') + money(profit);
             document.getElementById('sTotal').textContent = '+' + money(total);
@@ -1105,7 +1119,7 @@
                 { name: 'Partner', value: discPct ? `${pName} (-${discPct}%)` : pName, inline: true },
                 { name: 'Bevétel', value: `**+${money(total)}**`, inline: true },
                 { name: 'Tételek', value: cart.length ? cart.map(x => `• **${x.qty} db** ${x.cal} (${x.rar})`).join('\n') : '*Nincs tétel*', inline: false },
-                { name: 'Önköltség', value: money(rawCost), inline: true },
+                { name: 'Önköltség', value: costDisplay, inline: true },
                 { name: 'Tiszta haszon', value: `**${profit >= 0 ? '+' : ''}${money(profit)}**`, inline: true }
             ];
             if (note) fields.push({ name: 'Megjegyzés', value: note, inline: false });
