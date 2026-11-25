@@ -48,11 +48,7 @@
             --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background:
@@ -81,11 +77,7 @@
             align-items: start;
         }
 
-        @media (max-width: 980px) {
-            .shell {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 980px) { .shell { grid-template-columns: 1fr; } }
 
         .panel {
             background: var(--card);
@@ -96,7 +88,6 @@
             position: relative;
         }
 
-        /* Fejléc + ZERO Logó + Mottó + READY jelző */
         .topbar {
             grid-column: 1 / -1;
             display: flex;
@@ -107,37 +98,11 @@
             padding: 13px 20px;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .zero-logo {
-            width: 42px;
-            height: 42px;
-            flex-shrink: 0;
-            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.24));
-        }
-
-        .brand-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .brand-text {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .brand h1 {
-            font-size: 1.22rem;
-            font-weight: 900;
-            letter-spacing: 1.1px;
-        }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .zero-logo { width: 42px; height: 42px; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.24)); }
+        .brand-stack { display: flex; flex-direction: column; gap: 3px; }
+        .brand-text { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .brand h1 { font-size: 1.22rem; font-weight: 900; letter-spacing: 1.1px; }
 
         .brand-sub {
             font-size: 0.72rem;
@@ -147,6 +112,17 @@
             color: #93c5fd;
             background: var(--accent-bg);
             border: 1px solid var(--accent-bd);
+            padding: 3px 9px;
+            border-radius: 6px;
+        }
+
+        .edit-badge {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #fcd34d;
+            background: var(--warn-bg);
+            border: 1px solid var(--warn-bd);
             padding: 3px 9px;
             border-radius: 6px;
         }
@@ -165,44 +141,17 @@
             border-radius: 999px;
         }
 
-        .live-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--ok);
-            animation: readyPulse 2.2s infinite ease-in-out;
-        }
-
-        .live-pill.busy .live-dot {
-            background: var(--warn);
-            animation: none;
-        }
-
-        .live-pill.busy {
-            color: #fcd34d;
-            background: var(--warn-bg);
-            border-color: var(--warn-bd);
-        }
+        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); animation: readyPulse 2.2s infinite ease-in-out; }
+        .live-pill.busy .live-dot { background: var(--warn); animation: none; }
+        .live-pill.busy { color: #fcd34d; background: var(--warn-bg); border-color: var(--warn-bd); }
 
         @keyframes readyPulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.45; transform: scale(0.85); }
         }
 
-        .brand-motto {
-            font-size: 0.78rem;
-            font-style: italic;
-            font-weight: 600;
-            color: var(--text-dim);
-            letter-spacing: 0.2px;
-        }
-
-        .top-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .brand-motto { font-size: 0.78rem; font-style: italic; font-weight: 600; color: var(--text-dim); letter-spacing: 0.2px; }
+        .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
         .btn-pricelist {
             background: var(--gold-bg);
@@ -214,14 +163,9 @@
             font-weight: 800;
             letter-spacing: 0.4px;
             cursor: pointer;
-            transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
         }
 
-        .btn-pricelist:hover, .btn-pricelist.active {
-            background: rgba(234, 179, 8, 0.25);
-            border-color: var(--gold);
-            color: #fff;
-        }
+        .btn-pricelist:hover, .btn-pricelist.active { background: rgba(234, 179, 8, 0.25); border-color: var(--gold); color: #fff; }
 
         .btn-ghost {
             background: var(--surface);
@@ -232,25 +176,12 @@
             font-size: 0.76rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
         }
 
-        .btn-ghost:hover {
-            color: var(--text);
-            border-color: var(--border-hi);
-            background: var(--surface-hover);
-        }
+        .btn-ghost:hover { color: var(--text); border-color: var(--border-hi); background: var(--surface-hover); }
 
-        .rec-box {
-            width: 230px;
-        }
-
-        .rec-chips {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            margin-top: 6px;
-        }
+        .rec-box { width: 230px; }
+        .rec-chips { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
 
         .rec-chip {
             background: var(--bg-elev);
@@ -262,22 +193,11 @@
             font-size: 0.68rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
         }
 
-        .rec-chip:hover, .rec-chip.active {
-            background: var(--accent-bg);
-            border-color: var(--accent-bd);
-            color: #fff;
-        }
+        .rec-chip:hover, .rec-chip.active { background: var(--accent-bg); border-color: var(--accent-bd); color: #fff; }
+        @media (max-width: 600px) { .rec-box { width: 100%; } }
 
-        @media (max-width: 600px) {
-            .rec-box {
-                width: 100%;
-            }
-        }
-
-        /* Árlista fiók */
         .drawer {
             grid-column: 1 / -1;
             background: var(--bg-elev);
@@ -286,89 +206,21 @@
             border-radius: 12px;
             padding: 16px 18px;
             overflow-x: auto;
-            animation: drawerReveal 0.18s ease-out;
         }
 
-        @keyframes drawerReveal {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .drawer-title { font-size: 0.84rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fde047; }
+        .drawer-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .drawer-search { width: 220px !important; padding: 6px 10px !important; font-size: 0.78rem !important; }
+        .drawer-note { font-size: 0.74rem; color: var(--text-dim); }
 
-        .drawer-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
+        .price-table { width: 100%; border-collapse: collapse; font-size: 0.79rem; min-width: 680px; }
+        .price-table th { text-align: left; color: var(--text-dim); font-weight: 800; padding: 7px 10px; border-bottom: 1px solid var(--border-hi); }
+        .price-table td { padding: 7px 10px; border-bottom: 1px solid rgba(37, 47, 68, 0.6); font-family: var(--mono); font-size: 0.76rem; }
+        .price-table td.pick-cell { cursor: pointer; border-radius: 5px; }
+        .price-table td.pick-cell:hover { background: var(--surface-hover); color: #fff; }
+        .price-table td:first-child { font-family: var(--sans); font-weight: 700; color: var(--text); }
 
-        .drawer-title {
-            font-size: 0.84rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: #fde047;
-        }
-
-        .drawer-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .drawer-search {
-            width: 220px !important;
-            padding: 6px 10px !important;
-            font-size: 0.78rem !important;
-        }
-
-        .drawer-note {
-            font-size: 0.74rem;
-            color: var(--text-dim);
-        }
-
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.79rem;
-            min-width: 680px;
-        }
-
-        .price-table th {
-            text-align: left;
-            color: var(--text-dim);
-            font-weight: 800;
-            padding: 7px 10px;
-            border-bottom: 1px solid var(--border-hi);
-        }
-
-        .price-table td {
-            padding: 7px 10px;
-            border-bottom: 1px solid rgba(37, 47, 68, 0.6);
-            font-family: var(--mono);
-            font-size: 0.76rem;
-        }
-
-        .price-table td.pick-cell {
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.12s ease;
-        }
-
-        .price-table td.pick-cell:hover {
-            background: var(--surface-hover);
-            color: #fff;
-        }
-
-        .price-table td:first-child {
-            font-family: var(--sans);
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        /* Fő fülek */
         .nav-tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -389,16 +241,10 @@
             font-size: 0.86rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
         }
 
         .nav-tab:hover { color: var(--text); }
-        .nav-tab.active {
-            background: var(--surface);
-            color: var(--text);
-            border-color: var(--border-hi);
-        }
-
+        .nav-tab.active { background: var(--surface); color: var(--text); border-color: var(--border-hi); }
         .nav-tab[data-tab="sale"].active { box-shadow: inset 0 -2px 0 var(--ok); }
         .nav-tab[data-tab="factory"].active { box-shadow: inset 0 -2px 0 var(--err); }
         .nav-tab[data-tab="other"].active { box-shadow: inset 0 -2px 0 var(--accent); }
@@ -416,40 +262,14 @@
         .block.hl-green { border-left-color: var(--ok); }
         .block.hl-warn { border-left-color: var(--warn); }
 
-        .sec-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
+        .sec-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .sec-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text); }
+        .sec-sub { font-size: 0.71rem; font-weight: 700; color: var(--text-dim); }
 
-        .sec-title {
-            font-size: 0.78rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text);
-        }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 620px) { .row-2 { grid-template-columns: 1fr; } }
 
-        .sec-sub {
-            font-size: 0.71rem;
-            font-weight: 700;
-            color: var(--text-dim);
-        }
-
-        .row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        @media (max-width: 620px) {
-            .row-2 { grid-template-columns: 1fr; }
-        }
-
-        input[type="text"],
-        input[type="number"] {
+        input[type="text"], input[type="number"] {
             width: 100%;
             background: var(--card);
             border: 1px solid var(--border);
@@ -458,27 +278,13 @@
             border-radius: 8px;
             font-size: 0.87rem;
             outline: none;
-            transition: border-color 0.14s ease, background 0.14s ease;
         }
 
-        input[type="number"] {
-            font-family: var(--mono);
-            font-weight: 700;
-        }
+        input[type="number"] { font-family: var(--mono); font-weight: 700; }
+        input:focus { border-color: var(--accent); background: var(--surface); }
+        input.invalid { border-color: var(--err); background: rgba(239, 68, 68, 0.08); }
 
-        input:focus {
-            border-color: var(--accent);
-            background: var(--surface);
-        }
-
-        input.invalid {
-            border-color: var(--err);
-            background: rgba(239, 68, 68, 0.08);
-        }
-
-        /* Saját sötét dropdown */
         .dd { position: relative; }
-
         .dd-trigger {
             width: 100%;
             display: flex;
@@ -494,30 +300,11 @@
             font-weight: 700;
             cursor: pointer;
             text-align: left;
-            transition: border-color 0.14s ease, background 0.14s ease;
         }
 
-        .dd-trigger:hover, .dd.open .dd-trigger {
-            border-color: var(--accent);
-            background: var(--surface);
-        }
-
-        .dd-trigger-main {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .dd-arrow {
-            color: var(--text-dim);
-            font-size: 0.72rem;
-            transition: transform 0.14s ease;
-            flex-shrink: 0;
-        }
-
+        .dd-trigger:hover, .dd.open .dd-trigger { border-color: var(--accent); background: var(--surface); }
+        .dd-trigger-main { display: flex; align-items: center; gap: 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .dd-arrow { color: var(--text-dim); font-size: 0.72rem; flex-shrink: 0; }
         .dd.open .dd-arrow { transform: rotate(180deg); }
 
         .dd-menu {
@@ -556,14 +343,8 @@
             margin-bottom: 2px;
         }
 
-        .dd-opt:last-child { margin-bottom: 0; }
         .dd-opt:hover { background: var(--surface-hover); color: var(--text); }
-        .dd-opt.selected {
-            background: var(--accent-bg);
-            border-color: var(--accent-bd);
-            color: #fff;
-            font-weight: 700;
-        }
+        .dd-opt.selected { background: var(--accent-bg); border-color: var(--accent-bd); color: #fff; font-weight: 700; }
 
         .spec-chip {
             font-family: var(--mono);
@@ -583,41 +364,12 @@
         .spec-chip.mag44   { background: rgba(168, 85, 247, 0.16); color: #d8b4fe; }
         .spec-chip.mag     { background: rgba(148, 163, 184, 0.14); color: #e2e8f0; }
 
-        .seg-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 4px;
-            border-radius: 8px;
-        }
-
-        .seg-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--text-dim);
-            padding: 8px 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
-        }
-
+        .seg-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--card); border: 1px solid var(--border); padding: 4px; border-radius: 8px; }
+        .seg-btn { background: transparent; border: 1px solid transparent; color: var(--text-dim); padding: 8px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
         .seg-btn:hover { color: var(--text); }
-        .seg-btn.active {
-            background: var(--surface);
-            color: var(--text);
-            border-color: var(--accent-bd);
-        }
+        .seg-btn.active { background: var(--surface); color: var(--text); border-color: var(--accent-bd); }
 
-        .rar-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-        }
-
+        .rar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .rar-btn {
             display: flex;
             align-items: center;
@@ -630,24 +382,10 @@
             font-size: 0.76rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.12s ease, border-color 0.12s ease;
         }
 
-        .rar-btn::before {
-            content: "";
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: currentColor;
-            flex-shrink: 0;
-        }
-
-        .rar-btn:hover { background: var(--surface); border-color: var(--border-hi); }
-        .rar-btn.active {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: currentColor;
-            box-shadow: inset 0 0 0 1px currentColor;
-        }
+        .rar-btn::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+        .rar-btn.active { background: rgba(255, 255, 255, 0.05); border-color: currentColor; box-shadow: inset 0 0 0 1px currentColor; }
 
         .rar-tag {
             display: inline-flex;
@@ -661,13 +399,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .rar-tag::before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-        }
+        .rar-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
         .c-Common    { color: var(--r-Common); }
         .c-Uncommon  { color: var(--r-Uncommon); }
@@ -676,13 +408,7 @@
         .c-Legendary { color: var(--r-Legendary); }
         .c-Mythic    { color: var(--r-Mythic); }
 
-        .qty-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-            margin-top: 6px;
-        }
-
+        .qty-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 6px; }
         .qty-btn {
             background: var(--card);
             border: 1px solid var(--border);
@@ -693,7 +419,6 @@
             font-size: 0.73rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
         }
 
         .qty-btn:hover { color: var(--text); border-color: var(--accent-bd); background: var(--surface); }
@@ -712,122 +437,30 @@
             font-weight: 700;
             cursor: pointer;
             margin-bottom: 14px;
-            transition: background 0.14s ease, border-color 0.14s ease;
         }
 
         .btn-add:hover { border-color: var(--accent); background: var(--surface-hover); }
+        .btn-add-price { font-family: var(--mono); font-size: 0.81rem; color: #6ee7b7; background: var(--ok-bg); border: 1px solid var(--ok-bd); padding: 2px 8px; border-radius: 5px; }
 
-        .btn-add-price {
-            font-family: var(--mono);
-            font-size: 0.81rem;
-            color: #6ee7b7;
-            background: var(--ok-bg);
-            border: 1px solid var(--ok-bd);
-            padding: 2px 8px;
-            border-radius: 5px;
-        }
-
-        .cart-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px;
-            min-height: 68px;
-            max-height: 240px;
-            overflow-y: auto;
-        }
-
-        .empty-note {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            text-align: center;
-            padding: 16px 0;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 6px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.82rem;
-        }
-
+        .cart-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-height: 68px; max-height: 240px; overflow-y: auto; }
+        .empty-note { color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 16px 0; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 7px 6px; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
         .cart-item:last-child { border-bottom: none; }
+        .cart-info { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 
-        .cart-info {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .src-pill {
-            font-size: 0.67rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 1px 6px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-dim);
-        }
-
+        .src-pill { font-size: 0.67rem; font-weight: 800; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.05); color: var(--text-dim); }
         .src-pill.own { background: var(--accent-bg); color: #93c5fd; }
 
-        .cart-ctrl {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-shrink: 0;
-        }
-
-        .step-btn {
-            width: 23px;
-            height: 23px;
-            border-radius: 5px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            font-weight: 800;
-            font-size: 0.82rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .cart-ctrl { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+        .step-btn { width: 23px; height: 23px; border-radius: 5px; background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); font-weight: 800; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
         .step-btn:hover { color: var(--text); border-color: var(--border-hi); }
         .step-btn.rm:hover { color: var(--err); border-color: var(--err-bd); }
+        .cart-sum { font-family: var(--mono); font-weight: 700; font-size: 0.81rem; min-width: 78px; text-align: right; }
 
-        .cart-sum {
-            font-family: var(--mono);
-            font-weight: 700;
-            font-size: 0.81rem;
-            min-width: 78px;
-            text-align: right;
-        }
-
-        .p-grp {
-            font-size: 0.68rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.45px;
-            color: var(--text-muted);
-            margin: 8px 0 5px;
-        }
-
+        .p-grp { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.45px; color: var(--text-muted); margin: 8px 0 5px; }
         .p-grp:first-child { margin-top: 0; }
-
-        .p-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-        }
-
-        @media (max-width: 560px) {
-            .p-grid { grid-template-columns: 1fr; }
-        }
+        .p-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        @media (max-width: 560px) { .p-grid { grid-template-columns: 1fr; } }
 
         .p-card {
             display: flex;
@@ -842,99 +475,33 @@
             font-size: 0.79rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.13s ease, border-color 0.13s ease;
         }
 
         .p-card.span-2 { grid-column: 1 / -1; }
         .p-card:hover { background: var(--surface); border-color: var(--border-hi); }
+        .p-card.active { background: var(--surface); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+        .p-card[data-role="drock"].active { border-color: #fbff00; box-shadow: inset 0 0 0 1px #fbff00; background: rgba(251, 255, 0, 0.08); }
+        .p-card[data-role="rustata"].active { border-color: #d400ca; box-shadow: inset 0 0 0 1px #ff61f7; background: rgba(212, 0, 202, 0.08); }
 
-        .p-card.active {
-            background: var(--surface);
-            border-color: var(--accent);
-            box-shadow: inset 0 0 0 1px var(--accent);
-        }
-
-        .p-card[data-role="drock"].active {
-            border-color: #fbff00;
-            box-shadow: inset 0 0 0 1px #fbff00;
-            background: rgba(251, 255, 0, 0.08);
-        }
-
-        .p-card[data-role="rustata"].active {
-            border-color: #d400ca;
-            box-shadow: inset 0 0 0 1px #ff61f7;
-            background: rgba(212, 0, 202, 0.08);
-        }
-
-        .p-tag {
-            font-family: var(--mono);
-            font-size: 0.69rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-dim);
-        }
-
+        .p-tag { font-family: var(--mono); font-size: 0.69rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.05); color: var(--text-dim); }
         .p-card[data-role="tier"] .p-tag { background: var(--accent-bg); color: #93c5fd; }
         .p-card[data-role="drock"] .p-tag { background: var(--warn-bg); color: #fbff00c5; }
         .p-card[data-role="rustata"] .p-tag { background: var(--warn-bg); color: #ff61f7; }
 
-        .st-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .st-btn {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            border-radius: 8px;
-            padding: 9px 10px;
-            font-size: 0.81rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
-        }
-
-        .st-btn:hover { color: var(--text); border-color: var(--border-hi); }
+        .st-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .st-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; padding: 9px 10px; font-size: 0.81rem; font-weight: 700; cursor: pointer; }
         .st-btn.paid-on { background: var(--ok-bg); border-color: var(--ok-bd); color: #6ee7b7; }
         .st-btn.pend-on { background: var(--warn-bg); border-color: var(--warn-bd); color: #fcd34d; }
 
-        .t-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.84rem;
-            color: var(--text-dim);
-            margin-bottom: 6px;
-        }
-
+        .t-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.84rem; color: var(--text-dim); margin-bottom: 6px; }
         .t-row span:first-child { font-weight: 600; }
         .t-row span:last-child { font-family: var(--mono); font-weight: 700; }
 
-        .t-profit {
-            background: var(--ok-bg);
-            border: 1px solid var(--ok-bd);
-            border-radius: 7px;
-            padding: 8px 10px;
-            margin: 8px 0;
-            color: var(--text);
-        }
-
+        .t-profit { background: var(--ok-bg); border: 1px solid var(--ok-bd); border-radius: 7px; padding: 8px 10px; margin: 8px 0; color: var(--text); }
         .t-profit span:first-child { font-weight: 800; }
         .t-profit span:last-child { color: #6ee7b7; }
 
-        .t-grand {
-            border-top: 1px solid var(--border-hi);
-            padding-top: 9px;
-            margin: 8px 0 0;
-            color: var(--text);
-            font-size: 1.05rem;
-            font-weight: 800;
-        }
-
+        .t-grand { border-top: 1px solid var(--border-hi); padding-top: 9px; margin: 8px 0 0; color: var(--text); font-size: 1.05rem; font-weight: 800; }
         .t-grand span:last-child { color: var(--ok); }
 
         .quote-bar {
@@ -950,15 +517,9 @@
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
-            transition: background 0.16s ease, border-color 0.16s ease;
         }
 
-        .quote-bar.tier-hit {
-            background: var(--ok-bg);
-            border-color: var(--ok-bd);
-            color: #d1fae5;
-        }
-
+        .quote-bar.tier-hit { background: var(--ok-bg); border-color: var(--ok-bd); color: #d1fae5; }
         .quote-bar strong { color: #fff; font-family: var(--mono); }
 
         .btn-copy {
@@ -971,12 +532,6 @@
             font-weight: 800;
             cursor: pointer;
             white-space: nowrap;
-            transition: background 0.13s ease, border-color 0.13s ease;
-        }
-
-        .btn-copy:hover {
-            background: var(--surface-hover);
-            border-color: var(--accent);
         }
 
         .undo-bar {
@@ -993,35 +548,9 @@
             color: #dbeafe;
         }
 
-        .btn-undo {
-            background: var(--accent);
-            border: none;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.74rem;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .preset-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .preset-btn {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            padding: 6px 10px;
-            border-radius: 7px;
-            font-size: 0.77rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.13s ease, border-color 0.13s ease, color 0.13s ease;
-        }
-
+        .btn-undo { background: var(--accent); border: none; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 800; cursor: pointer; }
+        .preset-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+        .preset-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-dim); padding: 6px 10px; border-radius: 7px; font-size: 0.77rem; font-weight: 700; cursor: pointer; }
         .preset-btn:hover { color: var(--text); border-color: var(--accent-bd); background: var(--surface); }
 
         .btn-submit {
@@ -1035,185 +564,40 @@
             font-weight: 800;
             letter-spacing: 0.2px;
             cursor: pointer;
-            transition: filter 0.14s ease, opacity 0.14s ease;
         }
 
+        .btn-submit.editing { background: var(--warn); color: #111827; }
         .btn-submit:hover:not(:disabled) { filter: brightness(1.08); }
         .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+        .feedback { margin-top: 8px; min-height: 18px; text-align: center; font-size: 0.81rem; font-weight: 700; }
 
-        .feedback {
-            margin-top: 8px;
-            min-height: 18px;
-            text-align: center;
-            font-size: 0.81rem;
-            font-weight: 700;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+        .stat-lbl { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
+        .stat-val { font-family: var(--mono); font-size: 0.88rem; font-weight: 800; color: var(--text); }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .stat-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 10px;
-        }
-
-        .stat-lbl {
-            font-size: 0.68rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 2px;
-        }
-
-        .stat-val {
-            font-family: var(--mono);
-            font-size: 0.88rem;
-            font-weight: 800;
-            color: var(--text);
-        }
-
-        .discord-card {
-            background: #2b2d31;
-            border-left: 4px solid var(--ok);
-            border-radius: 6px;
-            padding: 12px 14px;
-            color: #dbdee1;
-            font-size: 0.84rem;
-        }
-
-        .dc-title {
-            font-weight: 700;
-            color: #fff;
-            font-size: 0.95rem;
-            margin-bottom: 6px;
-        }
-
-        .dc-desc {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f3f4f6;
-            font-size: 0.8rem;
-            padding: 6px 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .dc-fields {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
+        .discord-card { background: #2b2d31; border-left: 4px solid var(--ok); border-radius: 6px; padding: 12px 14px; color: #dbdee1; font-size: 0.84rem; }
+        .dc-title { font-weight: 700; color: #fff; font-size: 0.95rem; margin-bottom: 6px; }
+        .dc-desc { background: rgba(255, 255, 255, 0.05); color: #f3f4f6; font-size: 0.8rem; padding: 6px 8px; border-radius: 5px; margin-bottom: 10px; }
+        .dc-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .dc-field.full { grid-column: 1 / -1; }
+        .dc-k { font-size: 0.71rem; font-weight: 700; color: #fff; margin-bottom: 1px; }
+        .dc-v { font-size: 0.81rem; white-space: pre-line; }
 
-        .dc-k {
-            font-size: 0.71rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 1px;
-        }
-
-        .dc-v {
-            font-size: 0.81rem;
-            white-space: pre-line;
-        }
-
-        .stack-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 270px;
-            overflow-y: auto;
-        }
-
-        .order-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--warn);
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 0.79rem;
-        }
-
-        .order-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 8px;
-            margin-bottom: 3px;
-        }
-
+        .stack-list { display: flex; flex-direction: column; gap: 8px; max-height: 270px; overflow-y: auto; }
+        .order-card { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--warn); border-radius: 8px; padding: 10px; font-size: 0.79rem; }
+        .order-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 3px; }
         .order-name { font-weight: 700; color: #fff; }
         .order-val { font-family: var(--mono); font-weight: 800; color: var(--warn); }
-
-        .order-meta {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .order-lines {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            margin-bottom: 8px;
-            color: #cbd5e1;
-            font-size: 0.75rem;
-        }
-
-        .order-line {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-
+        .order-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; }
+        .order-lines { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; color: #cbd5e1; font-size: 0.75rem; }
+        .order-line { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
         .order-btns { display: flex; gap: 6px; }
 
-        .btn-imp {
-            flex: 1;
-            background: var(--ok-bg);
-            border: 1px solid var(--ok-bd);
-            color: #6ee7b7;
-            border-radius: 6px;
-            padding: 6px 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
+        .btn-imp { flex: 1; background: var(--ok-bg); border: 1px solid var(--ok-bd); color: #6ee7b7; border-radius: 6px; padding: 6px 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .btn-del { background: var(--err-bg); border: 1px solid var(--err-bd); color: #fca5a5; border-radius: 6px; padding: 6px 9px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
 
-        .btn-imp:hover { background: rgba(16, 185, 129, 0.22); }
-
-        .btn-del {
-            background: var(--err-bg);
-            border: 1px solid var(--err-bd);
-            color: #fca5a5;
-            border-radius: 6px;
-            padding: 6px 9px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .btn-del:hover { background: rgba(239, 68, 68, 0.22); }
-
-        .log-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            padding: 6px 8px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-dim);
-        }
-
+        .log-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.75rem; padding: 6px 8px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-dim); }
         .log-row strong { color: var(--text); }
         .log-amt { font-family: var(--mono); font-weight: 700; }
 
@@ -1223,7 +607,6 @@
 <body>
 
 <div class="shell">
-    <!-- Fejléc + ZERO Logó + Mottó + READY -->
     <header class="panel topbar">
         <div class="brand">
             <svg class="zero-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ZERO logó">
@@ -1235,21 +618,19 @@
                 </defs>
                 <path d="M24 3L42 13.5V34.5L24 45L6 34.5V13.5L24 3Z" fill="#0d131d" stroke="url(#zeroGrad)" stroke-width="2"/>
                 <path d="M15 15H33V20.5L21.5 27.5H33V33H15V27.5L26.5 20.5H15V15Z" fill="#f3f6fa"/>
-                <line x1="24" y1="3" x2="24" y2="9" stroke="#93c5fd" stroke-width="1.8"/>
-                <line x1="24" y1="39" x2="24" y2="45" stroke="#6ee7b7" stroke-width="1.8"/>
-                <line x1="6" y1="24" x2="11" y2="24" stroke="#3b82f6" stroke-width="1.8"/>
-                <line x1="37" y1="24" x2="42" y2="24" stroke="#10b981" stroke-width="1.8"/>
             </svg>
             <div class="brand-stack">
                 <div class="brand-text">
                     <h1>ZERO // KASSZA</h1>
                     <span class="brand-sub">Lőszergyár</span>
+                    <span class="edit-badge hidden" id="editBadge">SZERKESZTÉS MÓD</span>
                     <span class="live-pill" id="livePill"><span class="live-dot"></span><span id="liveText">READY</span></span>
                 </div>
                 <div class="brand-motto">Kaliberre szabva, nem a véletlenre bízva.</div>
             </div>
         </div>
         <div class="top-actions">
+            <button type="button" class="btn-ghost hidden" id="btnCancelEdit" onclick="cancelEditMode()">Mégse (új tétel)</button>
             <button type="button" class="btn-pricelist" id="btnPriceToggle" onclick="togglePrices()">ÁRLISTA</button>
             <div class="rec-box">
                 <input type="text" id="recorder" placeholder="Rögzítő neve (kötelező)">
@@ -1258,7 +639,6 @@
         </div>
     </header>
 
-    <!-- Árlista fiók -->
     <section class="drawer hidden" id="priceDrawer">
         <div class="drawer-head">
             <span class="drawer-title">ÁRLISTA — ELADÁSI ÁR (GYÁRTÁSI KÖLTSÉG)</span>
@@ -1273,7 +653,6 @@
         </table>
     </section>
 
-    <!-- Bal oldal: Műveletek -->
     <main class="panel">
         <nav class="nav-tabs">
             <button type="button" class="nav-tab active" data-tab="sale" onclick="setTab('sale')">Eladás</button>
@@ -1281,7 +660,6 @@
             <button type="button" class="nav-tab" data-tab="other" onclick="setTab('other')">Egyéb</button>
         </nav>
 
-        <!-- ELADÁS -->
         <div id="tab-sale">
             <div class="block hl-blue">
                 <div class="sec-head">
@@ -1301,9 +679,7 @@
                 </div>
                 <div class="row-2">
                     <div>
-                        <div class="sec-head" style="margin-bottom:5px;">
-                            <span class="sec-sub" style="color:var(--text);">Kategória</span>
-                        </div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub" style="color:var(--text);">Kategória</span></div>
                         <div class="dd" id="ddCategory">
                             <button type="button" class="dd-trigger" onclick="toggleDropdown('ddCategory')">
                                 <span class="dd-trigger-main" id="ddCategoryLabel">Lőszer</span>
@@ -1313,9 +689,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="sec-head" style="margin-bottom:5px;">
-                            <span class="sec-sub" style="color:var(--text);">Kaliber / Típus</span>
-                        </div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub" style="color:var(--text);">Kaliber / Típus</span></div>
                         <div class="dd" id="ddCaliber">
                             <button type="button" class="dd-trigger" onclick="toggleDropdown('ddCaliber')">
                                 <span class="dd-trigger-main" id="ddCaliberLabel">9×19 mm Parabellum</span>
@@ -1328,14 +702,10 @@
             </div>
 
             <div class="block">
-                <div class="sec-head">
-                    <span class="sec-title">3. Ritkaság &amp; Darabszám</span>
-                </div>
+                <div class="sec-head"><span class="sec-title">3. Ritkaság &amp; Darabszám</span></div>
                 <div class="row-2">
                     <div>
-                        <div class="sec-head" style="margin-bottom:5px;">
-                            <span class="sec-sub">Ritkaság</span>
-                        </div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Ritkaság</span></div>
                         <div class="rar-grid" id="rarityGrid">
                             <button type="button" class="rar-btn c-Common" data-rar="Common" onclick="selectRarity('Common')">Common</button>
                             <button type="button" class="rar-btn c-Uncommon active" data-rar="Uncommon" onclick="selectRarity('Uncommon')">Uncommon</button>
@@ -1346,9 +716,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="sec-head" style="margin-bottom:5px;">
-                            <span class="sec-sub">Darabszám</span>
-                        </div>
+                        <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Darabszám</span></div>
                         <input type="number" id="qty" value="1000" min="1" oninput="updateAddButtonPreview()" onkeydown="if(event.key==='Enter'){event.preventDefault();addItem();}">
                         <div class="qty-bar" id="qtyPresets"></div>
                     </div>
@@ -1370,9 +738,7 @@
                     <span class="sec-title">4. Kosár</span>
                     <button type="button" class="btn-ghost" onclick="clearCart()">Kosár ürítése</button>
                 </div>
-                <div class="cart-box" id="cart">
-                    <div class="empty-note">Nincs tétel a listában.</div>
-                </div>
+                <div class="cart-box" id="cart"><div class="empty-note">Nincs tétel a listában.</div></div>
             </div>
 
             <div class="block">
@@ -1424,9 +790,7 @@
             </div>
 
             <div class="block hl-warn">
-                <div class="sec-head">
-                    <span class="sec-title">6. Státusz &amp; Megjegyzés</span>
-                </div>
+                <div class="sec-head"><span class="sec-title">6. Státusz &amp; Megjegyzés</span></div>
                 <div class="st-grid" style="margin-bottom:10px;">
                     <button type="button" class="st-btn paid-on" id="stPaidBtn" onclick="selectStatus('paid')">Kész (kasszában)</button>
                     <button type="button" class="st-btn" id="stPendingBtn" onclick="selectStatus('pending')">Függőben / tartozás</button>
@@ -1435,9 +799,7 @@
             </div>
 
             <div class="block hl-green" style="margin-bottom:10px;">
-                <div class="sec-head">
-                    <span class="sec-title">7. Elszámolás</span>
-                </div>
+                <div class="sec-head"><span class="sec-title">7. Elszámolás</span></div>
                 <div class="t-row"><span>Önköltség</span><span id="sCost">0 $</span></div>
                 <div class="t-row"><span>Kedvezmény</span><span id="sDisc">0 $</span></div>
                 <div class="t-row t-profit"><span>Tiszta haszon</span><span id="sProfit">0 $</span></div>
@@ -1449,12 +811,9 @@
             </div>
         </div>
 
-        <!-- GYÁR KIADÁS -->
         <div id="tab-factory" class="hidden">
             <div class="block hl-warn">
-                <div class="sec-head">
-                    <span class="sec-title">Gyors gyári tételek</span>
-                </div>
+                <div class="sec-head"><span class="sec-title">Gyors gyári tételek</span></div>
                 <div class="preset-wrap">
                     <button type="button" class="preset-btn" onclick="setFactory('Tár gyártás (25 db)', 2500)">-2,5k tár gyártás</button>
                     <button type="button" class="preset-btn" onclick="setFactory('Gyártási díj', 2000)">-2k gyártás</button>
@@ -1465,9 +824,7 @@
                 </div>
             </div>
             <div class="block">
-                <div class="sec-head">
-                    <span class="sec-title">Kiadás adatai</span>
-                </div>
+                <div class="sec-head"><span class="sec-title">Kiadás adatai</span></div>
                 <div class="row-2" style="margin-bottom:10px;">
                     <div>
                         <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Megnevezés</span></div>
@@ -1485,12 +842,9 @@
             </div>
         </div>
 
-        <!-- EGYÉB -->
         <div id="tab-other" class="hidden">
             <div class="block hl-blue">
-                <div class="sec-head">
-                    <span class="sec-title">Egyéb tétel adatai</span>
-                </div>
+                <div class="sec-head"><span class="sec-title">Egyéb tétel adatai</span></div>
                 <div class="row-2" style="margin-bottom:10px;">
                     <div>
                         <div class="sec-head" style="margin-bottom:5px;"><span class="sec-sub">Típus</span></div>
@@ -1519,7 +873,6 @@
         <div class="feedback" id="msg"></div>
     </main>
 
-    <!-- Jobb oldal: Munkamenet összesítő + Discord előnézet + Függőben + Legutóbbi küldések -->
     <aside class="panel">
         <div class="block hl-green">
             <div class="sec-head">
@@ -1527,22 +880,10 @@
                 <button type="button" class="btn-ghost" onclick="resetSessionStats()">Nullázás</button>
             </div>
             <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-lbl">Bevétel</div>
-                    <div class="stat-val" id="stIncome" style="color:var(--ok);">+0 $</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-lbl">Kiadás</div>
-                    <div class="stat-val" id="stExpense" style="color:var(--err);">-0 $</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-lbl">Nettó</div>
-                    <div class="stat-val" id="stNet">0 $</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-lbl">Tiszta haszon</div>
-                    <div class="stat-val" id="stProfit" style="color:#6ee7b7;">+0 $</div>
-                </div>
+                <div class="stat-box"><div class="stat-lbl">Bevétel</div><div class="stat-val" id="stIncome" style="color:var(--ok);">+0 $</div></div>
+                <div class="stat-box"><div class="stat-lbl">Kiadás</div><div class="stat-val" id="stExpense" style="color:var(--err);">-0 $</div></div>
+                <div class="stat-box"><div class="stat-lbl">Nettó</div><div class="stat-val" id="stNet">0 $</div></div>
+                <div class="stat-box"><div class="stat-lbl">Tiszta haszon</div><div class="stat-val" id="stProfit" style="color:#6ee7b7;">+0 $</div></div>
             </div>
         </div>
 
@@ -1551,7 +892,6 @@
                 <span class="sec-title">Discord előnézet</span>
                 <span class="sec-sub" id="statusBadge" style="color: var(--ok);">KÉSZ</span>
             </div>
-
             <div class="discord-card" id="embed">
                 <div class="dc-title" id="eTitle">Eladás (Kész)</div>
                 <div class="dc-desc" id="eDesc">👤 Rögzítette: —</div>
@@ -1578,12 +918,17 @@
 </div>
 
 <script>
-    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1574083295216406528/pykSkznZG8RU2U4Cczh6eVtdLrdo0cSk2jydkx6HRbw9PTJYtTCPmZSVlS0C5MkaE7wU';
+    // Állítsd be a botod publikus HTTPS API címét (pl. https://kassza-api.sajatdomain.hu)
+    const BOT_API_URL = 'https://ministry-packard-gave-enabled.trycloudflare.com';
+    const BOT_API_KEY = 'UbuCfvBxTlv7kjrsfFBXTAhGrXDEizej';
+    // Tartalék webhook csak akkor fut, ha a BOT_API_URL üres
+    const FALLBACK_WEBHOOK_URL = '';
+
     const TIER_1 = 100000;
     const TIER_2 = 200000;
     const PARTNER_CAP_AMOUNT = 400000;
     const PARTNER_MAX_DISCOUNT = 30;
-    const SEND_COOLDOWN_MS = 1500;
+    const SEND_COOLDOWN_MS = 1200;
 
     const STORAGE_KEYS = {
         recorder: 'zero_rec',
@@ -1605,93 +950,51 @@
     const RARITIES = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic'];
 
     const PRICES = {
-        ammo: {
-            Common:    { cost: 9.8,  sell: 15 },
-            Uncommon:  { cost: 10.6, sell: 19 },
-            Rare:      { cost: 11.4, sell: 22 },
-            Epic:      { cost: 12.2, sell: 28 },
-            Legendary: { cost: 13.0, sell: 34 },
-            Mythic:    { cost: 13.8, sell: 40 }
-        },
-        shotgun: {
-            Common:    { cost: 8.6,  sell: 15 },
-            Uncommon:  { cost: 9.4,  sell: 19 },
-            Rare:      { cost: 10.2, sell: 22 },
-            Epic:      { cost: 11.0, sell: 28 },
-            Legendary: { cost: 11.8, sell: 34 },
-            Mythic:    { cost: 12.6, sell: 40 }
-        },
-        emptyPistol: {
-            Common:    { cost: 364.0, sell: 600 },
-            Uncommon:  { cost: 391.2, sell: 750 },
-            Rare:      { cost: 416.8, sell: 900 },
-            Epic:      { cost: 444.0, sell: 1150 },
-            Legendary: { cost: 469.6, sell: 1400 },
-            Mythic:    { cost: 496.8, sell: 1700 }
-        },
-        emptyBig: {
-            Common:    { cost: 452.0, sell: 800 },
-            Uncommon:  { cost: 487.2, sell: 1000 },
-            Rare:      { cost: 522.4, sell: 1200 },
-            Epic:      { cost: 557.6, sell: 1600 },
-            Legendary: { cost: 592.8, sell: 2000 },
-            Mythic:    { cost: 628.0, sell: 2400 }
-        },
-        fullPistol: {
-            Common:    { cost: 364.0 + 30 * 9.8,  sell: 1100 },
-            Uncommon:  { cost: 391.2 + 30 * 10.6, sell: 1400 },
-            Rare:      { cost: 416.8 + 30 * 11.4, sell: 1600 },
-            Epic:      { cost: 444.0 + 30 * 12.2, sell: 2000 },
-            Legendary: { cost: 469.6 + 30 * 13.0, sell: 2500 },
-            Mythic:    { cost: 496.8 + 30 * 13.8, sell: 2900 }
-        },
-        fullBig: {
-            Common:    { cost: 452.0 + 50 * 9.8,  sell: 1600 },
-            Uncommon:  { cost: 487.2 + 50 * 10.6, sell: 2000 },
-            Rare:      { cost: 522.4 + 50 * 11.4, sell: 2300 },
-            Epic:      { cost: 557.6 + 50 * 12.2, sell: 3000 },
-            Legendary: { cost: 592.8 + 50 * 13.0, sell: 3700 },
-            Mythic:    { cost: 628.0 + 50 * 13.8, sell: 4400 }
-        }
+        ammo:        { Common: { cost: 9.8, sell: 15 }, Uncommon: { cost: 10.6, sell: 19 }, Rare: { cost: 11.4, sell: 22 }, Epic: { cost: 12.2, sell: 28 }, Legendary: { cost: 13.0, sell: 34 }, Mythic: { cost: 13.8, sell: 40 } },
+        shotgun:     { Common: { cost: 8.6, sell: 15 }, Uncommon: { cost: 9.4, sell: 19 }, Rare: { cost: 10.2, sell: 22 }, Epic: { cost: 11.0, sell: 28 }, Legendary: { cost: 11.8, sell: 34 }, Mythic: { cost: 12.6, sell: 40 } },
+        emptyPistol: { Common: { cost: 364.0, sell: 600 }, Uncommon: { cost: 391.2, sell: 750 }, Rare: { cost: 416.8, sell: 900 }, Epic: { cost: 444.0, sell: 1150 }, Legendary: { cost: 469.6, sell: 1400 }, Mythic: { cost: 496.8, sell: 1700 } },
+        emptyBig:    { Common: { cost: 452.0, sell: 800 }, Uncommon: { cost: 487.2, sell: 1000 }, Rare: { cost: 522.4, sell: 1200 }, Epic: { cost: 557.6, sell: 1600 }, Legendary: { cost: 592.8, sell: 2000 }, Mythic: { cost: 628.0, sell: 2400 } },
+        fullPistol:  { Common: { cost: 364.0 + 30 * 9.8, sell: 1100 }, Uncommon: { cost: 391.2 + 30 * 10.6, sell: 1400 }, Rare: { cost: 416.8 + 30 * 11.4, sell: 1600 }, Epic: { cost: 444.0 + 30 * 12.2, sell: 2000 }, Legendary: { cost: 469.6 + 30 * 13.0, sell: 2500 }, Mythic: { cost: 496.8 + 30 * 13.8, sell: 2900 } },
+        fullBig:     { Common: { cost: 452.0 + 50 * 9.8, sell: 1600 }, Uncommon: { cost: 487.2 + 50 * 10.6, sell: 2000 }, Rare: { cost: 522.4 + 50 * 11.4, sell: 2300 }, Epic: { cost: 557.6 + 50 * 12.2, sell: 3000 }, Legendary: { cost: 592.8 + 50 * 13.0, sell: 3700 }, Mythic: { cost: 628.0 + 50 * 13.8, sell: 4400 } }
     };
 
     const CALIBERS = {
         ammo: [
-            { name: '9×19 mm Parabellum', chip: '9×19',     cls: 'mag' },
-            { name: '.45 ACP',            chip: '.45 ACP',  cls: 'mag' },
-            { name: '.44 Magnum',         chip: '.44 MAG',  cls: 'mag44' },
-            { name: '5.56×45 mm NATO',    chip: '5.56 NATO',cls: 'nato556' },
-            { name: '7.62×39 mm',         chip: '7.62×39',  cls: 'ak762' },
-            { name: '7.62×51 mm NATO',    chip: '7.62 NATO',cls: 'nato762' }
+            { name: '9×19 mm Parabellum', chip: '9×19', cls: 'mag' },
+            { name: '.45 ACP', chip: '.45 ACP', cls: 'mag' },
+            { name: '.44 Magnum', chip: '.44 MAG', cls: 'mag44' },
+            { name: '5.56×45 mm NATO', chip: '5.56 NATO', cls: 'nato556' },
+            { name: '7.62×39 mm', chip: '7.62×39', cls: 'ak762' },
+            { name: '7.62×51 mm NATO', chip: '7.62 NATO', cls: 'nato762' }
         ],
-        shotgun: [
-            { name: 'Sörétes lőszer', chip: '12 GA', cls: 'mag' }
-        ],
+        shotgun: [{ name: 'Sörétes lőszer', chip: '12 GA', cls: 'mag' }],
         emptyPistol: [
-            { name: '9×19 mm Parabellum tár',        chip: '9×19 · ÜRES', cls: 'mag' },
-            { name: '.45 ACP tár',                   chip: '.45 · ÜRES',  cls: 'mag' },
-            { name: 'Desert Eagle (.44 Magnum) tár', chip: '.44 · ÜRES',  cls: 'mag44' }
+            { name: '9×19 mm Parabellum tár', chip: '9×19 · ÜRES', cls: 'mag' },
+            { name: '.45 ACP tár', chip: '.45 · ÜRES', cls: 'mag' },
+            { name: 'Desert Eagle (.44 Magnum) tár', chip: '.44 · ÜRES', cls: 'mag44' }
         ],
         emptyBig: [
-            { name: '5.56×45 mm NATO tár',        chip: '5.56 NATO',  cls: 'nato556' },
-            { name: '7.62×39 mm tár',             chip: '7.62×39',    cls: 'ak762' },
-            { name: '7.62×51 mm NATO tár',        chip: '7.62 NATO',  cls: 'nato762' },
-            { name: '9×19 mm géppisztolytár',     chip: '9×19 SMG',   cls: 'mag' },
+            { name: '5.56×45 mm NATO tár', chip: '5.56 NATO', cls: 'nato556' },
+            { name: '7.62×39 mm tár', chip: '7.62×39', cls: 'ak762' },
+            { name: '7.62×51 mm NATO tár', chip: '7.62 NATO', cls: 'nato762' },
+            { name: '9×19 mm géppisztolytár', chip: '9×19 SMG', cls: 'mag' },
             { name: '.45 ACP géppisztoly dobtár', chip: '.45 DOBTÁR', cls: 'mag' }
         ],
         fullPistol: [
-            { name: '9×19 mm Parabellum tár (töltött)',        chip: '9×19 · +30', cls: 'mag' },
-            { name: '.45 ACP tár (töltött)',                   chip: '.45 · +30',  cls: 'mag' },
-            { name: 'Desert Eagle (.44 Magnum) tár (töltött)', chip: '.44 · +30',  cls: 'mag44' }
+            { name: '9×19 mm Parabellum tár (töltött)', chip: '9×19 · +30', cls: 'mag' },
+            { name: '.45 ACP tár (töltött)', chip: '.45 · +30', cls: 'mag' },
+            { name: 'Desert Eagle (.44 Magnum) tár (töltött)', chip: '.44 · +30', cls: 'mag44' }
         ],
         fullBig: [
-            { name: '5.56×45 mm NATO tár (töltött)',    chip: '5.56 NATO +50', cls: 'nato556' },
-            { name: '7.62×39 mm tár (töltött)',         chip: '7.62×39 +50',   cls: 'ak762' },
-            { name: '7.62×51 mm NATO tár (töltött)',    chip: '7.62 NATO +50', cls: 'nato762' },
-            { name: '9×19 mm géppisztolytár (töltött)', chip: '9×19 SMG +50',  cls: 'mag' },
-            { name: '.45 ACP dobtár (töltött)',         chip: '.45 DOB +50',   cls: 'mag' }
+            { name: '5.56×45 mm NATO tár (töltött)', chip: '5.56 NATO +50', cls: 'nato556' },
+            { name: '7.62×39 mm tár (töltött)', chip: '7.62×39 +50', cls: 'ak762' },
+            { name: '7.62×51 mm NATO tár (töltött)', chip: '7.62 NATO +50', cls: 'nato762' },
+            { name: '9×19 mm géppisztolytár (töltött)', chip: '9×19 SMG +50', cls: 'mag' },
+            { name: '.45 ACP dobtár (töltött)', chip: '.45 DOB +50', cls: 'mag' }
         ]
     };
+
+    const urlParams = new URLSearchParams(window.location.search);
 
     const state = {
         recorder: '',
@@ -1712,32 +1015,21 @@
         session: { income: 0, expense: 0, profit: 0 },
         undo: null,
         isSending: false,
-        lastSentAt: 0
+        lastSentAt: 0,
+        discordUserId: urlParams.get('u') || '',
+        discordUserSig: urlParams.get('usig') || '',
+        editEntryId: urlParams.get('edit') || '',
+        editEntrySig: urlParams.get('esig') || ''
     };
 
     const money = n => Math.round(n).toLocaleString('hu-HU') + ' $';
-
-    function escapeHtml(str) {
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-    }
-
-    function safeRarity(rar) {
-        return RARITIES.includes(rar) ? rar : 'Uncommon';
-    }
-
-    function rarityTagHtml(rar) {
+    const escapeHtml = str => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const safeRarity = rar => RARITIES.includes(rar) ? rar : 'Uncommon';
+    const rarityTagHtml = rar => {
         const r = safeRarity(rar);
         return `<span class="rar-tag c-${r}">${escapeHtml(r)}</span>`;
-    }
-
-    function getCaliberMeta(catId, calName) {
-        const list = CALIBERS[catId] || [];
-        return list.find(x => x.name === calName) || { name: calName, chip: '', cls: 'mag' };
-    }
+    };
+    const getCaliberMeta = (catId, calName) => (CALIBERS[catId] || []).find(x => x.name === calName) || { name: calName, chip: '', cls: 'mag' };
 
     function setLiveIndicator(mode, label) {
         const pill = document.getElementById('livePill');
@@ -1747,14 +1039,81 @@
         txt.textContent = label || (mode === 'busy' ? 'SENDING' : 'READY');
     }
 
-    /* Rögzítő profilok */
+    function syncEditUi() {
+        const active = Boolean(state.editEntryId);
+        document.getElementById('editBadge').classList.toggle('hidden', !active);
+        document.getElementById('btnCancelEdit').classList.toggle('hidden', !active);
+        const btnSend = document.getElementById('btnSend');
+        btnSend.classList.toggle('editing', active);
+        btnSend.textContent = active ? 'Módosítás mentése Discordon' : 'Küldés Discordra';
+    }
+
+    function cancelEditMode() {
+        state.editEntryId = '';
+        state.editEntrySig = '';
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('edit');
+        cleanUrl.searchParams.delete('esig');
+        window.history.replaceState({}, '', cleanUrl.toString());
+        syncEditUi();
+        setFeedback('Szerkesztés megszakítva.', 'var(--text-dim)');
+    }
+
+    async function loadEntryForEdit() {
+        if (!state.editEntryId || !BOT_API_URL) return;
+        setLiveIndicator('busy', 'LOADING');
+        try {
+            const q = new URLSearchParams({ u: state.discordUserId, esig: state.editEntrySig });
+            const res = await fetch(`${BOT_API_URL.replace(/\/+$/, '')}/api/entries/${encodeURIComponent(state.editEntryId)}?${q.toString()}`, {
+                headers: BOT_API_KEY ? { 'X-Kassza-Key': BOT_API_KEY } : {}
+            });
+            const data = await res.json();
+            if (!res.ok || !data.entry) {
+                setFeedback(data.error || 'Nem sikerült betölteni a szerkesztendő tételt.', 'var(--err)');
+                cancelEditMode();
+                return;
+            }
+            const e = data.entry;
+            if (e.recorder) {
+                state.recorder = e.recorder;
+                document.getElementById('recorder').value = e.recorder;
+            }
+            setTab(e.tab || 'sale');
+            if ((e.tab || 'sale') === 'sale') {
+                setMaterialMode(e.materialMode === 'own' ? 'own' : 'bought');
+                state.cart = Array.isArray(e.cart) ? e.cart.map(x => ({ ...x })) : [];
+                renderCart();
+                selectPartner(e.partnerRole || 'other', e.partnerName || 'Sima vevő');
+                selectStatus(e.status === 'pending' ? 'pending' : 'paid');
+                state.saleNote = e.saleNote || '';
+                document.getElementById('saleNote').value = state.saleNote;
+            } else if (e.tab === 'factory' && e.factory) {
+                state.factory = { ...e.factory };
+                document.getElementById('fTitle').value = e.factory.title || '';
+                document.getElementById('fAmount').value = e.factory.amount || '';
+                document.getElementById('fNote').value = e.factory.note || '';
+            } else if (e.tab === 'other' && e.other) {
+                state.other = { ...e.other };
+                setOtherType(e.other.type === 'income' ? 'income' : 'expense');
+                document.getElementById('oTitle').value = e.other.title || '';
+                document.getElementById('oAmount').value = e.other.amount || '';
+                document.getElementById('oNote').value = e.other.note || '';
+            }
+            syncEditUi();
+            render();
+            setFeedback(`Betöltve szerkesztésre (#${state.editEntryId.slice(0, 8)})`, 'var(--warn)');
+        } catch {
+            setFeedback('Hálózati hiba a tétel betöltésekor.', 'var(--err)');
+        } finally {
+            setLiveIndicator('ready', 'READY');
+        }
+    }
+
     function loadProfiles() {
         try {
             const p = JSON.parse(localStorage.getItem(STORAGE_KEYS.profiles) || '[]');
             state.recorderProfiles = Array.isArray(p) ? p : [];
-        } catch {
-            state.recorderProfiles = [];
-        }
+        } catch { state.recorderProfiles = []; }
     }
 
     function rememberProfile(name) {
@@ -1783,7 +1142,6 @@
         render();
     }
 
-    /* Árlista + kereső + gyors betöltés */
     function togglePrices() {
         const drawer = document.getElementById('priceDrawer');
         const btn = document.getElementById('btnPriceToggle');
@@ -1793,13 +1151,10 @@
 
     function buildPriceTable() {
         const terms = (document.getElementById('priceFilter')?.value || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
-        const matchesRarityTerm = (rarity, term) =>
-            rarity.toLowerCase().startsWith(term) || (rarity === 'Legendary' && term === 'lega');
+        const matchesRarityTerm = (rarity, term) => rarity.toLowerCase().startsWith(term) || (rarity === 'Legendary' && term === 'lega');
         const matchedRarities = RARITIES.filter(r => terms.some(term => matchesRarityTerm(r, term)));
         const rarities = matchedRarities.length ? matchedRarities : RARITIES;
-        const categoryTerms = matchedRarities.length
-            ? terms.filter(term => !RARITIES.some(r => matchesRarityTerm(r, term)))
-            : terms;
+        const categoryTerms = matchedRarities.length ? terms.filter(term => !RARITIES.some(r => matchesRarityTerm(r, term))) : terms;
         const q = categoryTerms.join(' ');
         const head = document.getElementById('priceTableHead');
         const body = document.getElementById('priceTableBody');
@@ -1813,7 +1168,7 @@
         body.innerHTML = filtered.map(cat => {
             const cells = rarities.map(r => {
                 const p = PRICES[cat.id][r];
-                return `<td class="pick-cell" onclick="pickFromPriceList('${cat.id}', '${r}')" title="Kattints a kiválasztáshoz">${p.sell.toLocaleString('hu-HU')} $ <span style="color:var(--text-muted)">(${p.cost})</span></td>`;
+                return `<td class="pick-cell" onclick="pickFromPriceList('${cat.id}', '${r}')">${p.sell.toLocaleString('hu-HU')} $ <span style="color:var(--text-muted)">(${p.cost})</span></td>`;
             }).join('');
             return `<tr><td>${escapeHtml(cat.label)}</td>${cells}</tr>`;
         }).join('') || `<tr><td colspan="${rarities.length + 1}" class="empty-note">Nincs találat a szűrőre.</td></tr>`;
@@ -1828,21 +1183,15 @@
         state.qty = isAmmo ? 1000 : 5;
         document.getElementById('qty').value = state.qty;
         state.rarity = safeRarity(rar);
-
         renderCategoryDropdown();
         renderCaliberDropdown();
         renderQtyPresets(isAmmo);
         syncRarityButtons();
         updateAddButtonPreview();
         render();
-        setFeedback(`Betöltve: ${CATEGORIES.find(c => c.id === catId).label} · ${state.rarity}`, 'var(--accent)');
     }
 
-    /* Custom sötét dropdownok */
-    function closeAllDropdowns() {
-        document.querySelectorAll('.dd.open').forEach(el => el.classList.remove('open'));
-    }
-
+    function closeAllDropdowns() { document.querySelectorAll('.dd.open').forEach(el => el.classList.remove('open')); }
     function toggleDropdown(id) {
         const el = document.getElementById(id);
         const wasOpen = el.classList.contains('open');
@@ -1852,13 +1201,10 @@
 
     function renderCategoryDropdown() {
         const catObj = CATEGORIES.find(c => c.id === state.category) || CATEGORIES[0];
-        document.getElementById('ddCategoryLabel').innerHTML =
-            `<span>${escapeHtml(catObj.label)}</span><span class="spec-chip ${catObj.chipCls}">${escapeHtml(catObj.chip)}</span>`;
-
+        document.getElementById('ddCategoryLabel').innerHTML = `<span>${escapeHtml(catObj.label)}</span><span class="spec-chip ${catObj.chipCls}">${escapeHtml(catObj.chip)}</span>`;
         document.getElementById('ddCategoryMenu').innerHTML = CATEGORIES.map(c => `
             <button type="button" class="dd-opt ${c.id === state.category ? 'selected' : ''}" onclick="selectCategory('${c.id}')">
-                <span>${escapeHtml(c.label)}</span>
-                <span class="spec-chip ${c.chipCls}">${escapeHtml(c.chip)}</span>
+                <span>${escapeHtml(c.label)}</span><span class="spec-chip ${c.chipCls}">${escapeHtml(c.chip)}</span>
             </button>
         `).join('');
     }
@@ -1867,14 +1213,10 @@
         const list = CALIBERS[state.category] || [];
         if (!list.some(x => x.name === state.caliber)) state.caliber = list[0].name;
         const activeMeta = getCaliberMeta(state.category, state.caliber);
-
-        document.getElementById('ddCaliberLabel').innerHTML =
-            `<span>${escapeHtml(activeMeta.name)}</span><span class="spec-chip ${activeMeta.cls}">${escapeHtml(activeMeta.chip)}</span>`;
-
+        document.getElementById('ddCaliberLabel').innerHTML = `<span>${escapeHtml(activeMeta.name)}</span><span class="spec-chip ${activeMeta.cls}">${escapeHtml(activeMeta.chip)}</span>`;
         document.getElementById('ddCaliberMenu').innerHTML = list.map(item => `
             <button type="button" class="dd-opt ${item.name === state.caliber ? 'selected' : ''}" onclick='selectCaliber(${JSON.stringify(item.name)})'>
-                <span>${escapeHtml(item.name)}</span>
-                <span class="spec-chip ${item.cls}">${escapeHtml(item.chip)}</span>
+                <span>${escapeHtml(item.name)}</span><span class="spec-chip ${item.cls}">${escapeHtml(item.chip)}</span>
             </button>
         `).join('');
     }
@@ -1891,42 +1233,25 @@
         closeAllDropdowns();
     }
 
-    function selectCaliber(cal) {
-        state.caliber = cal;
-        renderCaliberDropdown();
-        closeAllDropdowns();
-    }
-
-    function syncRarityButtons() {
-        document.querySelectorAll('#rarityGrid .rar-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.rar === state.rarity);
-        });
-    }
-
-    function selectRarity(rar) {
-        state.rarity = safeRarity(rar);
-        syncRarityButtons();
-        updateAddButtonPreview();
-    }
+    function selectCaliber(cal) { state.caliber = cal; renderCaliberDropdown(); closeAllDropdowns(); }
+    function syncRarityButtons() { document.querySelectorAll('#rarityGrid .rar-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.rar === state.rarity)); }
+    function selectRarity(rar) { state.rarity = safeRarity(rar); syncRarityButtons(); updateAddButtonPreview(); }
 
     function updateAddButtonPreview() {
         const qty = Math.max(0, parseInt(document.getElementById('qty').value, 10) || 0);
         state.qty = qty;
-        const unitSell = PRICES[state.category][state.rarity].sell;
-        document.getElementById('addPreviewPrice').textContent = `+${money(qty * unitSell)}`;
+        document.getElementById('addPreviewPrice').textContent = `+${money(qty * PRICES[state.category][state.rarity].sell)}`;
     }
 
     function selectPartner(role, name) {
         state.partnerRole = ['tier', 'drock', 'rustata', 'other'].includes(role) ? role : 'other';
         state.partnerName = String(name || 'Sima vevő').trim() || 'Sima vevő';
-
         let matched = false;
         document.querySelectorAll('#partnerPanel .p-card').forEach(btn => {
             const ok = !matched && btn.dataset.name === state.partnerName && btn.dataset.role === state.partnerRole;
             btn.classList.toggle('active', ok);
             if (ok) matched = true;
         });
-
         if (!matched) {
             document.querySelectorAll('#partnerPanel .p-card').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.role === state.partnerRole && btn.dataset.name === 'Sima vevő');
@@ -1949,14 +1274,8 @@
         render();
     }
 
-    function getCostTag(mode) {
-        return mode === 'own' ? 'gyári' : 'vett';
-    }
-
-    function getEffectiveMode() {
-        if (state.cart.length > 0) return state.cart[0].mode || state.materialMode;
-        return state.materialMode;
-    }
+    const getCostTag = mode => mode === 'own' ? 'gyári' : 'vett';
+    const getEffectiveMode = () => state.cart.length > 0 ? (state.cart[0].mode || state.materialMode) : state.materialMode;
 
     function getUnitCost(cat, rar, mode) {
         if (mode === 'own') {
@@ -1970,19 +1289,14 @@
 
     function setMaterialMode(mode) {
         state.materialMode = mode;
-        document.querySelectorAll('[data-mat]').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.mat === mode);
-        });
+        document.querySelectorAll('[data-mat]').forEach(btn => btn.classList.toggle('active', btn.dataset.mat === mode));
         render();
     }
 
     function getDiscountPercent(buyerRole, rawSell) {
         if (buyerRole === 'drock') return 50;
         if (buyerRole === 'rustata') return 30;
-        if (buyerRole === 'tier') {
-            const steps = Math.floor(Math.max(0, rawSell) / TIER_1);
-            return Math.min(PARTNER_MAX_DISCOUNT, 10 + steps * 5);
-        }
+        if (buyerRole === 'tier') return Math.min(PARTNER_MAX_DISCOUNT, 10 + Math.floor(Math.max(0, rawSell) / TIER_1) * 5);
         if (rawSell >= TIER_2) return 10;
         if (rawSell >= TIER_1) return 5;
         return 0;
@@ -1990,64 +1304,27 @@
 
     function renderQtyPresets(isAmmo) {
         const presets = isAmmo ? [500, 1000, 2500, 5000] : [5, 10, 25, 50];
-        document.getElementById('qtyPresets').innerHTML = presets
-            .map(n => `<button type="button" class="qty-btn" onclick="setQty(${n})">${n}</button>`)
-            .join('');
+        document.getElementById('qtyPresets').innerHTML = presets.map(n => `<button type="button" class="qty-btn" onclick="setQty(${n})">${n}</button>`).join('');
     }
 
-    function setQty(val) {
-        state.qty = val;
-        document.getElementById('qty').value = val;
-        updateAddButtonPreview();
-    }
+    function setQty(val) { state.qty = val; document.getElementById('qty').value = val; updateAddButtonPreview(); }
 
-    /* Undo rendszer */
     function showUndo(label, restoreFn) {
         state.undo = { label, restoreFn };
         document.getElementById('undoText').textContent = label;
         document.getElementById('undoBar').classList.remove('hidden');
     }
-
-    function hideUndo() {
-        state.undo = null;
-        document.getElementById('undoBar').classList.add('hidden');
-    }
-
-    function runUndo() {
-        if (!state.undo) return;
-        state.undo.restoreFn();
-        hideUndo();
-        render();
-    }
+    function hideUndo() { state.undo = null; document.getElementById('undoBar').classList.add('hidden'); }
+    function runUndo() { if (!state.undo) return; state.undo.restoreFn(); hideUndo(); render(); }
 
     function addItem() {
         const qty = parseInt(document.getElementById('qty').value, 10) || 0;
         if (qty <= 0) return;
-
         const sell = PRICES[state.category][state.rarity].sell;
         const cost = getUnitCost(state.category, state.rarity, state.materialMode);
-
-        const existing = state.cart.find(x =>
-            x.cat === state.category &&
-            x.cal === state.caliber &&
-            x.rar === state.rarity &&
-            (x.mode || state.materialMode) === state.materialMode
-        );
-
-        if (existing) {
-            existing.qty += qty;
-        } else {
-            state.cart.push({
-                cat: state.category,
-                cal: state.caliber,
-                rar: state.rarity,
-                qty,
-                cost,
-                sell,
-                mode: state.materialMode
-            });
-        }
-
+        const existing = state.cart.find(x => x.cat === state.category && x.cal === state.caliber && x.rar === state.rarity && (x.mode || state.materialMode) === state.materialMode);
+        if (existing) existing.qty += qty;
+        else state.cart.push({ cat: state.category, cal: state.caliber, rar: state.rarity, qty, cost, sell, mode: state.materialMode });
         hideUndo();
         renderCart();
         render();
@@ -2058,10 +1335,7 @@
         if (!item) return;
         const step = (item.cat === 'ammo' || item.cat === 'shotgun') ? 250 : 1;
         item.qty += delta * step;
-        if (item.qty <= 0) {
-            removeItem(index);
-            return;
-        }
+        if (item.qty <= 0) { removeItem(index); return; }
         renderCart();
         render();
     }
@@ -2071,10 +1345,7 @@
         if (!removed) return;
         const snapshot = { item: { ...removed }, index: i };
         state.cart.splice(i, 1);
-        showUndo(`Kivéve: ${removed.qty} db ${removed.cal}`, () => {
-            state.cart.splice(Math.min(snapshot.index, state.cart.length), 0, snapshot.item);
-            renderCart();
-        });
+        showUndo(`Kivéve: ${removed.qty} db ${removed.cal}`, () => { state.cart.splice(Math.min(snapshot.index, state.cart.length), 0, snapshot.item); renderCart(); });
         renderCart();
         render();
     }
@@ -2083,23 +1354,16 @@
         if (!state.cart.length) return;
         const prevCart = state.cart.map(x => ({ ...x }));
         state.cart = [];
-        showUndo(`Kosár ürítve (${prevCart.length} tétel)`, () => {
-            state.cart = prevCart;
-            renderCart();
-        });
+        showUndo(`Kosár ürítve (${prevCart.length} tétel)`, () => { state.cart = prevCart; renderCart(); });
         renderCart();
         render();
     }
 
     function renderCart() {
         const el = document.getElementById('cart');
-        if (!state.cart.length) {
-            el.innerHTML = '<div class="empty-note">Nincs tétel a listában.</div>';
-            return;
-        }
+        if (!state.cart.length) { el.innerHTML = '<div class="empty-note">Nincs tétel a listában.</div>'; return; }
         el.innerHTML = state.cart.map((x, i) => {
             const mode = x.mode || state.materialMode;
-            const tag = getCostTag(mode);
             const meta = getCaliberMeta(x.cat, x.cal);
             return `
                 <div class="cart-item">
@@ -2108,13 +1372,13 @@
                         <span>${escapeHtml(x.cal)}</span>
                         ${meta.chip ? `<span class="spec-chip ${meta.cls}">${escapeHtml(meta.chip)}</span>` : ''}
                         ${rarityTagHtml(x.rar)}
-                        <span class="src-pill ${mode === 'own' ? 'own' : ''}">${tag}</span>
+                        <span class="src-pill ${mode === 'own' ? 'own' : ''}">${getCostTag(mode)}</span>
                     </div>
                     <div class="cart-ctrl">
-                        <button type="button" class="step-btn" onclick="stepItemQty(${i}, -1)" title="Csökkentés">−</button>
-                        <button type="button" class="step-btn" onclick="stepItemQty(${i}, 1)" title="Növelés">+</button>
+                        <button type="button" class="step-btn" onclick="stepItemQty(${i}, -1)">−</button>
+                        <button type="button" class="step-btn" onclick="stepItemQty(${i}, 1)">+</button>
                         <span class="cart-sum">${money(x.qty * x.sell)}</span>
-                        <button type="button" class="step-btn rm" onclick="removeItem(${i})" title="Törlés">✕</button>
+                        <button type="button" class="step-btn rm" onclick="removeItem(${i})">✕</button>
                     </div>
                 </div>
             `;
@@ -2142,9 +1406,7 @@
         let rawSell = 0, rawCost = 0;
         state.cart.forEach(x => {
             rawSell += x.qty * x.sell;
-            const unitCost = (x.cat && x.rar)
-                ? getUnitCost(x.cat, x.rar, x.mode || state.materialMode)
-                : x.cost;
+            const unitCost = (x.cat && x.rar) ? getUnitCost(x.cat, x.rar, x.mode || state.materialMode) : x.cost;
             rawCost += x.qty * unitCost;
         });
         const activeMode = getEffectiveMode();
@@ -2159,71 +1421,33 @@
     function updateLocalQuote(t) {
         const quoteEl = document.getElementById('sQuote');
         const barEl = document.getElementById('sQuoteBar');
-        if (!t.rawSell) {
-            barEl.classList.remove('tier-hit');
-            quoteEl.innerHTML = 'Vevői végösszeg (csak itt): adj hozzá tételt.';
-            return;
-        }
-
-        const isActiveTier = (state.partnerRole === 'drock') ||
-            (state.partnerRole === 'rustata') ||
-            (state.partnerRole === 'tier') ||
-            (t.rawSell >= TIER_1);
-
+        if (!t.rawSell) { barEl.classList.remove('tier-hit'); quoteEl.innerHTML = 'Vevői végösszeg (csak itt): adj hozzá tételt.'; return; }
+        const isActiveTier = state.partnerRole === 'drock' || state.partnerRole === 'rustata' || state.partnerRole === 'tier' || t.rawSell >= TIER_1;
         barEl.classList.toggle('tier-hit', isActiveTier);
-
-        if (state.partnerRole === 'drock') {
-            quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · D-Rock (-50% aktív)`;
-            return;
-        }
-
-        if (state.partnerRole === 'rustata') {
-            quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · Rustata (-30% aktív)`;
-            return;
-        }
-
+        if (state.partnerRole === 'drock') { quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · D-Rock (-50% aktív)`; return; }
+        if (state.partnerRole === 'rustata') { quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · Rustata (-30% aktív)`; return; }
         if (state.partnerRole === 'tier') {
             if (t.rawSell >= PARTNER_CAP_AMOUNT || t.discPct >= PARTNER_MAX_DISCOUNT) {
                 quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · Partner max sáv (-30%, 400k+ felett)`;
             } else {
                 const nextThreshold = Math.min(PARTNER_CAP_AMOUNT, (Math.floor(t.rawSell / TIER_1) + 1) * TIER_1);
                 const nextPct = Math.min(PARTNER_MAX_DISCOUNT, t.discPct + 5);
-                const missing = nextThreshold - t.rawSell;
-                const hypNext = Math.round(t.rawSell * (1 - nextPct / 100));
-                quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (-${t.discPct}%) · <strong>${money(missing)}</strong> a <strong>-${nextPct}%</strong>-hoz (~<strong>${money(hypNext)}</strong>)`;
+                quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (-${t.discPct}%) · <strong>${money(nextThreshold - t.rawSell)}</strong> a <strong>-${nextPct}%</strong>-hoz`;
             }
             return;
         }
-
-        if (t.rawSell >= TIER_2) {
-            quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · Sima vevő max sáv (-10%, 200k+ felett)`;
-        } else if (t.rawSell >= TIER_1) {
-            const missing = TIER_2 - t.rawSell;
-            const hyp10 = Math.round(t.rawSell * 0.9);
-            quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (-5%) · <strong>${money(missing)}</strong> a <strong>-10%</strong>-hoz (~<strong>${money(hyp10)}</strong>)`;
-        } else {
-            const missing = TIER_1 - t.rawSell;
-            const hyp5 = Math.round(t.rawSell * 0.95);
-            quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (0%) · <strong>${money(missing)}</strong> a <strong>-5%</strong>-hoz (~<strong>${money(hyp5)}</strong>)`;
-        }
+        if (t.rawSell >= TIER_2) quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> · Sima vevő max sáv (-10%, 200k+ felett)`;
+        else if (t.rawSell >= TIER_1) quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (-5%) · <strong>${money(TIER_2 - t.rawSell)}</strong> a <strong>-10%</strong>-hoz`;
+        else quoteEl.innerHTML = `Vevői ár: <strong>${money(t.total)}</strong> (0%) · <strong>${money(TIER_1 - t.rawSell)}</strong> a <strong>-5%</strong>-hoz`;
     }
 
     async function copyCustomerQuote() {
-        if (!state.cart.length) {
-            setFeedback('Nincs tétel a kosárban az árajánlathoz.', 'var(--warn)');
-            return;
-        }
+        if (!state.cart.length) { setFeedback('Nincs tétel a kosárban az árajánlathoz.', 'var(--warn)'); return; }
         const t = getSaleTotals();
         const lines = state.cart.map(x => `• ${x.qty} db ${x.cal} (${x.rar}) — ${money(x.qty * x.sell)}`);
-        const discLine = t.discPct ? `Kedvezmény:-${t.discPct}%\n` : '';
-        const text = `Árajánlat\n${lines.join('\n')}\n${discLine}Végösszeg: ${money(t.total)}`;
-
-        try {
-            await navigator.clipboard.writeText(text);
-            setFeedback('Vevői árajánlat vágólapra másolva.', 'var(--ok)');
-        } catch {
-            setFeedback('Nem sikerült a vágólapra másolni.', 'var(--err)');
-        }
+        const discLine = t.discPct ? `Kedvezmény: -${t.discPct}%\n` : '';
+        await navigator.clipboard.writeText(`Árajánlat\n${lines.join('\n')}\n${discLine}Végösszeg: ${money(t.total)}`);
+        setFeedback('Vevői árajánlat vágólapra másolva.', 'var(--ok)');
     }
 
     function buildPayload() {
@@ -2238,7 +1462,6 @@
         if (state.tab === 'sale') {
             const t = getSaleTotals();
             const costDisplay = `${money(t.rawCost)} (${t.costTag})`;
-
             document.getElementById('sCost').textContent = costDisplay;
             document.getElementById('sDisc').textContent = t.discVal ? `-${money(t.discVal)} (${t.discPct}%)` : '0 $';
             document.getElementById('sProfit').textContent = (t.profit >= 0 ? '+' : '') + money(t.profit);
@@ -2247,7 +1470,6 @@
 
             color = state.status === 'paid' ? 0x10b981 : 0xf59e0b;
             title = state.status === 'paid' ? 'Eladás (Kész)' : 'Függőben / Tartozás';
-
             fields = [
                 { name: 'Partner', value: t.discPct ? `${state.partnerName} (-${t.discPct}%)` : state.partnerName, inline: true },
                 { name: 'Bevétel', value: `**+${money(t.total)}**`, inline: true },
@@ -2279,35 +1501,44 @@
             if (state.other.note.trim()) fields.push({ name: 'Megjegyzés', value: state.other.note.trim(), inline: false });
         }
 
+        const embed = { color, title, description, fields, timestamp: new Date().toISOString() };
+        const entry = {
+            recorder: upperRecorder,
+            tab: state.tab,
+            materialMode: state.materialMode,
+            cart: state.cart.map(x => ({ ...x })),
+            partnerRole: state.partnerRole,
+            partnerName: state.partnerName,
+            status: state.status,
+            saleNote: state.saleNote,
+            factory: { ...state.factory },
+            other: { ...state.other }
+        };
+
         return {
             username: 'ZERO Kassza',
-            embeds: [{ color, title, description, fields, timestamp: new Date().toISOString() }]
+            embeds: [embed],
+            embed,
+            entry,
+            discord_user_id: state.discordUserId,
+            discord_user_sig: state.discordUserSig
         };
     }
 
     function formatPreviewValue(name, raw) {
         const clean = raw.replace(/\*\*/g, '');
-        if (name !== 'Tételek' || !state.cart.length) {
-            return escapeHtml(clean).replace(/\n/g, '<br>');
-        }
+        if (name !== 'Tételek' || !state.cart.length) return escapeHtml(clean).replace(/\n/g, '<br>');
         return state.cart.map(x => {
             const meta = getCaliberMeta(x.cat, x.cal);
             return `<div class="order-line">• <strong>${x.qty} db</strong> ${escapeHtml(x.cal)} ${meta.chip ? `<span class="spec-chip ${meta.cls}">${escapeHtml(meta.chip)}</span>` : ''} ${rarityTagHtml(x.rar)}</div>`;
         }).join('');
     }
 
-    /* Munkamenet összesítő */
     function loadSessionStats() {
         try {
             const s = JSON.parse(localStorage.getItem(STORAGE_KEYS.session) || '{}');
-            state.session = {
-                income: Number(s.income) || 0,
-                expense: Number(s.expense) || 0,
-                profit: Number(s.profit) || 0
-            };
-        } catch {
-            state.session = { income: 0, expense: 0, profit: 0 };
-        }
+            state.session = { income: Number(s.income) || 0, expense: Number(s.expense) || 0, profit: Number(s.profit) || 0 };
+        } catch { state.session = { income: 0, expense: 0, profit: 0 }; }
     }
 
     function saveAndRenderSessionStats() {
@@ -2321,21 +1552,14 @@
         document.getElementById('stProfit').textContent = (state.session.profit >= 0 ? '+' : '') + money(state.session.profit);
     }
 
-    function resetSessionStats() {
-        state.session = { income: 0, expense: 0, profit: 0 };
-        saveAndRenderSessionStats();
-    }
+    function resetSessionStats() { state.session = { income: 0, expense: 0, profit: 0 }; saveAndRenderSessionStats(); }
 
     function recordSessionDelta() {
         if (state.tab === 'sale') {
             const t = getSaleTotals();
-            if (state.status === 'paid') {
-                state.session.income += t.total;
-                state.session.profit += t.profit;
-            }
+            if (state.status === 'paid') { state.session.income += t.total; state.session.profit += t.profit; }
         } else if (state.tab === 'factory') {
-            const amt = parseInt(state.factory.amount, 10) || 0;
-            state.session.expense += amt;
+            state.session.expense += parseInt(state.factory.amount, 10) || 0;
         } else {
             const amt = parseInt(state.other.amount, 10) || 0;
             if (state.other.type === 'expense') state.session.expense += amt;
@@ -2345,22 +1569,15 @@
     }
 
     function render() {
-        const embed = buildPayload().embeds[0];
+        const embed = buildPayload().embed;
         const badge = document.getElementById('statusBadge');
         document.getElementById('embed').style.borderLeftColor = '#' + embed.color.toString(16).padStart(6, '0');
         document.getElementById('eTitle').textContent = embed.title;
         document.getElementById('eDesc').textContent = embed.description.replace(/\*\*|`/g, '');
 
-        if (embed.color === 0x10b981) {
-            badge.textContent = 'KÉSZ / BEVÉTEL';
-            badge.style.color = 'var(--ok)';
-        } else if (embed.color === 0xf59e0b) {
-            badge.textContent = 'FÜGGŐBEN';
-            badge.style.color = 'var(--warn)';
-        } else {
-            badge.textContent = 'KIADÁS';
-            badge.style.color = 'var(--err)';
-        }
+        if (embed.color === 0x10b981) { badge.textContent = 'KÉSZ / BEVÉTEL'; badge.style.color = 'var(--ok)'; }
+        else if (embed.color === 0xf59e0b) { badge.textContent = 'FÜGGŐBEN'; badge.style.color = 'var(--warn)'; }
+        else { badge.textContent = 'KIADÁS'; badge.style.color = 'var(--err)'; }
 
         document.getElementById('eFields').innerHTML = embed.fields.map(f => `
             <div class="dc-field ${f.inline ? '' : 'full'}">
@@ -2370,19 +1587,12 @@
         `).join('');
     }
 
-    /* Helyi függő rendelések */
     function getPendingOrders() {
-        try {
-            const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.pending) || '[]');
-            return Array.isArray(parsed) ? parsed : [];
-        } catch {
-            return [];
-        }
+        try { const p = JSON.parse(localStorage.getItem(STORAGE_KEYS.pending) || '[]'); return Array.isArray(p) ? p : []; }
+        catch { return []; }
     }
 
-    function savePendingOrders(orders) {
-        localStorage.setItem(STORAGE_KEYS.pending, JSON.stringify(orders));
-    }
+    function savePendingOrders(orders) { localStorage.setItem(STORAGE_KEYS.pending, JSON.stringify(orders)); }
 
     function saveCurrentSaleToPending() {
         const t = getSaleTotals();
@@ -2405,28 +1615,17 @@
     function importPendingOrder(orderId) {
         const found = getPendingOrders().find(o => o.id === orderId);
         if (!found) return;
-
         setTab('sale');
         const restoredMode = found.materialMode === 'own' ? 'own' : 'bought';
         setMaterialMode(restoredMode);
-
-        state.cart = (found.items || []).map(x => ({
-            ...x,
-            cost: typeof x.cost === 'number' ? x.cost : getUnitCost(x.cat, x.rar, restoredMode)
-        }));
+        state.cart = (found.items || []).map(x => ({ ...x, cost: typeof x.cost === 'number' ? x.cost : getUnitCost(x.cat, x.rar, restoredMode) }));
         renderCart();
-
         selectPartner(found.partnerRole, found.partnerName);
         selectStatus('paid');
         state.saleNote = found.note || '';
         document.getElementById('saleNote').value = state.saleNote;
-
         const recInput = document.getElementById('recorder');
-        if (!recInput.value.trim() && found.recorder && found.recorder !== '—') {
-            recInput.value = found.recorder;
-            state.recorder = found.recorder;
-        }
-
+        if (!recInput.value.trim() && found.recorder && found.recorder !== '—') { recInput.value = found.recorder; state.recorder = found.recorder; }
         render();
         setFeedback(`Beimportálva: ${state.partnerName} (${money(found.total)}) — Kész`, 'var(--ok)');
     }
@@ -2450,35 +1649,23 @@
         const listEl = document.getElementById('pendingList');
         const orders = getPendingOrders();
         document.getElementById('pendingCount').textContent = `${orders.length} mentett`;
-
-        if (!orders.length) {
-            listEl.innerHTML = '<div class="empty-note">Nincs helyben mentett függő tétel.</div>';
-            return;
-        }
-
+        if (!orders.length) { listEl.innerHTML = '<div class="empty-note">Nincs helyben mentett függő tétel.</div>'; return; }
         listEl.innerHTML = orders.map(o => {
-            const lines = (o.items || [])
-                .map(x => `<div class="order-line">• <strong>${x.qty} db</strong> ${escapeHtml(x.cal)} ${rarityTagHtml(x.rar)}</div>`)
-                .join('');
-            const modeLabel = getCostTag(o.materialMode === 'own' ? 'own' : 'bought');
+            const lines = (o.items || []).map(x => `<div class="order-line">• <strong>${x.qty} db</strong> ${escapeHtml(x.cal)} ${rarityTagHtml(x.rar)}</div>`).join('');
             return `
                 <div class="order-card">
-                    <div class="order-top">
-                        <span class="order-name">${escapeHtml(o.partnerName || 'Sima vevő')}</span>
-                        <span class="order-val">${money(o.total || 0)}</span>
-                    </div>
-                    <div class="order-meta">${escapeHtml(o.createdAt || '')} · ${modeLabel} · ${escapeHtml(o.recorder || '—')}${o.note ? ' · ' + escapeHtml(o.note) : ''}</div>
+                    <div class="order-top"><span class="order-name">${escapeHtml(o.partnerName || 'Sima vevő')}</span><span class="order-val">${money(o.total || 0)}</span></div>
+                    <div class="order-meta">${escapeHtml(o.createdAt || '')} · ${getCostTag(o.materialMode)} · ${escapeHtml(o.recorder || '—')}${o.note ? ' · ' + escapeHtml(o.note) : ''}</div>
                     <div class="order-lines">${lines}</div>
                     <div class="order-btns">
                         <button type="button" class="btn-imp" onclick="importPendingOrder('${o.id}')">Beimportálás</button>
-                        <button type="button" class="btn-del" onclick="deletePendingOrder('${o.id}')" title="Törlés">✕</button>
+                        <button type="button" class="btn-del" onclick="deletePendingOrder('${o.id}')">✕</button>
                     </div>
                 </div>
             `;
         }).join('');
     }
 
-    /* Helyi küldési napló */
     function pushRecentLog(embed) {
         try {
             const prev = JSON.parse(localStorage.getItem(STORAGE_KEYS.recent) || '[]');
@@ -2500,17 +1687,9 @@
     function renderRecentLogs() {
         const listEl = document.getElementById('recentList');
         let list = [];
-        try {
-            const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.recent) || '[]');
-            if (Array.isArray(parsed)) list = parsed;
-        } catch {}
+        try { const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.recent) || '[]'); if (Array.isArray(parsed)) list = parsed; } catch {}
         document.getElementById('recentCount').textContent = `${list.length} db`;
-
-        if (!list.length) {
-            listEl.innerHTML = '<div class="empty-note">Még nincs elküldött tétel.</div>';
-            return;
-        }
-
+        if (!list.length) { listEl.innerHTML = '<div class="empty-note">Még nincs elküldött tétel.</div>'; return; }
         listEl.innerHTML = list.map(r => `
             <div class="log-row">
                 <span><strong>${escapeHtml(r.time)}</strong> · ${escapeHtml(r.who || r.title)}</span>
@@ -2528,25 +1707,14 @@
     async function send() {
         if (state.isSending) return;
         const now = Date.now();
-        if (now - state.lastSentAt < SEND_COOLDOWN_MS) {
-            setFeedback('Várj egy pillanatot a következő küldésig.', 'var(--warn)');
-            return;
-        }
+        if (now - state.lastSentAt < SEND_COOLDOWN_MS) { setFeedback('Várj egy pillanatot a következő küldésig.', 'var(--warn)'); return; }
 
         const recorderEl = document.getElementById('recorder');
         const recorder = recorderEl.value.trim();
         recorderEl.classList.remove('invalid');
 
-        if (!recorder) {
-            recorderEl.classList.add('invalid');
-            setFeedback('Add meg a rögzítő nevét!', 'var(--err)');
-            recorderEl.focus();
-            return;
-        }
-        if (state.tab === 'sale' && !state.cart.length) {
-            setFeedback('Adj hozzá legalább egy tételt!', 'var(--err)');
-            return;
-        }
+        if (!recorder) { recorderEl.classList.add('invalid'); setFeedback('Add meg a rögzítő nevét!', 'var(--err)'); recorderEl.focus(); return; }
+        if (state.tab === 'sale' && !state.cart.length) { setFeedback('Adj hozzá legalább egy tételt!', 'var(--err)'); return; }
 
         state.recorder = recorder;
         localStorage.setItem(STORAGE_KEYS.recorder, recorder);
@@ -2554,39 +1722,61 @@
 
         const payload = buildPayload();
         const currentSaleStatus = state.tab === 'sale' ? state.status : null;
+        const isEditing = Boolean(state.editEntryId);
 
         state.isSending = true;
-        setLiveIndicator('busy', 'SENDING');
+        setLiveIndicator('busy', isEditing ? 'UPDATING' : 'SENDING');
         const btn = document.getElementById('btnSend');
         btn.disabled = true;
-        setFeedback('Küldés...', 'var(--text-dim)');
+        setFeedback(isEditing ? 'Módosítás mentése...' : 'Küldés...', 'var(--text-dim)');
 
         try {
-            const res = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (res.ok) {
+            let ok = false;
+            if (BOT_API_URL) {
+                const baseUrl = BOT_API_URL.replace(/\/+$/, '');
+                const url = isEditing ? `${baseUrl}/api/entries/${encodeURIComponent(state.editEntryId)}` : `${baseUrl}/api/entries`;
+                const method = isEditing ? 'PUT' : 'POST';
+                const headers = { 'Content-Type': 'application/json' };
+                if (BOT_API_KEY) headers['X-Kassza-Key'] = BOT_API_KEY;
+
+                const res = await fetch(url, { method, headers, body: JSON.stringify(payload) });
+                ok = res.ok;
+                if (!res.ok) {
+                    const errBody = await res.json().catch(() => ({}));
+                    setFeedback(errBody.error || `Bot API hiba (${res.status})`, 'var(--err)');
+                }
+            } else if (FALLBACK_WEBHOOK_URL) {
+                const res = await fetch(FALLBACK_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: payload.username, embeds: payload.embeds })
+                });
+                ok = res.ok;
+                if (!res.ok) setFeedback(`Webhook hiba (${res.status})`, 'var(--err)');
+            } else {
+                setFeedback('Állítsd be a BOT_API_URL címet a kódban!', 'var(--warn)');
+            }
+
+            if (ok) {
                 state.lastSentAt = Date.now();
-                setFeedback('Elküldve Discordra.', 'var(--ok)');
-                pushRecentLog(payload.embeds[0]);
-                recordSessionDelta();
-                if (state.tab === 'sale') {
-                    if (currentSaleStatus === 'pending') {
-                        saveCurrentSaleToPending();
+                setFeedback(isEditing ? 'Discord üzenet helyben frissítve!' : 'Elküldve a Discord botnak.', 'var(--ok)');
+                if (!isEditing) {
+                    pushRecentLog(payload.embed);
+                    recordSessionDelta();
+                    if (state.tab === 'sale') {
+                        if (currentSaleStatus === 'pending') saveCurrentSaleToPending();
+                        state.cart = [];
+                        renderCart();
+                        state.saleNote = '';
+                        document.getElementById('saleNote').value = '';
                     }
-                    state.cart = [];
-                    renderCart();
-                    state.saleNote = '';
-                    document.getElementById('saleNote').value = '';
+                } else {
+                    cancelEditMode();
                 }
                 render();
-            } else {
-                setFeedback(`Discord hiba (${res.status})`, 'var(--err)');
             }
         } catch {
-            setFeedback('Hálózati hiba.', 'var(--err)');
+            setFeedback('Hálózati hiba a bot API elérésekor.', 'var(--err)');
         } finally {
             state.isSending = false;
             setLiveIndicator('ready', 'READY');
@@ -2594,18 +1784,10 @@
         }
     }
 
-    document.addEventListener('click', e => {
-        if (!e.target.closest('.dd')) closeAllDropdowns();
-    });
+    document.addEventListener('click', e => { if (!e.target.closest('.dd')) closeAllDropdowns(); });
+    document.addEventListener('keydown', e => { if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); send(); } });
 
-    document.addEventListener('keydown', e => {
-        if (e.ctrlKey && e.key === 'Enter') {
-            e.preventDefault();
-            send();
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         loadProfiles();
         loadSessionStats();
         saveAndRenderSessionStats();
@@ -2634,7 +1816,12 @@
         updateAddButtonPreview();
         renderPendingOrders();
         renderRecentLogs();
+        syncEditUi();
         render();
+
+        if (state.editEntryId) {
+            await loadEntryForEdit();
+        }
     });
 </script>
 
